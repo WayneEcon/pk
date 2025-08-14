@@ -70,7 +70,7 @@ def run_full_dli_analysis(data_dir: str = None,
     
     Args:
         data_dir: 原始数据目录，默认使用项目标准路径
-        output_dir: 输出目录，默认使用outputs/tables
+        output_dir: 输出目录，默认使用当前05_dli_analysis文件夹
         skip_data_prep: 跳过数据准备步骤（使用已有prepared数据）
         skip_dli_calculation: 跳过DLI计算步骤（使用已有DLI面板数据）
         skip_verification: 跳过统计验证步骤
@@ -92,7 +92,7 @@ def run_full_dli_analysis(data_dir: str = None,
         # 设置输出目录
         if output_dir is None:
             base_dir = Path(__file__).parent.parent.parent
-            output_dir = base_dir / "outputs" / "tables"
+            output_dir = Path(__file__).parent
         else:
             output_dir = Path(output_dir)
         
@@ -221,7 +221,7 @@ def run_dli_calculation_only(data_file: str = None,
     try:
         if output_dir is None:
             base_dir = Path(__file__).parent.parent.parent
-            output_dir = base_dir / "outputs" / "tables"
+            output_dir = Path(__file__).parent
         else:
             output_dir = Path(output_dir)
         
@@ -262,7 +262,7 @@ def run_verification_only(dli_data_file: str = None,
     try:
         if output_dir is None:
             base_dir = Path(__file__).parent.parent.parent
-            output_dir = base_dir / "outputs" / "tables"
+            output_dir = Path(__file__).parent
         else:
             output_dir = Path(output_dir)
         

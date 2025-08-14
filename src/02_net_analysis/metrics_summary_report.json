@@ -1,0 +1,1243 @@
+{
+  "report_generated": "2025-08-14T18:09:37.747009",
+  "total_records": 5476,
+  "years_covered": 24,
+  "year_range": "2001 - 2024",
+  "total_countries": 234,
+  "yearly_statistics": [
+    {
+      "year": "2001",
+      "nodes": 225,
+      "avg_total_strength": 4805145874.217884,
+      "network_density": 0.14293650793650794,
+      "avg_path_length": 2.065161401098901,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 112532517655.55402
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 70690388258.533
+        },
+        {
+          "country_code": "SAU",
+          "total_strength": 57829216500.129
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 49392700787.392006
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 41279332434.297
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.1313503470956192
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.05344106475073874
+        },
+        {
+          "country_code": "MEX",
+          "pagerank_centrality": 0.04222451700649203
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03773207122429187
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.03361215608986651
+        }
+      ]
+    },
+    {
+      "year": "2002",
+      "nodes": 224,
+      "avg_total_strength": 4889248132.599312,
+      "network_density": 0.14662075592568866,
+      "avg_path_length": 2.05073954566126,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 127970449229.198
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 65886002974.443
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 55447731128.832985
+        },
+        {
+          "country_code": "SAU",
+          "total_strength": 54388839850.488
+        },
+        {
+          "country_code": "CAN",
+          "total_strength": 38896067361.631
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.1223584881839023
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.05317331556414545
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.045543515086329985
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.03834737820723296
+        },
+        {
+          "country_code": "MEX",
+          "pagerank_centrality": 0.03483573298414126
+        }
+      ]
+    },
+    {
+      "year": "2003",
+      "nodes": 223,
+      "avg_total_strength": 5884610870.05305,
+      "network_density": 0.15026461439017494,
+      "avg_path_length": 2.0283787642497857,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 134486056730.439
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 81658236200.195
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 71062733752.41798
+        },
+        {
+          "country_code": "SAU",
+          "total_strength": 54271660055.833
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 44920554576.508
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.1240794914252529
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.05685902966541091
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.0420977295911287
+        },
+        {
+          "country_code": "MEX",
+          "pagerank_centrality": 0.038428909144420466
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03817874623374333
+        }
+      ]
+    },
+    {
+      "year": "2004",
+      "nodes": 224,
+      "avg_total_strength": 7231111833.854339,
+      "network_density": 0.15699071108263934,
+      "avg_path_length": 2.039846252402306,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 113683306399.246
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 99590201866.548
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 98723289785.34799
+        },
+        {
+          "country_code": "SAU",
+          "total_strength": 75170686802.92099
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 57897430130.423004
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.10264757466948879
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.05419595809191406
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.05252221783392097
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.039489207359681706
+        },
+        {
+          "country_code": "MEX",
+          "pagerank_centrality": 0.02845280344678408
+        }
+      ]
+    },
+    {
+      "year": "2005",
+      "nodes": 223,
+      "avg_total_strength": 9605006688.02097,
+      "network_density": 0.16088958914071022,
+      "avg_path_length": 2.0218137360044612,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 164143910395.33
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 138168578484.36603
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 88510643071.056
+        },
+        {
+          "country_code": "SAU",
+          "total_strength": 87133572261.795
+        },
+        {
+          "country_code": "DEU",
+          "total_strength": 82545668933.06299
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.11206300242233484
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.0406203642394894
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.04052924450100042
+        },
+        {
+          "country_code": "MEX",
+          "pagerank_centrality": 0.03503762383493742
+        },
+        {
+          "country_code": "FRA",
+          "pagerank_centrality": 0.033815142257201586
+        }
+      ]
+    },
+    {
+      "year": "2006",
+      "nodes": 225,
+      "avg_total_strength": 11743365932.275768,
+      "network_density": 0.16628968253968254,
+      "avg_path_length": 1.9867362050093362,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 187619457474.71402
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 155271675418.31403
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 106356846628.307
+        },
+        {
+          "country_code": "NLD",
+          "total_strength": 103396259460.134
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 97198163437.711
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.1139071896615359
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.03380664428568308
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.03367853002903528
+        },
+        {
+          "country_code": "MEX",
+          "pagerank_centrality": 0.03314829196643826
+        },
+        {
+          "country_code": "CAN",
+          "pagerank_centrality": 0.03175426260305917
+        }
+      ]
+    },
+    {
+      "year": "2007",
+      "nodes": 225,
+      "avg_total_strength": 13272780375.151041,
+      "network_density": 0.1734920634920635,
+      "avg_path_length": 1.9651622273960314,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 207359427675.268
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 181710714883.76102
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 121415103671.482
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 112502064130.315
+        },
+        {
+          "country_code": "NLD",
+          "total_strength": 106194123294.31401
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.10051941458695014
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.03562451704398252
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.031981370466330115
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.03152612230916196
+        },
+        {
+          "country_code": "MEX",
+          "pagerank_centrality": 0.031194049414838266
+        }
+      ]
+    },
+    {
+      "year": "2008",
+      "nodes": 227,
+      "avg_total_strength": 17318407952.490913,
+      "network_density": 0.17420373474718334,
+      "avg_path_length": 1.9858985275487528,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 254321842807.42395
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 247977573571.113
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 142298308948.89102
+        },
+        {
+          "country_code": "SGP",
+          "total_strength": 140832622279.739
+        },
+        {
+          "country_code": "NLD",
+          "total_strength": 135240565767.623
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.08081487696998273
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.03927936595833352
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.03814641596874882
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.03404723502186197
+        },
+        {
+          "country_code": "FRA",
+          "pagerank_centrality": 0.03069516239414755
+        }
+      ]
+    },
+    {
+      "year": "2009",
+      "nodes": 227,
+      "avg_total_strength": 12493221493.947313,
+      "network_density": 0.17743947604381896,
+      "avg_path_length": 1.962233578461922,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 196527686468.13904
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 191710640857.845
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 116003252849.283
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 112789336910.63199
+        },
+        {
+          "country_code": "NLD",
+          "total_strength": 102553628803.08301
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.07854094536801258
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.04792446093103269
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.041308598956476934
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03330319272409285
+        },
+        {
+          "country_code": "IND",
+          "pagerank_centrality": 0.03238344459603494
+        }
+      ]
+    },
+    {
+      "year": "2010",
+      "nodes": 228,
+      "avg_total_strength": 15520505402.318628,
+      "network_density": 0.18052013293144756,
+      "avg_path_length": 1.9571124467818684,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 239723780987.54297
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 239071241305.50598
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 153799736807.92398
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 147691396641.906
+        },
+        {
+          "country_code": "NLD",
+          "total_strength": 126792654623.384
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.07717758393669066
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.055375661822718115
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.05100760085758842
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03434806009349065
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.03382942124422644
+        }
+      ]
+    },
+    {
+      "year": "2011",
+      "nodes": 229,
+      "avg_total_strength": 20144117287.025757,
+      "network_density": 0.18467019076074465,
+      "avg_path_length": 1.9400853050056333,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 289160506393.03296
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 270063385053.61002
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 187810994030.746
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 186258895081.85004
+        },
+        {
+          "country_code": "SGP",
+          "total_strength": 180659075103.04697
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.06390937174983201
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.056638246839486935
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.05487499503273569
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.040528465489653026
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.035640545769072864
+        }
+      ]
+    },
+    {
+      "year": "2012",
+      "nodes": 232,
+      "avg_total_strength": 19928749318.390602,
+      "network_density": 0.18054933572174953,
+      "avg_path_length": 1.9398661944116489,
+      "top_countries_by_strength": [
+        {
+          "country_code": "RUS",
+          "total_strength": 265377328965.70703
+        },
+        {
+          "country_code": "USA",
+          "total_strength": 238826916709.505
+        },
+        {
+          "country_code": "SGP",
+          "total_strength": 185932536011.45004
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 181043964406.127
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 180972147208.947
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.06149642486743954
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.06065158762064905
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.046056771885012796
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.04592892896922706
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.04319624372265387
+        }
+      ]
+    },
+    {
+      "year": "2013",
+      "nodes": 233,
+      "avg_total_strength": 19769124468.131573,
+      "network_density": 0.17999852005327807,
+      "avg_path_length": 1.947621221443741,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 266913608731.508
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 265047449346.44
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 189641332108.746
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 179519187050.906
+        },
+        {
+          "country_code": "SGP",
+          "total_strength": 178009977116.14102
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.05715730485219897
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.05071474455117844
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.04677273136942324
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.04059446609192989
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03510070171558155
+        }
+      ]
+    },
+    {
+      "year": "2014",
+      "nodes": 230,
+      "avg_total_strength": 19071641061.69273,
+      "network_density": 0.1863489652553636,
+      "avg_path_length": 1.9217492291057627,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 268200710563.24402
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 261141707062.043
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 187526949558.7
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 180182927000.107
+        },
+        {
+          "country_code": "SGP",
+          "total_strength": 173743352950.79102
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.05949683105993235
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.056442757699871005
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.04944619326785444
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.03809564082139022
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.036278982832380825
+        }
+      ]
+    },
+    {
+      "year": "2015",
+      "nodes": 231,
+      "avg_total_strength": 13003117995.950636,
+      "network_density": 0.18923395445134575,
+      "avg_path_length": 1.9116603547937014,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 203132715022.511
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 169919337120.487
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 143162670588.35
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 126529296723.42401
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 118847522218.923
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.054596111839363914
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.0489634622691825
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.047144152153584536
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.0334273414111083
+        },
+        {
+          "country_code": "HKG",
+          "pagerank_centrality": 0.030993736754085642
+        }
+      ]
+    },
+    {
+      "year": "2016",
+      "nodes": 229,
+      "avg_total_strength": 11225544814.647194,
+      "network_density": 0.19298245614035087,
+      "avg_path_length": 1.9372455702177034,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 172523294037.65802
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 160261752927.76697
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 134733964213.95
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 107839056312.46501
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 103605513292.326
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.055523343256097715
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.05279455825824292
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.03859923165223539
+        },
+        {
+          "country_code": "IND",
+          "pagerank_centrality": 0.028820378370114638
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.02746866709451062
+        }
+      ]
+    },
+    {
+      "year": "2017",
+      "nodes": 230,
+      "avg_total_strength": 14141870456.861427,
+      "network_density": 0.19515853426998292,
+      "avg_path_length": 1.929010848260203,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 232901643504.44604
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 184299142850.00497
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 173442061025.06192
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 145567465921.63403
+        },
+        {
+          "country_code": "JPN",
+          "total_strength": 122406489290.17801
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.060560292420743005
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.057367403523864165
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.048018980307103144
+        },
+        {
+          "country_code": "JPN",
+          "pagerank_centrality": 0.031483830442339295
+        },
+        {
+          "country_code": "AUS",
+          "pagerank_centrality": 0.02925116718249785
+        }
+      ]
+    },
+    {
+      "year": "2018",
+      "nodes": 230,
+      "avg_total_strength": 17003511934.126043,
+      "network_density": 0.1976836909056389,
+      "avg_path_length": 1.906493050817723,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 306079108006.594
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 222493517200.647
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 204377874897.56696
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 157569095397.56198
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 152225810551.682
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.05439420523420769
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.050316285380751384
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.05015098551531029
+        },
+        {
+          "country_code": "IND",
+          "pagerank_centrality": 0.03182229865294463
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03157571946673004
+        }
+      ]
+    },
+    {
+      "year": "2019",
+      "nodes": 230,
+      "avg_total_strength": 15137171299.177147,
+      "network_density": 0.19762673248528573,
+      "avg_path_length": 1.9014479584378643,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 295482088853.4979
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 201161188745.793
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 198413046533.902
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 140708371665.74
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 137848485126.08096
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.055949269420913265
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.05196887669703868
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.04315715133384682
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03195307069812373
+        },
+        {
+          "country_code": "IND",
+          "pagerank_centrality": 0.027739895277135822
+        }
+      ]
+    },
+    {
+      "year": "2020",
+      "nodes": 229,
+      "avg_total_strength": 11148478919.2555,
+      "network_density": 0.19572129012487552,
+      "avg_path_length": 1.9000820968743117,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 219248178274.50198
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 196014925093.16602
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 126687217178.50197
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 121716116693.11102
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 106119872586.24501
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.0686678514968024
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.055483652552052204
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.0449861475035259
+        },
+        {
+          "country_code": "MYS",
+          "pagerank_centrality": 0.03412320786135202
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03234543726257491
+        }
+      ]
+    },
+    {
+      "year": "2021",
+      "nodes": 230,
+      "avg_total_strength": 15890710020.41335,
+      "network_density": 0.19948737421682172,
+      "avg_path_length": 1.8898068374050907,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 350983525163.23193
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 218000868011.5939
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 212306085357.17902
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 156431672124.368
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 147713812504.867
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.05811120937641987
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.048204488384832773
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.04629906468778109
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.036479944333606906
+        },
+        {
+          "country_code": "IND",
+          "pagerank_centrality": 0.03529363409698685
+        }
+      ]
+    },
+    {
+      "year": "2022",
+      "nodes": 231,
+      "avg_total_strength": 22733607488.122986,
+      "network_density": 0.19826839826839826,
+      "avg_path_length": 1.8744540172310158,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 473571255119.9151
+        },
+        {
+          "country_code": "RUS",
+          "total_strength": 259908663289.26907
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 241915098039.16998
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 216897608527.49997
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 213657002056.17102
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.043616933580278364
+        },
+        {
+          "country_code": "IND",
+          "pagerank_centrality": 0.03596360062809405
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.03374052264037662
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.0331249115131189
+        },
+        {
+          "country_code": "NLD",
+          "pagerank_centrality": 0.03290729766614055
+        }
+      ]
+    },
+    {
+      "year": "2023",
+      "nodes": 231,
+      "avg_total_strength": 19667951031.57431,
+      "network_density": 0.19988706945228685,
+      "avg_path_length": 1.8733250917211677,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 446862775074.12006
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 262575449292.90802
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 193248366629.831
+        },
+        {
+          "country_code": "NLD",
+          "total_strength": 161724227093.38507
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 161344123294.04395
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.04768417462648384
+        },
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.04421767333343881
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.03699580115142416
+        },
+        {
+          "country_code": "NLD",
+          "pagerank_centrality": 0.03400809784253665
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03155480847979579
+        }
+      ]
+    },
+    {
+      "year": "2024",
+      "nodes": 230,
+      "avg_total_strength": 17275730399.452866,
+      "network_density": 0.16495158534269982,
+      "avg_path_length": 1.9165663695151058,
+      "top_countries_by_strength": [
+        {
+          "country_code": "USA",
+          "total_strength": 433075995793.449
+        },
+        {
+          "country_code": "CHN",
+          "total_strength": 248948169749.6
+        },
+        {
+          "country_code": "KOR",
+          "total_strength": 183621331285.23297
+        },
+        {
+          "country_code": "IND",
+          "total_strength": 163909525838.96295
+        },
+        {
+          "country_code": "NLD",
+          "total_strength": 147654432693.58096
+        }
+      ],
+      "top_countries_by_pagerank": [
+        {
+          "country_code": "CHN",
+          "pagerank_centrality": 0.0538570959034971
+        },
+        {
+          "country_code": "USA",
+          "pagerank_centrality": 0.042078503172924074
+        },
+        {
+          "country_code": "NLD",
+          "pagerank_centrality": 0.034099640072982225
+        },
+        {
+          "country_code": "KOR",
+          "pagerank_centrality": 0.03176792625793415
+        },
+        {
+          "country_code": "SGP",
+          "pagerank_centrality": 0.03169695547559462
+        }
+      ]
+    }
+  ],
+  "network_growth": {
+    "initial_size": 225,
+    "final_size": 230,
+    "growth_rate": 0.022222222222222223
+  },
+  "density_trend": {
+    "initial_density": 0.14293650793650794,
+    "final_density": 0.16495158534269982,
+    "density_change": 0.02201507740619188
+  }
+}

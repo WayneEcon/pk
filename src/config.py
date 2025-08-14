@@ -18,15 +18,16 @@ from typing import Dict, List, Tuple
 PROJECT_ROOT = Path(__file__).parent.parent
 
 # 数据目录
-RAW_DATA_DIR = PROJECT_ROOT / "raw_data"
-PROCESSED_DATA_DIR = PROJECT_ROOT / "processed_data"
-NETWORKS_DIR = PROCESSED_DATA_DIR / "networks"
+DATA_DIR = PROJECT_ROOT / "data"
+RAW_DATA_DIR = DATA_DIR / "raw_data"
+PROCESSED_DATA_DIR = DATA_DIR / "processed_data"
+NETWORKS_DIR = PROJECT_ROOT / "src" / "02_net_analysis"  # 网络数据输出到02模块
 
-# 输出目录
+# 输出目录  
 OUTPUTS_DIR = PROJECT_ROOT / "outputs"
 FIGURES_DIR = OUTPUTS_DIR / "figures"
 TABLES_DIR = OUTPUTS_DIR / "tables"
-NETWORK_STATS_DIR = OUTPUTS_DIR / "network_stats"
+NETWORK_STATS_DIR = PROJECT_ROOT / "src" / "02_net_analysis"  # 网络统计输出到02模块
 
 # 日志目录
 LOGS_DIR = PROJECT_ROOT / "logs"

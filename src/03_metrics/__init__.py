@@ -86,17 +86,21 @@ def calculate_all_metrics_for_year(G: nx.DiGraph, year: int) -> pd.DataFrame:
         # 1. 计算节点级别指标
         node_metrics_df = calculate_all_node_centralities(G, year)
         
-        # 2. 计算全局级别指标
-        global_metrics_dict = calculate_all_global_metrics(G, year)
+        # 2. 计算全局级别指标（现在返回单行DataFrame）
+        global_metrics_df = calculate_all_global_metrics(G, year)
         
-        # 3. 将全局指标添加到每个节点行中（广播）
-        for key, value in global_metrics_dict.items():
-            if key != 'year':  # 避免重复年份列
-                node_metrics_df[f'global_{key}'] = value
+        # 3. 使用pandas merge进行数据合并（基于年份）
+        # 全局指标会自动广播到每一行节点数据
+        combined_df = pd.merge(node_metrics_df, global_metrics_df, on='year', how='left')
         
-        logger.info(f"🎯 {year}: 所有网络指标计算完成 - {len(node_metrics_df)} 个节点")
+        # 为全局指标添加global_前缀（除了year列）
+        global_cols_to_rename = {col: f'global_{col}' for col in global_metrics_df.columns if col != 'year'}
+        if global_cols_to_rename:
+            combined_df = combined_df.rename(columns=global_cols_to_rename)
         
-        return node_metrics_df
+        logger.info(f"🎯 {year}: 所有网络指标计算完成 - {len(combined_df)} 个节点，{len(combined_df.columns)} 个指标")
+        
+        return combined_df
         
     except Exception as e:
         logger.error(f"❌ {year}: 指标计算失败: {e}")
@@ -211,7 +215,7 @@ def get_metrics_summary_report(metrics_df: pd.DataFrame) -> Dict[str, Any]:
     
     return summary
 
-def export_metrics_to_files(metrics_df: pd.DataFrame, output_dir: str = "./outputs/metrics") -> Dict[str, str]:
+def export_metrics_to_files(metrics_df: pd.DataFrame, output_dir: str = None) -> Dict[str, str]:
     """
     将指标结果导出到文件
     
@@ -228,6 +232,9 @@ def export_metrics_to_files(metrics_df: pd.DataFrame, output_dir: str = "./outpu
     from pathlib import Path
     import os
     
+    if output_dir is None:
+        output_dir = Path(__file__).parent
+        
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     
@@ -276,11 +283,73 @@ def export_metrics_to_files(metrics_df: pd.DataFrame, output_dir: str = "./outpu
         logger.error(f"❌ 导出文件时出错: {e}")
         return {}
 
+def run_full_metrics_calculation() -> bool:
+    """
+    运行完整的指标计算流程的便捷函数
+    
+    自动加载网络数据，计算所有指标，并导出结果文件
+    
+    Returns:
+        bool: 计算是否成功
+        
+    Example:
+        >>> from src.metrics_03 import run_full_metrics_calculation
+        >>> success = run_full_metrics_calculation()
+    """
+    import pickle
+    from pathlib import Path
+    
+    logger.info("🚀 开始完整的指标计算流程...")
+    
+    try:
+        # 设置路径
+        base_dir = Path(__file__).parent.parent.parent
+        networks_file = base_dir / "data/processed_data/networks/annual_networks_2001_2024.pkl"
+        
+        # 检查网络文件
+        if not networks_file.exists():
+            logger.error(f"❌ 网络文件不存在: {networks_file}")
+            return False
+        
+        # 加载网络数据
+        logger.info("📂 加载年度网络数据...")
+        with open(networks_file, 'rb') as f:
+            annual_networks = pickle.load(f)
+        
+        logger.info(f"✅ 成功加载 {len(annual_networks)} 个年度网络")
+        
+        # 计算所有指标
+        logger.info("⚙️ 开始计算指标...")
+        all_metrics_df = calculate_metrics_for_multiple_years(annual_networks)
+        
+        if all_metrics_df.empty:
+            logger.error("❌ 指标计算失败")
+            return False
+        
+        logger.info(f"✅ 指标计算完成: {len(all_metrics_df):,} 条记录")
+        
+        # 导出结果
+        logger.info("💾 导出结果文件...")
+        output_dir = Path(__file__).parent
+        exported_files = export_metrics_to_files(all_metrics_df, str(output_dir))
+        
+        if exported_files:
+            logger.info(f"✅ 结果已导出: {list(exported_files.keys())}")
+            return True
+        else:
+            logger.error("❌ 结果导出失败")
+            return False
+            
+    except Exception as e:
+        logger.error(f"❌ 指标计算流程失败: {e}")
+        return False
+
 # 导出的主要函数
 __all__ = [
     # 主要计算函数
     'calculate_all_metrics_for_year',
     'calculate_metrics_for_multiple_years',
+    'run_full_metrics_calculation',
     
     # 节点指标
     'calculate_all_node_centralities',

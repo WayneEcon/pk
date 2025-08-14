@@ -43,7 +43,7 @@ METRIC_LABELS = {
 def plot_country_dashboard(df: pd.DataFrame, 
                           country_code: str, 
                           metrics_to_plot: List[str],
-                          output_dir: str = "outputs/figures/policy_impact",
+                          output_dir: str = None,
                           figsize: Tuple = (16, 12)) -> str:
     """
     为单个Country生成包含多个子图的仪表盘式概览图
@@ -58,6 +58,10 @@ def plot_country_dashboard(df: pd.DataFrame,
     Returns:
         保存的文件路径
     """
+    # 设置默认输出目录
+    if output_dir is None:
+        output_dir = str(Path(__file__).parent / "figures")
+    
     # 确保输出目录存在
     Path(output_dir).mkdir(parents=True, exist_ok=True)
     
@@ -158,7 +162,7 @@ def plot_country_dashboard(df: pd.DataFrame,
 def plot_metric_timeseries(df: pd.DataFrame, 
                           country_code: str, 
                           metric_name: str,
-                          output_dir: str = "outputs/figures/policy_impact",
+                          output_dir: str = None,
                           figsize: Tuple[int, int] = (12, 8),
                           save_format: str = 'png') -> str:
     """
@@ -179,6 +183,10 @@ def plot_metric_timeseries(df: pd.DataFrame,
         ValueError: 当Country或指标不存在时
     """
     logger.info(f"📈 绘制时间序列图: {country_code} - {metric_name}")
+    
+    # 设置默认输出目录
+    if output_dir is None:
+        output_dir = str(Path(__file__).parent / "figures")
     
     # 验证输入
     if country_code not in df['country_code'].values:
@@ -258,7 +266,7 @@ def plot_metric_timeseries(df: pd.DataFrame,
 def plot_period_comparison(comparison_df: pd.DataFrame,
                          metric_name: str,
                          top_n: int = 10,
-                         output_dir: str = "outputs/figures/policy_impact",
+                         output_dir: str = None,
                          figsize: Tuple[int, int] = (14, 10)) -> str:
     """
     绘制指标的事前-事后期间对比图
@@ -274,6 +282,10 @@ def plot_period_comparison(comparison_df: pd.DataFrame,
         保存的文件路径
     """
     logger.info(f"📊 绘制期间对比图: {metric_name}")
+    
+    # 设置默认输出目录
+    if output_dir is None:
+        output_dir = str(Path(__file__).parent / "figures")
     
     # 验证列名
     pre_col = f'{metric_name}_pre'
@@ -368,7 +380,7 @@ def plot_period_comparison(comparison_df: pd.DataFrame,
 
 def plot_correlation_heatmap(comparison_df: pd.DataFrame,
                            metrics_list: List[str],
-                           output_dir: str = "outputs/figures/policy_impact",
+                           output_dir: str = None,
                            figsize: Tuple[int, int] = (12, 10)) -> str:
     """
     绘制指标Change的相关性热力图
@@ -383,6 +395,10 @@ def plot_correlation_heatmap(comparison_df: pd.DataFrame,
         保存的文件路径
     """
     logger.info("🔥 绘制Change相关性热力图...")
+    
+    # 设置默认输出目录
+    if output_dir is None:
+        output_dir = str(Path(__file__).parent / "figures")
     
     # 提取Change列
     change_cols = [f'{metric}_change' for metric in metrics_list]
@@ -410,7 +426,7 @@ def plot_correlation_heatmap(comparison_df: pd.DataFrame,
     ax.set_xticklabels(labels, rotation=45, ha='right')
     ax.set_yticklabels(labels, rotation=0)
     
-    ax.set_title('指标Change相关性分析\n(Post - Pre Period)', 
+    ax.set_title('Metrics Change Correlation Analysis\n(Post - Pre Period)', 
                 fontsize=14, fontweight='bold', pad=20)
     
     plt.tight_layout()
@@ -435,7 +451,7 @@ def create_policy_impact_dashboard(df: pd.DataFrame,
                                  statistics: Dict[str, Any],
                                  key_countries: List[str],
                                  key_metrics: List[str],
-                                 output_dir: str = "outputs/figures/policy_impact") -> Dict[str, str]:
+                                 output_dir: str = None) -> Dict[str, str]:
     """
     创建政策影响分析的完整仪表板（重构版本）
     
@@ -452,6 +468,10 @@ def create_policy_impact_dashboard(df: pd.DataFrame,
     """
     logger.info("📊 创建政策影响分析仪表板...")
     
+    # 设置默认输出目录
+    if output_dir is None:
+        output_dir = str(Path(__file__).parent / "figures")
+        
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     
@@ -551,8 +571,8 @@ def create_overview_plot(statistics: Dict[str, Any],
     # 子图1: 平均Change
     colors = ['green' if x > 0 else 'red' for x in summary_df['mean_change']]
     bars1 = ax1.bar(summary_df['metric'], summary_df['mean_change'], color=colors, alpha=0.7)
-    ax1.set_title('各指标平均Change', fontweight='bold')
-    ax1.set_ylabel('平均Change')
+    ax1.set_title('Average Change by Metric', fontweight='bold')
+    ax1.set_ylabel('Average Change')
     ax1.tick_params(axis='x', rotation=45)
     ax1.grid(True, alpha=0.3)
     ax1.axhline(y=0, color='black', linestyle='-', alpha=0.5)
@@ -560,8 +580,8 @@ def create_overview_plot(statistics: Dict[str, Any],
     # 子图2: 显著性检验结果
     significance_colors = ['green' if x else 'gray' for x in summary_df['is_significant']]
     bars2 = ax2.bar(summary_df['metric'], summary_df['p_value'], color=significance_colors, alpha=0.7)
-    ax2.set_title('统计显著性检验 (p值)', fontweight='bold')
-    ax2.set_ylabel('p值')
+    ax2.set_title('Statistical Significance Test (p-value)', fontweight='bold')
+    ax2.set_ylabel('p-value')
     ax2.tick_params(axis='x', rotation=45)
     ax2.grid(True, alpha=0.3)
     ax2.axhline(y=0.05, color='red', linestyle='--', alpha=0.7, label='α=0.05')
@@ -572,12 +592,12 @@ def create_overview_plot(statistics: Dict[str, Any],
     width = 0.35
     
     bars3a = ax3.bar(x - width/2, summary_df['countries_increased'], width, 
-                    label='指标上升', color='green', alpha=0.7)
+                    label='Metrics Increased', color='green', alpha=0.7)
     bars3b = ax3.bar(x + width/2, summary_df['countries_decreased'], width,
-                    label='指标下降', color='red', alpha=0.7)
+                    label='Metrics Decreased', color='red', alpha=0.7)
     
-    ax3.set_title('各指标影响的Country数量', fontweight='bold')
-    ax3.set_ylabel('Country数量')
+    ax3.set_title('Number of Countries Affected by Each Metric', fontweight='bold')
+    ax3.set_ylabel('Number of Countries')
     ax3.set_xticks(x)
     ax3.set_xticklabels(summary_df['metric'], rotation=45)
     ax3.legend()
@@ -589,22 +609,22 @@ def create_overview_plot(statistics: Dict[str, Any],
     
     if len(significant_metrics) > 0:
         ax4.scatter(significant_metrics['mean_change'], significant_metrics['p_value'],
-                   color='red', s=100, alpha=0.7, label='显著变化')
+                   color='red', s=100, alpha=0.7, label='Significant Change')
     
     if len(non_significant_metrics) > 0:
         ax4.scatter(non_significant_metrics['mean_change'], non_significant_metrics['p_value'],
-                   color='gray', s=100, alpha=0.7, label='非显著变化')
+                   color='gray', s=100, alpha=0.7, label='Non-significant Change')
     
-    ax4.set_xlabel('平均Change')
-    ax4.set_ylabel('p值')
-    ax4.set_title('Change vs 统计显著性', fontweight='bold')
+    ax4.set_xlabel('Average Change')
+    ax4.set_ylabel('p-value')
+    ax4.set_title('Change vs Statistical Significance', fontweight='bold')
     ax4.axhline(y=0.05, color='red', linestyle='--', alpha=0.7)
     ax4.axvline(x=0, color='black', linestyle='-', alpha=0.5)
     ax4.legend()
     ax4.grid(True, alpha=0.3)
     
     # 调整布局
-    plt.suptitle('美国能源独立政策影响分析 - 统计概览', fontsize=16, fontweight='bold')
+    plt.suptitle('US Energy Independence Policy Impact Analysis - Statistical Overview', fontsize=16, fontweight='bold')
     plt.tight_layout()
     
     # 保存图形

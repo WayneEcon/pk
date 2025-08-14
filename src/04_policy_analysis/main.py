@@ -81,11 +81,11 @@ def determine_key_countries(df: pd.DataFrame, top_n: int = 10) -> List[str]:
     logger.info(f"动态选定的核心国家: {result}")
     return result
 
-def run_full_policy_analysis(data_filepath: str = "outputs/tables/all_metrics.csv",
+def run_full_policy_analysis(data_filepath: str = None,
                            countries_list: Optional[List[str]] = None,
                            metrics_list: Optional[List[str]] = None,
-                           output_tables_dir: str = "outputs/tables",
-                           output_figures_dir: str = "outputs/figures/policy_impact",
+                           output_tables_dir: str = None,
+                           output_figures_dir: str = None,
                            generate_visualizations: bool = True) -> bool:
     """
     执行完整的政策影响分析流程
@@ -104,6 +104,17 @@ def run_full_policy_analysis(data_filepath: str = "outputs/tables/all_metrics.cs
     logger.info("🚀 开始美国能源独立政策影响分析")
     logger.info("=" * 60)
     logger.info(f"时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # 设置默认路径
+    if data_filepath is None:
+        from pathlib import Path
+        data_filepath = Path(__file__).parent.parent / "03_metrics" / "all_metrics.csv"
+    if output_tables_dir is None:
+        from pathlib import Path
+        output_tables_dir = str(Path(__file__).parent)
+    if output_figures_dir is None:
+        from pathlib import Path
+        output_figures_dir = str(Path(__file__).parent / "figures")
     
     # 第1步：加载和准备数据
     logger.info("\n📖 第1步：加载和准备数据...")
@@ -217,9 +228,9 @@ def run_quick_analysis(countries: List[str] = None,
         generate_visualizations=False
     )
 
-def run_visualization_only(data_filepath: str = "outputs/tables/all_metrics.csv",
-                          comparison_filepath: str = "outputs/tables/policy_impact_summary.csv",
-                          statistics_filepath: str = "outputs/tables/policy_impact_statistics.json") -> bool:
+def run_visualization_only(data_filepath: str = None,
+                          comparison_filepath: str = None,
+                          statistics_filepath: str = None) -> bool:
     """
     仅生成可视化：基于已有的分析结果生成图表
     
@@ -232,6 +243,17 @@ def run_visualization_only(data_filepath: str = "outputs/tables/all_metrics.csv"
         可视化是否成功
     """
     logger.info("📈 仅生成可视化...")
+    
+    # 设置默认路径
+    if data_filepath is None:
+        from pathlib import Path
+        data_filepath = Path(__file__).parent.parent / "03_metrics" / "all_metrics.csv"
+    if comparison_filepath is None:
+        from pathlib import Path
+        comparison_filepath = Path(__file__).parent / "policy_impact_summary.csv"
+    if statistics_filepath is None:
+        from pathlib import Path
+        statistics_filepath = Path(__file__).parent / "policy_impact_statistics.json"
     
     try:
         # 加载数据
@@ -297,8 +319,8 @@ if __name__ == "__main__":
     
     if success:
         print("\n🎉 政策影响分析成功完成！")
-        print("📊 查看 outputs/tables/ 目录获取分析结果")
-        print("📈 查看 outputs/figures/policy_impact/ 目录获取可视化图表")
+        print("📊 查看 04_policy_analysis 文件夹获取分析结果")
+        print("📈 查看 04_policy_analysis 文件夹获取可视化图表")
     else:
         print("\n💥 分析过程中出现错误，请检查日志")
         sys.exit(1)

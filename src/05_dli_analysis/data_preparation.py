@@ -448,6 +448,130 @@ def prepare_dli_dataset(data_dir: str = None) -> pd.DataFrame:
     
     return complete_df
 
+def load_global_trade_data_by_year(year: int, data_dir: str = None) -> pd.DataFrame:
+    """
+    加载指定年份的全局能源贸易数据
+    
+    这个函数专为双向DLI分析设计，支持计算出口锁定力时需要的全球贸易格局数据
+    
+    Args:
+        year: 需要加载的年份
+        data_dir: 数据目录路径，默认使用项目标准路径
+        
+    Returns:
+        包含该年份所有能源贸易记录的DataFrame
+        
+    数据结构：
+        - year: 年份
+        - reporter: 报告国代码  
+        - partner: 伙伴国代码
+        - flow: 贸易流向 (M=Import, X=Export)
+        - product_code: 能源产品代码
+        - product_name: 产品名称
+        - trade_value_usd: 贸易值（美元）
+        - energy_product: 标准化的能源产品名称
+    """
+    
+    logger.info(f"🌍 加载{year}年全球能源贸易数据...")
+    
+    # 设置数据路径
+    if data_dir is None:
+        base_dir = Path(__file__).parent.parent.parent  # 到达energy_network目录
+        data_dir = base_dir / "data" / "processed_data"
+    else:
+        data_dir = Path(data_dir)
+    
+    file_path = data_dir / f"cleaned_energy_trade_{year}.csv"
+    
+    if not file_path.exists():
+        raise FileNotFoundError(f"❌ {year}年全球数据文件不存在: {file_path}")
+    
+    try:
+        # 读取年度数据
+        df = pd.read_csv(file_path)
+        logger.info(f"📂 {year}: 成功加载 {len(df):,} 条全球贸易记录")
+        
+        # 重命名贸易值列以保持一致性
+        if 'trade_value_raw_usd' in df.columns:
+            df = df.rename(columns={'trade_value_raw_usd': 'trade_value_usd'})
+        
+        # 标准化能源产品名称
+        df['product_code'] = df['product_code'].astype(str)
+        df['energy_product'] = df['product_code'].map(ENERGY_PRODUCTS)
+        
+        # 筛选有效的能源产品
+        df = df[df['energy_product'].notna()]
+        
+        # 确保数据类型正确
+        df['trade_value_usd'] = df['trade_value_usd'].astype(float)
+        
+        # 移除无效贸易值
+        df = df[df['trade_value_usd'] > 0]
+        
+        logger.info(f"✅ {year}: 清洗后保留 {len(df):,} 条有效能源贸易记录")
+        
+        return df
+        
+    except Exception as e:
+        logger.error(f"❌ 处理{year}年全球数据时出错: {e}")
+        raise
+
+
+def get_global_trade_cache() -> Dict[int, pd.DataFrame]:
+    """
+    获取全局贸易数据缓存
+    
+    为了避免重复加载大量数据，提供一个简单的缓存机制
+    
+    Returns:
+        年份到DataFrame的字典缓存
+    """
+    if not hasattr(get_global_trade_cache, '_cache'):
+        get_global_trade_cache._cache = {}
+    return get_global_trade_cache._cache
+
+
+def load_global_trade_data_range(start_year: int = 2001, end_year: int = 2024, 
+                               data_dir: str = None) -> Dict[int, pd.DataFrame]:
+    """
+    批量加载指定年份范围的全局贸易数据
+    
+    Args:
+        start_year: 起始年份
+        end_year: 结束年份  
+        data_dir: 数据目录路径
+        
+    Returns:
+        年份到DataFrame的字典
+    """
+    
+    logger.info(f"🌍 批量加载{start_year}-{end_year}年全球能源贸易数据...")
+    
+    cache = get_global_trade_cache()
+    global_data = {}
+    
+    for year in range(start_year, end_year + 1):
+        if year in cache:
+            logger.info(f"📋 {year}: 使用缓存数据")
+            global_data[year] = cache[year]
+        else:
+            try:
+                df = load_global_trade_data_by_year(year, data_dir)
+                global_data[year] = df
+                cache[year] = df
+            except FileNotFoundError:
+                logger.warning(f"⚠️  {year}: 数据文件不存在，跳过")
+                continue
+            except Exception as e:
+                logger.error(f"❌ {year}: 加载失败 - {e}")
+                continue
+    
+    total_records = sum(len(df) for df in global_data.values())
+    logger.info(f"✅ 成功加载{len(global_data)}年数据，总计 {total_records:,} 条记录")
+    
+    return global_data
+
+
 def export_prepared_data(df: pd.DataFrame, output_path: str = None) -> str:
     """
     导出准备好的数据集到CSV文件
@@ -462,7 +586,7 @@ def export_prepared_data(df: pd.DataFrame, output_path: str = None) -> str:
     
     if output_path is None:
         base_dir = Path(__file__).parent.parent.parent  # 到达energy_network目录
-        output_dir = base_dir / "outputs" / "tables"
+        output_dir = Path(__file__).parent
         output_dir.mkdir(parents=True, exist_ok=True)
         output_path = output_dir / "us_trade_prepared_for_dli.csv"
     

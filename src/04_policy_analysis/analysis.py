@@ -269,7 +269,7 @@ def calculate_policy_impact_statistics(df: pd.DataFrame,
 
 def export_analysis_results(comparison_df: pd.DataFrame, 
                           statistics: Dict[str, Any],
-                          output_dir: str = "outputs/tables") -> Dict[str, str]:
+                          output_dir: str = None) -> Dict[str, str]:
     """
     导出分析结果
     
@@ -281,6 +281,9 @@ def export_analysis_results(comparison_df: pd.DataFrame,
     Returns:
         导出文件路径字典
     """
+    if output_dir is None:
+        output_dir = str(Path(__file__).parent)
+    
     logger.info(f"💾 导出分析结果到 {output_dir}...")
     
     output_path = Path(output_dir)
@@ -389,7 +392,7 @@ def create_summary_report(comparison_df: pd.DataFrame,
         f.write("- **产品范围**: 能源产品 (HS编码: 2701, 2709, 2710, 2711)\n\n")
 
 # 便捷函数
-def quick_policy_analysis(filepath: str = "outputs/tables/all_metrics.csv",
+def quick_policy_analysis(filepath: str = None,
                         countries: List[str] = None,
                         metrics: List[str] = None) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     """
@@ -404,6 +407,11 @@ def quick_policy_analysis(filepath: str = "outputs/tables/all_metrics.csv",
         (对比分析结果, 统计结果)
     """
     logger.info("🚀 开始快速政策影响分析...")
+    
+    # 设置默认路径
+    if filepath is None:
+        from pathlib import Path
+        filepath = Path(__file__).parent.parent / "03_metrics" / "all_metrics.csv"
     
     # 加载数据
     df = load_and_prepare_data(filepath)

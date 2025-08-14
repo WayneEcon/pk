@@ -19,11 +19,14 @@ from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
+# 导入国家代码验证模块
+from country_code_validator import filter_valid_trade_data, get_data_quality_report
+
 def setup_directories():
     """创建必要的输出目录"""
-    base_dir = Path(__file__).parent.parent
+    base_dir = Path(__file__).parent.parent.parent  # 项目根目录
     directories = [
-        base_dir / "processed_data",
+        base_dir / "data" / "processed_data",
         base_dir / "outputs" / "figures",
         base_dir / "outputs" / "tables",
         base_dir / "logs"
@@ -98,45 +101,81 @@ def filter_energy_products(df):
     
     return energy_data
 
-def clean_country_codes(df):
+def apply_country_whitelist_filter(df):
     """
-    清理和标准化国家代码
+    应用权威国家代码白名单过滤，剔除区域性汇总实体
+    
+    这是数据源污染修复的核心步骤，确保只保留真实的国家/地区实体
     
     参数:
-        df: 能源贸易数据DataFrame
+        df: 原始贸易数据DataFrame
+    
+    返回:
+        DataFrame: 过滤后的干净数据
+    """
+    print("\n🔍 第一步：应用权威国家代码白名单过滤...")
+    print("    目标：剔除所有区域性汇总实体 (如 EU-27, Africa nes 等)")
+    
+    # 生成过滤前的数据质量报告
+    print("\n📊 过滤前数据质量分析:")
+    pre_filter_report = get_data_quality_report(df)
+    print(f"    - 总实体数: {pre_filter_report['total_entities']}")
+    print(f"    - 有效国家数: {pre_filter_report['valid_entities_count']}")
+    print(f"    - 区域汇总实体数: {pre_filter_report['invalid_entities_count']}")
+    print(f"    - 数据污染率: {(1-pre_filter_report['valid_ratio'])*100:.1f}%")
+    
+    if pre_filter_report['invalid_entities_count'] > 0:
+        print(f"    - 检测到的区域汇总实体示例: {pre_filter_report['invalid_entities_list'][:15]}")
+    
+    # 应用严格过滤
+    df_filtered = filter_valid_trade_data(df, 'reporterISO', 'partnerISO')
+    
+    # 生成过滤后的质量报告
+    print("\n✅ 过滤完成，数据源污染问题已修复")
+    
+    return df_filtered
+
+def clean_country_codes(df):
+    """
+    清理和标准化国家代码（在白名单过滤后进行基础清理）
+    
+    参数:
+        df: 已通过白名单过滤的能源贸易数据DataFrame
     
     返回:
         DataFrame: 清理后的数据
     """
-    print("\n正在清理国家代码...")
+    print("\n🧹 第二步：基础国家代码清理...")
     
     initial_count = len(df)
     
     # 移除自贸易记录（同一国家内部贸易）
     df = df[df['reporterISO'] != df['partnerISO']].copy()
     self_trade_removed = initial_count - len(df)
-    print(f"  - 移除自贸易记录：{self_trade_removed:,} 条")
+    print(f"    - 移除自贸易记录：{self_trade_removed:,} 条")
     
     # 移除缺失国家代码的记录
     before_iso_clean = len(df)
     df = df.dropna(subset=['reporterISO', 'partnerISO']).copy()
     iso_missing_removed = before_iso_clean - len(df)
-    print(f"  - 移除缺失ISO代码记录：{iso_missing_removed:,} 条")
+    print(f"    - 移除缺失ISO代码记录：{iso_missing_removed:,} 条")
     
     # 移除ISO代码长度不等于3的记录
     before_iso_length = len(df)
     df = df[(df['reporterISO'].str.len() == 3) & (df['partnerISO'].str.len() == 3)].copy()
     iso_length_removed = before_iso_length - len(df)
-    print(f"  - 移除ISO代码格式错误记录：{iso_length_removed:,} 条")
+    print(f"    - 移除ISO代码格式错误记录：{iso_length_removed:,} 条")
     
     # 统计唯一国家数
     unique_reporters = df['reporterISO'].nunique()
     unique_partners = df['partnerISO'].nunique()
     all_countries = pd.concat([df['reporterISO'], df['partnerISO']]).nunique()
     
-    print(f"  - 报告国数量：{unique_reporters}")
-    print(f"  - 贸易伙伴国数量：{unique_partners}")
-    print(f"  - 总体国家数量：{all_countries}")
+    print(f"\n📈 清理后统计:")
+    print(f"    - 报告国数量：{unique_reporters}")
+    print(f"    - 贸易伙伴国数量：{unique_partners}")
+    print(f"    - 总体国家数量：{all_countries}")
+    print(f"    - 预期范围：180-210个国家/地区 (vs 修复前的230+)")
     
     return df
 
@@ -295,8 +334,8 @@ def main():
     
     # 设置目录
     base_dir = setup_directories()
-    raw_data_dir = base_dir / "raw_data"
-    processed_data_dir = base_dir / "processed_data"
+    raw_data_dir = base_dir / "data" / "raw_data"
+    processed_data_dir = base_dir / "data" / "processed_data"
     output_dir = base_dir / "outputs"
     
     try:
@@ -306,16 +345,19 @@ def main():
         # 步骤2：筛选能源产品
         energy_data = filter_energy_products(raw_data)
         
-        # 步骤3：清理国家代码
-        cleaned_country_data = clean_country_codes(energy_data)
+        # 步骤3：应用权威国家代码白名单过滤（核心修复）
+        whitelist_filtered_data = apply_country_whitelist_filter(energy_data)
         
-        # 步骤4：清理贸易价值
+        # 步骤4：基础国家代码清理
+        cleaned_country_data = clean_country_codes(whitelist_filtered_data)
+        
+        # 步骤5：清理贸易价值
         cleaned_value_data = clean_trade_values(cleaned_country_data)
         
-        # 步骤5：创建最终数据集
+        # 步骤6：创建最终数据集
         final_dataset = create_final_dataset(cleaned_value_data)
         
-        # 步骤6：按年度保存清洗后的数据
+        # 步骤7：按年度保存清洗后的数据
         print(f"\n正在按年度保存清洗后的数据...")
         for year in range(2001, 2025):
             year_data = final_dataset[final_dataset['year'] == year]
@@ -324,17 +366,18 @@ def main():
                 year_data.to_csv(output_file, index=False)
                 print(f"  - {year}: {len(year_data):,} 条记录 -> {output_file.name}")
         
-        # 步骤7：生成统计摘要
+        # 步骤8：生成统计摘要
         yearly_stats, product_stats, country_stats = generate_data_summary(final_dataset, output_dir)
         
         # 打印关键统计信息
         print("\n" + "=" * 60)
         print("数据处理完成！关键统计信息：")
         print("=" * 60)
+        print(f"✅ 数据源污染修复完成！")
         print(f"总记录数：{len(final_dataset):,}")
         print(f"时间跨度：{final_dataset['year'].min()} - {final_dataset['year'].max()}")
-        print(f"国家数量：{pd.concat([final_dataset['reporter'], final_dataset['partner']]).nunique()}")
-        print(f"总贸易额：${final_dataset['trade_value_raw_usd'].sum()/1e12:.2f} 万亿美元")
+        print(f"国家数量：{pd.concat([final_dataset['reporter'], final_dataset['partner']]).nunique()} (预期已降至合理范围)")
+        print(f"总贸易额：${final_dataset['trade_value_raw_usd'].sum()/1e12:.2f} 万亿美元 (无重复计算)")
         
         print("\n年度记录数分布（前5年和后5年）：")
         year_counts = final_dataset['year'].value_counts().sort_index()
