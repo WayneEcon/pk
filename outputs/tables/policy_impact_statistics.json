@@ -1,0 +1,98 @@
+{
+  "summary": {
+    "in_strength": {
+      "mean_change": 29877477403.960884,
+      "median_change": 7108454582.99589,
+      "std_change": 47964357821.458885,
+      "mean_pct_change": 409.6777211736418,
+      "median_pct_change": 69.98689993322444,
+      "countries_increased": 9,
+      "countries_decreased": 1,
+      "countries_unchanged": 0
+    },
+    "out_strength": {
+      "mean_change": 38130917065.025955,
+      "median_change": 22680376181.90442,
+      "std_change": 53580911319.33433,
+      "mean_pct_change": 167.2929001068958,
+      "median_pct_change": 116.9369837493324,
+      "countries_increased": 9,
+      "countries_decreased": 1,
+      "countries_unchanged": 0
+    },
+    "total_strength": {
+      "mean_change": 68008394468.98684,
+      "median_change": 56115306290.444534,
+      "std_change": 59888791580.83734,
+      "mean_pct_change": 93.71270132929355,
+      "median_pct_change": 97.5827351543036,
+      "countries_increased": 10,
+      "countries_decreased": 0,
+      "countries_unchanged": 0
+    },
+    "betweenness_centrality": {
+      "mean_change": 0.03911316991038179,
+      "median_change": 0.0491999852617255,
+      "std_change": 0.07875247610353235,
+      "mean_pct_change": 56.692427998400944,
+      "median_pct_change": 48.72674269146218,
+      "countries_increased": 7,
+      "countries_decreased": 3,
+      "countries_unchanged": 0
+    },
+    "pagerank_centrality": {
+      "mean_change": -0.007585314081068826,
+      "median_change": 0.000130306964821392,
+      "std_change": 0.020621019961910386,
+      "mean_pct_change": 32.14723735412391,
+      "median_pct_change": 18.95894694829979,
+      "countries_increased": 5,
+      "countries_decreased": 5,
+      "countries_unchanged": 0
+    },
+    "eigenvector_centrality": {
+      "mean_change": 0.11033102470877557,
+      "median_change": 0.0524528817062158,
+      "std_change": 0.11831572954807143,
+      "mean_pct_change": 588.6608441118018,
+      "median_pct_change": 366.7336594285722,
+      "countries_increased": 10,
+      "countries_decreased": 0,
+      "countries_unchanged": 0
+    },
+    "in_degree": {
+      "mean_change": 15.611111111111109,
+      "median_change": 17.923611111111107,
+      "std_change": 17.183281843033342,
+      "mean_pct_change": 19.68221072550714,
+      "median_pct_change": 19.98973439758758,
+      "countries_increased": 8,
+      "countries_decreased": 2,
+      "countries_unchanged": 0
+    },
+    "out_degree": {
+      "mean_change": 21.980555555555558,
+      "median_change": 18.75,
+      "std_change": 19.04685355420944,
+      "mean_pct_change": 16.728472886270154,
+      "median_pct_change": 14.803160924790994,
+      "countries_increased": 9,
+      "countries_decreased": 1,
+      "countries_unchanged": 0
+    },
+    "total_degree": {
+      "mean_change": 37.59166666666667,
+      "median_change": 24.479166666666657,
+      "std_change": 33.500453106900316,
+      "mean_pct_change": 17.770265182867107,
+      "median_pct_change": 13.556634270616007,
+      "countries_increased": 9,
+      "countries_decreased": 1,
+      "countries_unchanged": 0
+    }
+  },
+  "significance_tests": {
+    "in_strength": {
+      "t_statistic": 1.9698143293906674,
+      "p_value": 0.08036612127410526,
+      "is_significant": 

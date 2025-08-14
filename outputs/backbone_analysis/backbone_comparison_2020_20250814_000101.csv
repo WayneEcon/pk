@@ -1,0 +1,5 @@
+method,nodes,edges,density,edge_retention_rate,avg_clustering,connected_components,largest_component_size
+Original,240,10739,0.187221059972106,1.0,0.7533618096137129,1,240
+disparity_filter,240,1343,0.02341352859135286,0.12505819908743832,0.38355325255200234,10,231
+polarity_filter,240,0,0.0,0.0,0.0,240,1
+minimum_spanning_tree,240,243,0.004236401673640167,0.022627805196014525,0.0,1,240
