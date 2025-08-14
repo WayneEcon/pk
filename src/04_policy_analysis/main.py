@@ -9,18 +9,19 @@ from pathlib import Path
 import logging
 from datetime import datetime
 from typing import List, Optional
+import pandas as pd
 
 # 添加src路径
 sys.path.append(str(Path(__file__).parent.parent))
 
 # 导入分析模块
-from .analysis import (
+from analysis import (
     load_and_prepare_data, 
     run_pre_post_analysis, 
     calculate_policy_impact_statistics,
     export_analysis_results
 )
-from .plotting import (
+from plotting import (
     create_policy_impact_dashboard,
     plot_metric_timeseries,
     plot_period_comparison
@@ -34,12 +35,51 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # 配置常量
-KEY_COUNTRIES = ['USA', 'CHN', 'RUS', 'SAU', 'CAN', 'MEX', 'ARE', 'IND', 'JPN', 'KOR']
 KEY_METRICS = [
     'in_strength', 'out_strength', 'total_strength',
-    'betweenness_centrality', 'pagerank_centrality', 'eigenvector_centrality',
+    'betweenness_centrality', 'pagerank_centrality',
     'in_degree', 'out_degree', 'total_degree'
 ]
+
+def determine_key_countries(df: pd.DataFrame, top_n: int = 10) -> List[str]:
+    """
+    根据整个研究周期的数据动态确定核心国家
+    
+    Args:
+        df: 包含所有年份数据的DataFrame
+        top_n: 选择前N个国家
+        
+    Returns:
+        核心国家代码列表
+    """
+    
+    # 按国家分组计算总进出口
+    country_totals = df.groupby('country_code').agg({
+        'in_strength': 'sum',
+        'out_strength': 'sum'
+    }).reset_index()
+    
+    # 获取进口前top_n国家
+    top_importers = country_totals.nlargest(top_n, 'in_strength')['country_code'].tolist()
+    
+    # 获取出口前top_n国家  
+    top_exporters = country_totals.nlargest(top_n, 'out_strength')['country_code'].tolist()
+    
+    # 合并并去重
+    key_countries = list(set(top_importers + top_exporters))
+    
+    # 按总贸易额排序
+    country_totals['total_trade'] = country_totals['in_strength'] + country_totals['out_strength']
+    sorted_countries = country_totals.sort_values('total_trade', ascending=False)
+    
+    # 确保结果按重要性排序
+    result = []
+    for _, row in sorted_countries.iterrows():
+        if row['country_code'] in key_countries:
+            result.append(row['country_code'])
+    
+    logger.info(f"动态选定的核心国家: {result}")
+    return result
 
 def run_full_policy_analysis(data_filepath: str = "outputs/tables/all_metrics.csv",
                            countries_list: Optional[List[str]] = None,
@@ -65,9 +105,14 @@ def run_full_policy_analysis(data_filepath: str = "outputs/tables/all_metrics.cs
     logger.info("=" * 60)
     logger.info(f"时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
-    # 使用默认配置
+    # 第1步：加载和准备数据
+    logger.info("\n📖 第1步：加载和准备数据...")
+    df = load_and_prepare_data(data_filepath)
+    logger.info(f"✅ 数据加载完成: {len(df)} 条记录")
+    
+    # 动态确定核心国家（如果未指定）
     if countries_list is None:
-        countries_list = KEY_COUNTRIES
+        countries_list = determine_key_countries(df, top_n=10)
     if metrics_list is None:
         metrics_list = KEY_METRICS
     
@@ -78,11 +123,6 @@ def run_full_policy_analysis(data_filepath: str = "outputs/tables/all_metrics.cs
     logger.info(f"  生成可视化: {'是' if generate_visualizations else '否'}")
     
     try:
-        # 第1步：加载和准备数据
-        logger.info("\n📖 第1步：加载和准备数据...")
-        df = load_and_prepare_data(data_filepath)
-        logger.info(f"✅ 数据加载完成: {len(df)} 条记录")
-        
         # 第2步：执行事前-事后对比分析
         logger.info("\n🔍 第2步：执行事前-事后对比分析...")
         comparison_df = run_pre_post_analysis(df, countries_list, metrics_list)
@@ -210,7 +250,7 @@ def run_visualization_only(data_filepath: str = "outputs/tables/all_metrics.csv"
         
         # 生成可视化
         visualization_files = create_policy_impact_dashboard(
-            df, comparison_df, statistics, KEY_COUNTRIES, KEY_METRICS
+            df, comparison_df, statistics, countries_list, metrics_list
         )
         
         total_charts = sum(len(v) if isinstance(v, list) else 1 for v in visualization_files.values())

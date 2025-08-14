@@ -7,9 +7,19 @@
 """
 
 # 从子模块导入主要功能
-from .analysis import load_and_prepare_data, run_pre_post_analysis, calculate_policy_impact_statistics
-from .plotting import plot_metric_timeseries, plot_period_comparison, create_policy_impact_dashboard  
-from .main import run_full_policy_analysis
+try:
+    from .analysis import load_and_prepare_data, run_pre_post_analysis, calculate_policy_impact_statistics
+    from .plotting import plot_metric_timeseries, plot_period_comparison, create_policy_impact_dashboard  
+    from .main import run_full_policy_analysis
+except ImportError:
+    # 如果相对导入失败，尝试直接导入
+    import sys
+    from pathlib import Path
+    sys.path.append(str(Path(__file__).parent))
+    
+    from analysis import load_and_prepare_data, run_pre_post_analysis, calculate_policy_impact_statistics
+    from plotting import plot_metric_timeseries, plot_period_comparison, create_policy_impact_dashboard
+    from main import run_full_policy_analysis
 
 # 版本信息
 __version__ = '1.0.0'
