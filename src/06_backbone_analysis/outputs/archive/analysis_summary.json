@@ -1,0 +1,16 @@
+{
+  "analysis_period": [
+    "2001",
+    "2024"
+  ],
+  "total_years": 24,
+  "pre_shale_avg_mst_degree": 25.2,
+  "post_shale_avg_mst_degree": 31.071428571428573,
+  "mst_degree_change": 5.871428571428574,
+  "pre_shale_avg_mst_strength": 118514347331.252,
+  "post_shale_avg_mst_strength": 154329859365.8522,
+  "mst_strength_change": 35815512034.600204,
+  "mst_degree_relative_change": 0.23299319727891166,
+  "finding_usa_degree_increased": "True",
+  "finding_usa_strength_increased": "True"
+}

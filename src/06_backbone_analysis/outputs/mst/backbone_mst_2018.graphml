@@ -1,0 +1,1939 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d11" for="edge" attr.name="weight" attr.type="double"/>
+<key id="d10" for="node" attr.name="region" attr.type="string"/>
+<key id="d9" for="node" attr.name="country_code" attr.type="string"/>
+<key id="d8" for="node" attr.name="name" attr.type="string"/>
+<key id="d7" for="graph" attr.name="symmetrize_method" attr.type="string"/>
+<key id="d6" for="graph" attr.name="original_directed" attr.type="boolean"/>
+<key id="d5" for="graph" attr.name="retention_rate" attr.type="double"/>
+<key id="d4" for="graph" attr.name="total_mst_weight" attr.type="double"/>
+<key id="d3" for="graph" attr.name="mst_edges" attr.type="long"/>
+<key id="d2" for="graph" attr.name="original_edges" attr.type="long"/>
+<key id="d1" for="graph" attr.name="algorithm" attr.type="string"/>
+<key id="d0" for="graph" attr.name="backbone_method" attr.type="string"/>
+<graph edgedefault="undirected"><data key="d0">maximum_spanning_tree</data>
+<data key="d1">kruskal</data>
+<data key="d2">7681</data>
+<data key="d3">239</data>
+<data key="d4">788206220303.8911</data>
+<data key="d5">0.031115740138002865</data>
+<data key="d6">True</data>
+<data key="d7">max</data>
+<node id="ABW">
+  <data key="d8">Aruba</data>
+  <data key="d9">ABW</data>
+  <data key="d10">Other</data>
+</node>
+<node id="COL">
+  <data key="d8">Colombia</data>
+  <data key="d9">COL</data>
+  <data key="d10">Latin_America</data>
+</node>
+<node id="CRI">
+  <data key="d8">Costa Rica</data>
+  <data key="d9">CRI</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CUW">
+  <data key="d8">Cura_o</data>
+  <data key="d9">CUW</data>
+  <data key="d10">Other</data>
+</node>
+<node id="HND">
+  <data key="d8">Honduras</data>
+  <data key="d9">HND</data>
+  <data key="d10">Other</data>
+</node>
+<node id="NIC">
+  <data key="d8">Nicaragua</data>
+  <data key="d9">NIC</data>
+  <data key="d10">Other</data>
+</node>
+<node id="NLD">
+  <data key="d8">Netherlands</data>
+  <data key="d9">NLD</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="PAN">
+  <data key="d8">Panama</data>
+  <data key="d9">PAN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SDN">
+  <data key="d8">Sudan</data>
+  <data key="d9">SDN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SLV">
+  <data key="d8">El Salvador</data>
+  <data key="d9">SLV</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SUR">
+  <data key="d8">Suriname</data>
+  <data key="d9">SUR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="USA">
+  <data key="d8">USA</data>
+  <data key="d9">USA</data>
+  <data key="d10">North_America</data>
+</node>
+<node id="VEN">
+  <data key="d8">Venezuela</data>
+  <data key="d9">VEN</data>
+  <data key="d10">Latin_America</data>
+</node>
+<node id="_X ">
+  <data key="d8">Areas, nes</data>
+  <data key="d9">_X </data>
+  <data key="d10">Other</data>
+</node>
+<node id="AFG">
+  <data key="d8">Afghanistan</data>
+  <data key="d9">AFG</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ARE">
+  <data key="d8">United Arab Emirates</data>
+  <data key="d9">ARE</data>
+  <data key="d10">Middle_East</data>
+</node>
+<node id="CAN">
+  <data key="d8">Canada</data>
+  <data key="d9">CAN</data>
+  <data key="d10">North_America</data>
+</node>
+<node id="CYP">
+  <data key="d8">Cyprus</data>
+  <data key="d9">CYP</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ESP">
+  <data key="d8">Spain</data>
+  <data key="d9">ESP</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="MOZ">
+  <data key="d8">Mozambique</data>
+  <data key="d9">MOZ</data>
+  <data key="d10">Other</data>
+</node>
+<node id="PAK">
+  <data key="d8">Pakistan</data>
+  <data key="d9">PAK</data>
+  <data key="d10">Other</data>
+</node>
+<node id="PRY">
+  <data key="d8">Paraguay</data>
+  <data key="d9">PRY</data>
+  <data key="d10">Other</data>
+</node>
+<node id="PYF">
+  <data key="d8">French Polynesia</data>
+  <data key="d9">PYF</data>
+  <data key="d10">Other</data>
+</node>
+<node id="THA">
+  <data key="d8">Thailand</data>
+  <data key="d9">THA</data>
+  <data key="d10">Asia_Pacific</data>
+</node>
+<node id="AGO">
+  <data key="d8">Angola</data>
+  <data key="d9">AGO</data>
+  <data key="d10">Africa</data>
+</node>
+<node id="AUS">
+  <data key="d8">Australia</data>
+  <data key="d9">AUS</data>
+  <data key="d10">Asia_Pacific</data>
+</node>
+<node id="BEL">
+  <data key="d8">Belgium</data>
+  <data key="d9">BEL</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="BEN">
+  <data key="d8">Benin</data>
+  <data key="d9">BEN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BFA">
+  <data key="d8">Burkina Faso</data>
+  <data key="d9">BFA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BRA">
+  <data key="d8">Brazil</data>
+  <data key="d9">BRA</data>
+  <data key="d10">Latin_America</data>
+</node>
+<node id="CHN">
+  <data key="d8">China</data>
+  <data key="d9">CHN</data>
+  <data key="d10">Asia_Pacific</data>
+</node>
+<node id="CMR">
+  <data key="d8">Cameroon</data>
+  <data key="d9">CMR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="COD">
+  <data key="d8">Dem. Rep. of the Congo</data>
+  <data key="d9">COD</data>
+  <data key="d10">Other</data>
+</node>
+<node id="COG">
+  <data key="d8">Congo</data>
+  <data key="d9">COG</data>
+  <data key="d10">Other</data>
+</node>
+<node id="DEU">
+  <data key="d8">Germany</data>
+  <data key="d9">DEU</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="DNK">
+  <data key="d8">Denmark</data>
+  <data key="d9">DNK</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="FRA">
+  <data key="d8">France</data>
+  <data key="d9">FRA</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="GAB">
+  <data key="d8">Gabon</data>
+  <data key="d9">GAB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GBR">
+  <data key="d8">United Kingdom</data>
+  <data key="d9">GBR</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="IDN">
+  <data key="d8">Indonesia</data>
+  <data key="d9">IDN</data>
+  <data key="d10">Asia_Pacific</data>
+</node>
+<node id="IND">
+  <data key="d8">India</data>
+  <data key="d9">IND</data>
+  <data key="d10">Asia_Pacific</data>
+</node>
+<node id="ISR">
+  <data key="d8">Israel</data>
+  <data key="d9">ISR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ITA">
+  <data key="d8">Italy</data>
+  <data key="d9">ITA</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="JPN">
+  <data key="d8">Japan</data>
+  <data key="d9">JPN</data>
+  <data key="d10">Asia_Pacific</data>
+</node>
+<node id="KEN">
+  <data key="d8">Kenya</data>
+  <data key="d9">KEN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="KOR">
+  <data key="d8">Rep. of Korea</data>
+  <data key="d9">KOR</data>
+  <data key="d10">Asia_Pacific</data>
+</node>
+<node id="KWT">
+  <data key="d8">Kuwait</data>
+  <data key="d9">KWT</data>
+  <data key="d10">Middle_East</data>
+</node>
+<node id="MAR">
+  <data key="d8">Morocco</data>
+  <data key="d9">MAR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MYS">
+  <data key="d8">Malaysia</data>
+  <data key="d9">MYS</data>
+  <data key="d10">Asia_Pacific</data>
+</node>
+<node id="NAM">
+  <data key="d8">Namibia</data>
+  <data key="d9">NAM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="PHL">
+  <data key="d8">Philippines</data>
+  <data key="d9">PHL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="PRT">
+  <data key="d8">Portugal</data>
+  <data key="d9">PRT</data>
+  <data key="d10">Other</data>
+</node>
+<node id="S19">
+  <data key="d8">Other Asia, nes</data>
+  <data key="d9">S19</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SGP">
+  <data key="d8">Singapore</data>
+  <data key="d9">SGP</data>
+  <data key="d10">Asia_Pacific</data>
+</node>
+<node id="STP">
+  <data key="d8">Sao Tome and Principe</data>
+  <data key="d9">STP</data>
+  <data key="d10">Other</data>
+</node>
+<node id="UGA">
+  <data key="d8">Uganda</data>
+  <data key="d9">UGA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="URY">
+  <data key="d8">Uruguay</data>
+  <data key="d9">URY</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ZAF">
+  <data key="d8">South Africa</data>
+  <data key="d9">ZAF</data>
+  <data key="d10">Africa</data>
+</node>
+<node id="AIA">
+  <data key="d8">Anguilla</data>
+  <data key="d9">AIA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="DMA">
+  <data key="d8">Dominica</data>
+  <data key="d9">DMA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="LTU">
+  <data key="d8">Lithuania</data>
+  <data key="d9">LTU</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MSR">
+  <data key="d8">Montserrat</data>
+  <data key="d9">MSR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ALB">
+  <data key="d8">Albania</data>
+  <data key="d9">ALB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="AUT">
+  <data key="d8">Austria</data>
+  <data key="d9">AUT</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BGR">
+  <data key="d8">Bulgaria</data>
+  <data key="d9">BGR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BIH">
+  <data key="d8">Bosnia Herzegovina</data>
+  <data key="d9">BIH</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CHE">
+  <data key="d8">Switzerland</data>
+  <data key="d9">CHE</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CHL">
+  <data key="d8">Chile</data>
+  <data key="d9">CHL</data>
+  <data key="d10">Latin_America</data>
+</node>
+<node id="CIV">
+  <data key="d8">C_e d'Ivoire</data>
+  <data key="d9">CIV</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GEO">
+  <data key="d8">Georgia</data>
+  <data key="d9">GEO</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GRC">
+  <data key="d8">Greece</data>
+  <data key="d9">GRC</data>
+  <data key="d10">Other</data>
+</node>
+<node id="LBN">
+  <data key="d8">Lebanon</data>
+  <data key="d9">LBN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MDA">
+  <data key="d8">Rep. of Moldova</data>
+  <data key="d9">MDA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MKD">
+  <data key="d8">North Macedonia</data>
+  <data key="d9">MKD</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MLT">
+  <data key="d8">Malta</data>
+  <data key="d9">MLT</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MNE">
+  <data key="d8">Montenegro</data>
+  <data key="d9">MNE</data>
+  <data key="d10">Other</data>
+</node>
+<node id="POL">
+  <data key="d8">Poland</data>
+  <data key="d9">POL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ROU">
+  <data key="d8">Romania</data>
+  <data key="d9">ROU</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SAU">
+  <data key="d8">Saudi Arabia</data>
+  <data key="d9">SAU</data>
+  <data key="d10">Middle_East</data>
+</node>
+<node id="SEN">
+  <data key="d8">Senegal</data>
+  <data key="d9">SEN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SRB">
+  <data key="d8">Serbia</data>
+  <data key="d9">SRB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SVN">
+  <data key="d8">Slovenia</data>
+  <data key="d9">SVN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TGO">
+  <data key="d8">Togo</data>
+  <data key="d9">TGO</data>
+  <data key="d10">Other</data>
+</node>
+<node id="AND">
+  <data key="d8">Andorra</data>
+  <data key="d9">AND</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ZWE">
+  <data key="d8">Zimbabwe</data>
+  <data key="d9">ZWE</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ARG">
+  <data key="d8">Argentina</data>
+  <data key="d9">ARG</data>
+  <data key="d10">Latin_America</data>
+</node>
+<node id="ARM">
+  <data key="d8">Armenia</data>
+  <data key="d9">ARM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ATG">
+  <data key="d8">Antigua and Barbuda</data>
+  <data key="d9">ATG</data>
+  <data key="d10">Other</data>
+</node>
+<node id="AZE">
+  <data key="d8">Azerbaijan</data>
+  <data key="d9">AZE</data>
+  <data key="d10">Former_USSR</data>
+</node>
+<node id="BDI">
+  <data key="d8">Burundi</data>
+  <data key="d9">BDI</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BGD">
+  <data key="d8">Bangladesh</data>
+  <data key="d9">BGD</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BHR">
+  <data key="d8">Bahrain</data>
+  <data key="d9">BHR</data>
+  <data key="d10">Middle_East</data>
+</node>
+<node id="BHS">
+  <data key="d8">Bahamas</data>
+  <data key="d9">BHS</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BLR">
+  <data key="d8">Belarus</data>
+  <data key="d9">BLR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BOL">
+  <data key="d8">Bolivia (Plurinational State of)</data>
+  <data key="d9">BOL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BRB">
+  <data key="d8">Barbados</data>
+  <data key="d9">BRB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BRN">
+  <data key="d8">Brunei Darussalam</data>
+  <data key="d9">BRN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BWA">
+  <data key="d8">Botswana</data>
+  <data key="d9">BWA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CAF">
+  <data key="d8">Central African Rep.</data>
+  <data key="d9">CAF</data>
+  <data key="d10">Other</data>
+</node>
+<node id="COK">
+  <data key="d8">Cook Isds</data>
+  <data key="d9">COK</data>
+  <data key="d10">Other</data>
+</node>
+<node id="COM">
+  <data key="d8">Comoros</data>
+  <data key="d9">COM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CPV">
+  <data key="d8">Cabo Verde</data>
+  <data key="d9">CPV</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CUB">
+  <data key="d8">Cuba</data>
+  <data key="d9">CUB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CYM">
+  <data key="d8">Cayman Isds</data>
+  <data key="d9">CYM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="DJI">
+  <data key="d8">Djibouti</data>
+  <data key="d9">DJI</data>
+  <data key="d10">Other</data>
+</node>
+<node id="DOM">
+  <data key="d8">Dominican Rep.</data>
+  <data key="d9">DOM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="DZA">
+  <data key="d8">Algeria</data>
+  <data key="d9">DZA</data>
+  <data key="d10">Africa</data>
+</node>
+<node id="ECU">
+  <data key="d8">Ecuador</data>
+  <data key="d9">ECU</data>
+  <data key="d10">Latin_America</data>
+</node>
+<node id="EGY">
+  <data key="d8">Egypt</data>
+  <data key="d9">EGY</data>
+  <data key="d10">Africa</data>
+</node>
+<node id="ERI">
+  <data key="d8">Eritrea</data>
+  <data key="d9">ERI</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ESH">
+  <data key="d8">Western Sahara</data>
+  <data key="d9">ESH</data>
+  <data key="d10">Other</data>
+</node>
+<node id="EST">
+  <data key="d8">Estonia</data>
+  <data key="d9">EST</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ETH">
+  <data key="d8">Ethiopia</data>
+  <data key="d9">ETH</data>
+  <data key="d10">Other</data>
+</node>
+<node id="FJI">
+  <data key="d8">Fiji</data>
+  <data key="d9">FJI</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GHA">
+  <data key="d8">Ghana</data>
+  <data key="d9">GHA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GIN">
+  <data key="d8">Guinea</data>
+  <data key="d9">GIN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GMB">
+  <data key="d8">Gambia</data>
+  <data key="d9">GMB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GNB">
+  <data key="d8">Guinea-Bissau</data>
+  <data key="d9">GNB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GNQ">
+  <data key="d8">Equatorial Guinea</data>
+  <data key="d9">GNQ</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GRD">
+  <data key="d8">Grenada</data>
+  <data key="d9">GRD</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GTM">
+  <data key="d8">Guatemala</data>
+  <data key="d9">GTM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GUM">
+  <data key="d8">Guam</data>
+  <data key="d9">GUM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GUY">
+  <data key="d8">Guyana</data>
+  <data key="d9">GUY</data>
+  <data key="d10">Other</data>
+</node>
+<node id="HKG">
+  <data key="d8">China, Hong Kong SAR</data>
+  <data key="d9">HKG</data>
+  <data key="d10">Other</data>
+</node>
+<node id="HUN">
+  <data key="d8">Hungary</data>
+  <data key="d9">HUN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="IRL">
+  <data key="d8">Ireland</data>
+  <data key="d9">IRL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="IRN">
+  <data key="d8">Iran</data>
+  <data key="d9">IRN</data>
+  <data key="d10">Middle_East</data>
+</node>
+<node id="IRQ">
+  <data key="d8">Iraq</data>
+  <data key="d9">IRQ</data>
+  <data key="d10">Middle_East</data>
+</node>
+<node id="ISL">
+  <data key="d8">Iceland</data>
+  <data key="d9">ISL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="JAM">
+  <data key="d8">Jamaica</data>
+  <data key="d9">JAM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="JOR">
+  <data key="d8">Jordan</data>
+  <data key="d9">JOR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="KAZ">
+  <data key="d8">Kazakhstan</data>
+  <data key="d9">KAZ</data>
+  <data key="d10">Former_USSR</data>
+</node>
+<node id="KGZ">
+  <data key="d8">Kyrgyzstan</data>
+  <data key="d9">KGZ</data>
+  <data key="d10">Other</data>
+</node>
+<node id="KHM">
+  <data key="d8">Cambodia</data>
+  <data key="d9">KHM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="LBR">
+  <data key="d8">Liberia</data>
+  <data key="d9">LBR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="LBY">
+  <data key="d8">Libya</data>
+  <data key="d9">LBY</data>
+  <data key="d10">Africa</data>
+</node>
+<node id="LKA">
+  <data key="d8">Sri Lanka</data>
+  <data key="d9">LKA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="LUX">
+  <data key="d8">Luxembourg</data>
+  <data key="d9">LUX</data>
+  <data key="d10">Other</data>
+</node>
+<node id="LVA">
+  <data key="d8">Latvia</data>
+  <data key="d9">LVA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MAC">
+  <data key="d8">China, Macao SAR</data>
+  <data key="d9">MAC</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MDG">
+  <data key="d8">Madagascar</data>
+  <data key="d9">MDG</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MDV">
+  <data key="d8">Maldives</data>
+  <data key="d9">MDV</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MEX">
+  <data key="d8">Mexico</data>
+  <data key="d9">MEX</data>
+  <data key="d10">North_America</data>
+</node>
+<node id="MLI">
+  <data key="d8">Mali</data>
+  <data key="d9">MLI</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MMR">
+  <data key="d8">Myanmar</data>
+  <data key="d9">MMR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MNG">
+  <data key="d8">Mongolia</data>
+  <data key="d9">MNG</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MRT">
+  <data key="d8">Mauritania</data>
+  <data key="d9">MRT</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MUS">
+  <data key="d8">Mauritius</data>
+  <data key="d9">MUS</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MWI">
+  <data key="d8">Malawi</data>
+  <data key="d9">MWI</data>
+  <data key="d10">Other</data>
+</node>
+<node id="NER">
+  <data key="d8">Niger</data>
+  <data key="d9">NER</data>
+  <data key="d10">Other</data>
+</node>
+<node id="NGA">
+  <data key="d8">Nigeria</data>
+  <data key="d9">NGA</data>
+  <data key="d10">Africa</data>
+</node>
+<node id="NOR">
+  <data key="d8">Norway</data>
+  <data key="d9">NOR</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="NPL">
+  <data key="d8">Nepal</data>
+  <data key="d9">NPL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="NZL">
+  <data key="d8">New Zealand</data>
+  <data key="d9">NZL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="OMN">
+  <data key="d8">Oman</data>
+  <data key="d9">OMN</data>
+  <data key="d10">Middle_East</data>
+</node>
+<node id="PER">
+  <data key="d8">Peru</data>
+  <data key="d9">PER</data>
+  <data key="d10">Latin_America</data>
+</node>
+<node id="PNG">
+  <data key="d8">Papua New Guinea</data>
+  <data key="d9">PNG</data>
+  <data key="d10">Other</data>
+</node>
+<node id="PSE">
+  <data key="d8">State of Palestine</data>
+  <data key="d9">PSE</data>
+  <data key="d10">Other</data>
+</node>
+<node id="QAT">
+  <data key="d8">Qatar</data>
+  <data key="d9">QAT</data>
+  <data key="d10">Middle_East</data>
+</node>
+<node id="RUS">
+  <data key="d8">Russian Federation</data>
+  <data key="d9">RUS</data>
+  <data key="d10">Former_USSR</data>
+</node>
+<node id="RWA">
+  <data key="d8">Rwanda</data>
+  <data key="d9">RWA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SLE">
+  <data key="d8">Sierra Leone</data>
+  <data key="d9">SLE</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SOM">
+  <data key="d8">Somalia</data>
+  <data key="d9">SOM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SSD">
+  <data key="d8">South Sudan</data>
+  <data key="d9">SSD</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SWE">
+  <data key="d8">Sweden</data>
+  <data key="d9">SWE</data>
+  <data key="d10">Europe</data>
+</node>
+<node id="SWZ">
+  <data key="d8">Eswatini</data>
+  <data key="d9">SWZ</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SYC">
+  <data key="d8">Seychelles</data>
+  <data key="d9">SYC</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SYR">
+  <data key="d8">Syria</data>
+  <data key="d9">SYR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TCD">
+  <data key="d8">Chad</data>
+  <data key="d9">TCD</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TJK">
+  <data key="d8">Tajikistan</data>
+  <data key="d9">TJK</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TKM">
+  <data key="d8">Turkmenistan</data>
+  <data key="d9">TKM</data>
+  <data key="d10">Former_USSR</data>
+</node>
+<node id="TTO">
+  <data key="d8">Trinidad and Tobago</data>
+  <data key="d9">TTO</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TUN">
+  <data key="d8">Tunisia</data>
+  <data key="d9">TUN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TUR">
+  <data key="d8">T_kiye</data>
+  <data key="d9">TUR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TZA">
+  <data key="d8">United Rep. of Tanzania</data>
+  <data key="d9">TZA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="UKR">
+  <data key="d8">Ukraine</data>
+  <data key="d9">UKR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="UZB">
+  <data key="d8">Uzbekistan</data>
+  <data key="d9">UZB</data>
+  <data key="d10">Former_USSR</data>
+</node>
+<node id="VNM">
+  <data key="d8">Viet Nam</data>
+  <data key="d9">VNM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="WSM">
+  <data key="d8">Samoa</data>
+  <data key="d9">WSM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="YEM">
+  <data key="d8">Yemen</data>
+  <data key="d9">YEM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ZMB">
+  <data key="d8">Zambia</data>
+  <data key="d9">ZMB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CZE">
+  <data key="d8">Czechia</data>
+  <data key="d9">CZE</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ASM">
+  <data key="d8">American Samoa</data>
+  <data key="d9">ASM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ATA">
+  <data key="d8">Antarctica</data>
+  <data key="d9">ATA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="ATF">
+  <data key="d8">Fr. South Antarctic Terr.</data>
+  <data key="d9">ATF</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BMU">
+  <data key="d8">Bermuda</data>
+  <data key="d9">BMU</data>
+  <data key="d10">Other</data>
+</node>
+<node id="LCA">
+  <data key="d8">Saint Lucia</data>
+  <data key="d9">LCA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SXM">
+  <data key="d8">Sint Maarten</data>
+  <data key="d9">SXM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="VGB">
+  <data key="d8">Br. Virgin Isds</data>
+  <data key="d9">VGB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CCK">
+  <data key="d8">Cocos Isds</data>
+  <data key="d9">CCK</data>
+  <data key="d10">Other</data>
+</node>
+<node id="CXR">
+  <data key="d8">Christmas Isds</data>
+  <data key="d9">CXR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="FIN">
+  <data key="d8">Finland</data>
+  <data key="d9">FIN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="KIR">
+  <data key="d8">Kiribati</data>
+  <data key="d9">KIR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="LAO">
+  <data key="d8">Lao People's Dem. Rep.</data>
+  <data key="d9">LAO</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MHL">
+  <data key="d8">Marshall Isds</data>
+  <data key="d9">MHL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="MNP">
+  <data key="d8">N. Mariana Isds</data>
+  <data key="d9">MNP</data>
+  <data key="d10">Other</data>
+</node>
+<node id="NCL">
+  <data key="d8">New Caledonia</data>
+  <data key="d9">NCL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="NFK">
+  <data key="d8">Norfolk Isds</data>
+  <data key="d9">NFK</data>
+  <data key="d10">Other</data>
+</node>
+<node id="NRU">
+  <data key="d8">Nauru</data>
+  <data key="d9">NRU</data>
+  <data key="d10">Other</data>
+</node>
+<node id="PLW">
+  <data key="d8">Palau</data>
+  <data key="d9">PLW</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SLB">
+  <data key="d8">Solomon Isds</data>
+  <data key="d9">SLB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SVK">
+  <data key="d8">Slovakia</data>
+  <data key="d9">SVK</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TLS">
+  <data key="d8">Timor-Leste</data>
+  <data key="d9">TLS</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TON">
+  <data key="d8">Tonga</data>
+  <data key="d9">TON</data>
+  <data key="d10">Other</data>
+</node>
+<node id="VUT">
+  <data key="d8">Vanuatu</data>
+  <data key="d9">VUT</data>
+  <data key="d10">Other</data>
+</node>
+<node id="X1 ">
+  <data key="d8">Bunkers</data>
+  <data key="d9">X1 </data>
+  <data key="d10">Other</data>
+</node>
+<node id="HRV">
+  <data key="d8">Croatia</data>
+  <data key="d9">HRV</data>
+  <data key="d10">Other</data>
+</node>
+<node id="HTI">
+  <data key="d8">Haiti</data>
+  <data key="d9">HTI</data>
+  <data key="d10">Other</data>
+</node>
+<node id="LSO">
+  <data key="d8">Lesotho</data>
+  <data key="d9">LSO</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SMR">
+  <data key="d8">San Marino</data>
+  <data key="d9">SMR</data>
+  <data key="d10">Other</data>
+</node>
+<node id="XX ">
+  <data key="d8">Special Categories</data>
+  <data key="d9">XX </data>
+  <data key="d10">Other</data>
+</node>
+<node id="GIB">
+  <data key="d8">Gibraltar</data>
+  <data key="d9">GIB</data>
+  <data key="d10">Other</data>
+</node>
+<node id="FRO">
+  <data key="d8">Faroe Isds</data>
+  <data key="d9">FRO</data>
+  <data key="d10">Other</data>
+</node>
+<node id="GRL">
+  <data key="d8">Greenland</data>
+  <data key="d9">GRL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="WLF">
+  <data key="d8">Wallis and Futuna Isds</data>
+  <data key="d9">WLF</data>
+  <data key="d10">Other</data>
+</node>
+<node id="PRK">
+  <data key="d8">Dem. People's Rep. of Korea</data>
+  <data key="d9">PRK</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BES">
+  <data key="d8">Bonaire</data>
+  <data key="d9">BES</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BLZ">
+  <data key="d8">Belize</data>
+  <data key="d9">BLZ</data>
+  <data key="d10">Other</data>
+</node>
+<node id="VCT">
+  <data key="d8">Saint Vincent and the Grenadines</data>
+  <data key="d9">VCT</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TUV">
+  <data key="d8">Tuvalu</data>
+  <data key="d9">TUV</data>
+  <data key="d10">Other</data>
+</node>
+<node id="X2 ">
+  <data key="d8">Free Zones</data>
+  <data key="d9">X2 </data>
+  <data key="d10">Other</data>
+</node>
+<node id="TCA">
+  <data key="d8">Turks and Caicos Isds</data>
+  <data key="d9">TCA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BLM">
+  <data key="d8">Saint Barth_emy</data>
+  <data key="d9">BLM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="FLK">
+  <data key="d8">Falkland Isds (Malvinas)</data>
+  <data key="d9">FLK</data>
+  <data key="d10">Other</data>
+</node>
+<node id="KNA">
+  <data key="d8">Saint Kitts and Nevis</data>
+  <data key="d9">KNA</data>
+  <data key="d10">Other</data>
+</node>
+<node id="NIU">
+  <data key="d8">Niue</data>
+  <data key="d9">NIU</data>
+  <data key="d10">Other</data>
+</node>
+<node id="PCN">
+  <data key="d8">Pitcairn</data>
+  <data key="d9">PCN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="BTN">
+  <data key="d8">Bhutan</data>
+  <data key="d9">BTN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SPM">
+  <data key="d8">Saint Pierre and Miquelon</data>
+  <data key="d9">SPM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="A79">
+  <data key="d8">LAIA, nes</data>
+  <data key="d9">A79</data>
+  <data key="d10">Other</data>
+</node>
+<node id="FSM">
+  <data key="d8">FS Micronesia</data>
+  <data key="d9">FSM</data>
+  <data key="d10">Other</data>
+</node>
+<node id="HMD">
+  <data key="d8">Heard Island and McDonald Islands</data>
+  <data key="d9">HMD</data>
+  <data key="d10">Other</data>
+</node>
+<node id="F19">
+  <data key="d8">Other Africa, nes</data>
+  <data key="d9">F19</data>
+  <data key="d10">Other</data>
+</node>
+<node id="E19">
+  <data key="d8">Other Europe, nes</data>
+  <data key="d9">E19</data>
+  <data key="d10">Other</data>
+</node>
+<node id="SHN">
+  <data key="d8">Saint Helena</data>
+  <data key="d9">SHN</data>
+  <data key="d10">Other</data>
+</node>
+<node id="IOT">
+  <data key="d8">Br. Indian Ocean Terr.</data>
+  <data key="d9">IOT</data>
+  <data key="d10">Other</data>
+</node>
+<node id="VAT">
+  <data key="d8">Holy See (Vatican City State)</data>
+  <data key="d9">VAT</data>
+  <data key="d10">Other</data>
+</node>
+<node id="A59">
+  <data key="d8">North America and Central America, nes</data>
+  <data key="d9">A59</data>
+  <data key="d10">Other</data>
+</node>
+<node id="TKL">
+  <data key="d8">Tokelau</data>
+  <data key="d9">TKL</data>
+  <data key="d10">Other</data>
+</node>
+<node id="UMI">
+  <data key="d8">United States Minor Outlying Islands</data>
+  <data key="d9">UMI</data>
+  <data key="d10">Other</data>
+</node>
+<edge source="ABW" target="USA">
+  <data key="d11">73094969.76900001</data>
+</edge>
+<edge source="COL" target="USA">
+  <data key="d11">8467432077.0</data>
+</edge>
+<edge source="COL" target="LCA">
+  <data key="d11">797966169.1</data>
+</edge>
+<edge source="CRI" target="USA">
+  <data key="d11">1619850061.48</data>
+</edge>
+<edge source="CUW" target="RUS">
+  <data key="d11">493487532.3</data>
+</edge>
+<edge source="HND" target="USA">
+  <data key="d11">1374833144.82</data>
+</edge>
+<edge source="NIC" target="USA">
+  <data key="d11">686658340.18</data>
+</edge>
+<edge source="NLD" target="BEL">
+  <data key="d11">26572265541.5</data>
+</edge>
+<edge source="NLD" target="DEU">
+  <data key="d11">16720339603.0</data>
+</edge>
+<edge source="NLD" target="GBR">
+  <data key="d11">10672067886.441</data>
+</edge>
+<edge source="NLD" target="X1 ">
+  <data key="d11">5107758046.603</data>
+</edge>
+<edge source="NLD" target="GIN">
+  <data key="d11">186369847.7</data>
+</edge>
+<edge source="NLD" target="F19">
+  <data key="d11">11736691.81</data>
+</edge>
+<edge source="NLD" target="SPM">
+  <data key="d11">66891.936</data>
+</edge>
+<edge source="PAN" target="X2 ">
+  <data key="d11">1694445947.0</data>
+</edge>
+<edge source="PAN" target="USA">
+  <data key="d11">583712897.0</data>
+</edge>
+<edge source="SDN" target="SAU">
+  <data key="d11">563586827.0</data>
+</edge>
+<edge source="SDN" target="UMI">
+  <data key="d11">208968.0</data>
+</edge>
+<edge source="SLV" target="USA">
+  <data key="d11">1448958510.8899999</data>
+</edge>
+<edge source="SUR" target="GUY">
+  <data key="d11">90709626.034</data>
+</edge>
+<edge source="SUR" target="ATG">
+  <data key="d11">36973201.45</data>
+</edge>
+<edge source="USA" target="CAN">
+  <data key="d11">24306082072.3</data>
+</edge>
+<edge source="USA" target="MEX">
+  <data key="d11">15800789200.0</data>
+</edge>
+<edge source="USA" target="VEN">
+  <data key="d11">12772679769.0</data>
+</edge>
+<edge source="USA" target="IRQ">
+  <data key="d11">12123440260.0</data>
+</edge>
+<edge source="USA" target="KOR">
+  <data key="d11">11039637634.0</data>
+</edge>
+<edge source="USA" target="CHL">
+  <data key="d11">5466570528.4</data>
+</edge>
+<edge source="USA" target="ECU">
+  <data key="d11">4298414411.0</data>
+</edge>
+<edge source="USA" target="PER">
+  <data key="d11">3633872025.13</data>
+</edge>
+<edge source="USA" target="DOM">
+  <data key="d11">2541749273.5</data>
+</edge>
+<edge source="USA" target="GTM">
+  <data key="d11">2516999156.0</data>
+</edge>
+<edge source="USA" target="ARG">
+  <data key="d11">1774469647.37</data>
+</edge>
+<edge source="USA" target="TTO">
+  <data key="d11">1728255842.0</data>
+</edge>
+<edge source="USA" target="MAR">
+  <data key="d11">1632059649.1</data>
+</edge>
+<edge source="USA" target="JAM">
+  <data key="d11">772082706.6400001</data>
+</edge>
+<edge source="USA" target="PRY">
+  <data key="d11">483942819.0</data>
+</edge>
+<edge source="USA" target="BHS">
+  <data key="d11">478992923.22</data>
+</edge>
+<edge source="USA" target="HTI">
+  <data key="d11">269353675.0</data>
+</edge>
+<edge source="USA" target="CYM">
+  <data key="d11">139902966.0</data>
+</edge>
+<edge source="USA" target="VGB">
+  <data key="d11">101546878.0</data>
+</edge>
+<edge source="USA" target="BLZ">
+  <data key="d11">96948732.765</data>
+</edge>
+<edge source="USA" target="TCA">
+  <data key="d11">28611130.0</data>
+</edge>
+<edge source="USA" target="KNA">
+  <data key="d11">23289094.0</data>
+</edge>
+<edge source="USA" target="AIA">
+  <data key="d11">10521405.0</data>
+</edge>
+<edge source="USA" target="MSR">
+  <data key="d11">6142179.886999999</data>
+</edge>
+<edge source="VEN" target="CUB">
+  <data key="d11">2633451491.42</data>
+</edge>
+<edge source="_X " target="ARE">
+  <data key="d11">14329956599.0</data>
+</edge>
+<edge source="_X " target="KWT">
+  <data key="d11">13644713303.0</data>
+</edge>
+<edge source="_X " target="BHR">
+  <data key="d11">6898305000.0</data>
+</edge>
+<edge source="AFG" target="PAK">
+  <data key="d11">164620954.8</data>
+</edge>
+<edge source="ARE" target="THA">
+  <data key="d11">10015536551.67</data>
+</edge>
+<edge source="ARE" target="PAK">
+  <data key="d11">7314946783.902</data>
+</edge>
+<edge source="ARE" target="NZL">
+  <data key="d11">1904532223.76</data>
+</edge>
+<edge source="ARE" target="TZA">
+  <data key="d11">674389934.348</data>
+</edge>
+<edge source="ARE" target="DJI">
+  <data key="d11">605549128.6209999</data>
+</edge>
+<edge source="ARE" target="UGA">
+  <data key="d11">596192069.99</data>
+</edge>
+<edge source="ARE" target="MRT">
+  <data key="d11">433511864.03000003</data>
+</edge>
+<edge source="ARE" target="MDG">
+  <data key="d11">338567016.7</data>
+</edge>
+<edge source="ARE" target="MDV">
+  <data key="d11">299293789.46500003</data>
+</edge>
+<edge source="ARE" target="SYC">
+  <data key="d11">291386665.693</data>
+</edge>
+<edge source="ARE" target="RWA">
+  <data key="d11">183913259.847</data>
+</edge>
+<edge source="ARE" target="MWI">
+  <data key="d11">126978841.92400001</data>
+</edge>
+<edge source="ARE" target="ESH">
+  <data key="d11">31494.837</data>
+</edge>
+<edge source="CYP" target="ISR">
+  <data key="d11">558868124.928</data>
+</edge>
+<edge source="ESP" target="NGA">
+  <data key="d11">6542731734.0</data>
+</edge>
+<edge source="ESP" target="PRT">
+  <data key="d11">1578186909.246</data>
+</edge>
+<edge source="ESP" target="GIB">
+  <data key="d11">1527062543.472</data>
+</edge>
+<edge source="ESP" target="ALB">
+  <data key="d11">179908945.32200003</data>
+</edge>
+<edge source="ESP" target="AND">
+  <data key="d11">63668787.213</data>
+</edge>
+<edge source="ESP" target="FLK">
+  <data key="d11">15454817.52</data>
+</edge>
+<edge source="MOZ" target="IND">
+  <data key="d11">820862455.5139999</data>
+</edge>
+<edge source="PAK" target="BMU">
+  <data key="d11">95922428.74</data>
+</edge>
+<edge source="PYF" target="KOR">
+  <data key="d11">120534287.529</data>
+</edge>
+<edge source="THA" target="KHM">
+  <data key="d11">822082291.1999999</data>
+</edge>
+<edge source="THA" target="LAO">
+  <data key="d11">675468173.0</data>
+</edge>
+<edge source="AGO" target="IND">
+  <data key="d11">4094004125.0</data>
+</edge>
+<edge source="AGO" target="URY">
+  <data key="d11">363283051.0</data>
+</edge>
+<edge source="AGO" target="STP">
+  <data key="d11">29907696.411</data>
+</edge>
+<edge source="AUS" target="JPN">
+  <data key="d11">31522357163.0</data>
+</edge>
+<edge source="AUS" target="CHN">
+  <data key="d11">23031910459.0</data>
+</edge>
+<edge source="AUS" target="CXR">
+  <data key="d11">9961512.892</data>
+</edge>
+<edge source="AUS" target="ATA">
+  <data key="d11">4669814.86</data>
+</edge>
+<edge source="AUS" target="CCK">
+  <data key="d11">179830.255</data>
+</edge>
+<edge source="BEL" target="FRA">
+  <data key="d11">11372932143.806</data>
+</edge>
+<edge source="BEL" target="LUX">
+  <data key="d11">1263403715.8439999</data>
+</edge>
+<edge source="BEL" target="CPV">
+  <data key="d11">33299676.26</data>
+</edge>
+<edge source="BEN" target="MLI">
+  <data key="d11">151416224.7</data>
+</edge>
+<edge source="BFA" target="CIV">
+  <data key="d11">226738094.73900002</data>
+</edge>
+<edge source="BRA" target="CHN">
+  <data key="d11">16470376136.0</data>
+</edge>
+<edge source="BRA" target="BOL">
+  <data key="d11">1669662442.0</data>
+</edge>
+<edge source="BRA" target="PCN">
+  <data key="d11">243980.0</data>
+</edge>
+<edge source="CHN" target="OMN">
+  <data key="d11">17695687788.0</data>
+</edge>
+<edge source="CHN" target="IRN">
+  <data key="d11">15071670193.0</data>
+</edge>
+<edge source="CHN" target="KWT">
+  <data key="d11">13297268289.0</data>
+</edge>
+<edge source="CHN" target="MYS">
+  <data key="d11">10012744319.0</data>
+</edge>
+<edge source="CHN" target="COG">
+  <data key="d11">6474503105.0</data>
+</edge>
+<edge source="CHN" target="HKG">
+  <data key="d11">6409294994.856</data>
+</edge>
+<edge source="CHN" target="TKM">
+  <data key="d11">6319289487.0</data>
+</edge>
+<edge source="CHN" target="MNG">
+  <data key="d11">3198967883.0</data>
+</edge>
+<edge source="CHN" target="PHL">
+  <data key="d11">2235529502.6</data>
+</edge>
+<edge source="CHN" target="GAB">
+  <data key="d11">1953839380.0</data>
+</edge>
+<edge source="CHN" target="GHA">
+  <data key="d11">1878497668.0</data>
+</edge>
+<edge source="CHN" target="GNQ">
+  <data key="d11">1793533506.0</data>
+</edge>
+<edge source="CHN" target="SSD">
+  <data key="d11">1604084879.0</data>
+</edge>
+<edge source="CHN" target="CMR">
+  <data key="d11">724383172.0</data>
+</edge>
+<edge source="CHN" target="YEM">
+  <data key="d11">707063243.0</data>
+</edge>
+<edge source="CHN" target="UZB">
+  <data key="d11">611471268.0</data>
+</edge>
+<edge source="CHN" target="MHL">
+  <data key="d11">406126619.0</data>
+</edge>
+<edge source="CHN" target="MAC">
+  <data key="d11">294091404.09</data>
+</edge>
+<edge source="CHN" target="COD">
+  <data key="d11">242386401.0</data>
+</edge>
+<edge source="CHN" target="TUV">
+  <data key="d11">8070728.0</data>
+</edge>
+<edge source="CMR" target="HMD">
+  <data key="d11">115896.604</data>
+</edge>
+<edge source="COD" target="CAF">
+  <data key="d11">45444084.25</data>
+</edge>
+<edge source="DEU" target="RUS">
+  <data key="d11">21747070578.2</data>
+</edge>
+<edge source="DEU" target="XX ">
+  <data key="d11">10927883101.91</data>
+</edge>
+<edge source="DEU" target="KAZ">
+  <data key="d11">4002709018.227</data>
+</edge>
+<edge source="DEU" target="CHE">
+  <data key="d11">3173164079.3780003</data>
+</edge>
+<edge source="DNK" target="NOR">
+  <data key="d11">2009333322.416</data>
+</edge>
+<edge source="DNK" target="FRO">
+  <data key="d11">94201149.748</data>
+</edge>
+<edge source="FRA" target="BLM">
+  <data key="d11">7419012.69</data>
+</edge>
+<edge source="FRA" target="ATF">
+  <data key="d11">711831.4659999999</data>
+</edge>
+<edge source="GAB" target="PRK">
+  <data key="d11">185752760.8</data>
+</edge>
+<edge source="GBR" target="NOR">
+  <data key="d11">23115008832.537</data>
+</edge>
+<edge source="GBR" target="IRL">
+  <data key="d11">3667085504.66</data>
+</edge>
+<edge source="IDN" target="SGP">
+  <data key="d11">11610467376.0</data>
+</edge>
+<edge source="IND" target="IRN">
+  <data key="d11">13183871330.467</data>
+</edge>
+<edge source="IND" target="NGA">
+  <data key="d11">10904830261.843</data>
+</edge>
+<edge source="IND" target="NPL">
+  <data key="d11">1950719694.0</data>
+</edge>
+<edge source="IND" target="MUS">
+  <data key="d11">635376613.463</data>
+</edge>
+<edge source="IND" target="TCD">
+  <data key="d11">505293571.6</data>
+</edge>
+<edge source="IND" target="BTN">
+  <data key="d11">125190216.846</data>
+</edge>
+<edge source="ISR" target="RUS">
+  <data key="d11">3331176000.0</data>
+</edge>
+<edge source="ISR" target="PSE">
+  <data key="d11">657926601.4430001</data>
+</edge>
+<edge source="ITA" target="RUS">
+  <data key="d11">14480834850.9</data>
+</edge>
+<edge source="ITA" target="DZA">
+  <data key="d11">6663972072.6</data>
+</edge>
+<edge source="ITA" target="AZE">
+  <data key="d11">6514967177.17</data>
+</edge>
+<edge source="ITA" target="LBY">
+  <data key="d11">4908686884.4</data>
+</edge>
+<edge source="ITA" target="SVN">
+  <data key="d11">711013954.9999999</data>
+</edge>
+<edge source="ITA" target="MLT">
+  <data key="d11">648509670.683</data>
+</edge>
+<edge source="ITA" target="SMR">
+  <data key="d11">13762703.29</data>
+</edge>
+<edge source="ITA" target="VAT">
+  <data key="d11">7130257.775</data>
+</edge>
+<edge source="JPN" target="QAT">
+  <data key="d11">14655113780.0</data>
+</edge>
+<edge source="JPN" target="BRN">
+  <data key="d11">2324843619.97</data>
+</edge>
+<edge source="JPN" target="PNG">
+  <data key="d11">1849359708.8</data>
+</edge>
+<edge source="KEN" target="SAU">
+  <data key="d11">1351338230.55</data>
+</edge>
+<edge source="KOR" target="QAT">
+  <data key="d11">15933764580.0</data>
+</edge>
+<edge source="KOR" target="RUS">
+  <data key="d11">14233651873.0</data>
+</edge>
+<edge source="KOR" target="NRU">
+  <data key="d11">34441230.0</data>
+</edge>
+<edge source="KOR" target="FSM">
+  <data key="d11">1315557.0</data>
+</edge>
+<edge source="KWT" target="VNM">
+  <data key="d11">2506743026.37</data>
+</edge>
+<edge source="KWT" target="ETH">
+  <data key="d11">1071701919.0</data>
+</edge>
+<edge source="KWT" target="ZMB">
+  <data key="d11">435228213.716</data>
+</edge>
+<edge source="MYS" target="SGP">
+  <data key="d11">11641111482.221</data>
+</edge>
+<edge source="NAM" target="ZAF">
+  <data key="d11">241832932.949</data>
+</edge>
+<edge source="PRT" target="GNB">
+  <data key="d11">23943908.619000003</data>
+</edge>
+<edge source="S19" target="SAU">
+  <data key="d11">7332715777.3</data>
+</edge>
+<edge source="SGP" target="SAU">
+  <data key="d11">8480527160.75</data>
+</edge>
+<edge source="SGP" target="MMR">
+  <data key="d11">3324733072.4</data>
+</edge>
+<edge source="SGP" target="ZWE">
+  <data key="d11">1341627946.0</data>
+</edge>
+<edge source="SGP" target="BGD">
+  <data key="d11">1166079593.49</data>
+</edge>
+<edge source="SGP" target="LKA">
+  <data key="d11">911329590.054</data>
+</edge>
+<edge source="SGP" target="FJI">
+  <data key="d11">483406826.647</data>
+</edge>
+<edge source="SGP" target="NCL">
+  <data key="d11">335044975.7</data>
+</edge>
+<edge source="SGP" target="GUM">
+  <data key="d11">294893960.341</data>
+</edge>
+<edge source="SGP" target="SLB">
+  <data key="d11">75888139.137</data>
+</edge>
+<edge source="SGP" target="WSM">
+  <data key="d11">62354494.02</data>
+</edge>
+<edge source="SGP" target="ASM">
+  <data key="d11">34029690.59</data>
+</edge>
+<edge source="SGP" target="PLW">
+  <data key="d11">23433462.48</data>
+</edge>
+<edge source="SGP" target="MNP">
+  <data key="d11">20599886.87</data>
+</edge>
+<edge source="SGP" target="VUT">
+  <data key="d11">17124478.74</data>
+</edge>
+<edge source="SGP" target="KIR">
+  <data key="d11">11988945.154000001</data>
+</edge>
+<edge source="SGP" target="A59">
+  <data key="d11">3653054.994</data>
+</edge>
+<edge source="ZAF" target="SAU">
+  <data key="d11">4760750352.4</data>
+</edge>
+<edge source="ZAF" target="BWA">
+  <data key="d11">768545696.2179999</data>
+</edge>
+<edge source="ZAF" target="LSO">
+  <data key="d11">171456961.628</data>
+</edge>
+<edge source="ZAF" target="SWZ">
+  <data key="d11">160395879.467</data>
+</edge>
+<edge source="DMA" target="EGY">
+  <data key="d11">41857103.09</data>
+</edge>
+<edge source="LTU" target="RUS">
+  <data key="d11">3805617479.0</data>
+</edge>
+<edge source="LTU" target="LVA">
+  <data key="d11">634064534.7859999</data>
+</edge>
+<edge source="AUT" target="XX ">
+  <data key="d11">3577348709.0</data>
+</edge>
+<edge source="BGR" target="RUS">
+  <data key="d11">3133710401.55</data>
+</edge>
+<edge source="BIH" target="HRV">
+  <data key="d11">412378830.74</data>
+</edge>
+<edge source="CIV" target="NGA">
+  <data key="d11">1294200158.314</data>
+</edge>
+<edge source="CIV" target="LBR">
+  <data key="d11">492767026.5</data>
+</edge>
+<edge source="CIV" target="GMB">
+  <data key="d11">74642590.37</data>
+</edge>
+<edge source="GEO" target="AZE">
+  <data key="d11">383903649.4</data>
+</edge>
+<edge source="GRC" target="IRQ">
+  <data key="d11">5370585069.0</data>
+</edge>
+<edge source="GRC" target="LBN">
+  <data key="d11">1566068724.573</data>
+</edge>
+<edge source="GRC" target="MKD">
+  <data key="d11">481430656.39000005</data>
+</edge>
+<edge source="GRC" target="MNE">
+  <data key="d11">162251931.329</data>
+</edge>
+<edge source="GRC" target="SHN">
+  <data key="d11">3968821.541</data>
+</edge>
+<edge source="MDA" target="ROU">
+  <data key="d11">482753211.0</data>
+</edge>
+<edge source="POL" target="RUS">
+  <data key="d11">13201673392.0</data>
+</edge>
+<edge source="ROU" target="RUS">
+  <data key="d11">2991867229.32</data>
+</edge>
+<edge source="SAU" target="EGY">
+  <data key="d11">3694836211.9</data>
+</edge>
+<edge source="SAU" target="JOR">
+  <data key="d11">2053181644.8</data>
+</edge>
+<edge source="SAU" target="BDI">
+  <data key="d11">111344662.5</data>
+</edge>
+<edge source="SEN" target="MLI">
+  <data key="d11">753172197.03</data>
+</edge>
+<edge source="SEN" target="NGA">
+  <data key="d11">685837180.645</data>
+</edge>
+<edge source="SEN" target="SLE">
+  <data key="d11">5964317.15</data>
+</edge>
+<edge source="SRB" target="RUS">
+  <data key="d11">1362702724.0</data>
+</edge>
+<edge source="TGO" target="NGA">
+  <data key="d11">1052467327.01</data>
+</edge>
+<edge source="ARM" target="RUS">
+  <data key="d11">463984690.15999997</data>
+</edge>
+<edge source="BLR" target="RUS">
+  <data key="d11">10900991900.0</data>
+</edge>
+<edge source="BRB" target="TTO">
+  <data key="d11">218710232.0</data>
+</edge>
+<edge source="COK" target="FJI">
+  <data key="d11">11541582.75</data>
+</edge>
+<edge source="COM" target="TUR">
+  <data key="d11">2337343.0</data>
+</edge>
+<edge source="DZA" target="TUN">
+  <data key="d11">876232138.814</data>
+</edge>
+<edge source="EGY" target="ERI">
+  <data key="d11">4262801.14</data>
+</edge>
+<edge source="EST" target="RUS">
+  <data key="d11">780085665.1260002</data>
+</edge>
+<edge source="FJI" target="TON">
+  <data key="d11">34691229.587000005</data>
+</edge>
+<edge source="FJI" target="WLF">
+  <data key="d11">5755178.767</data>
+</edge>
+<edge source="FJI" target="NFK">
+  <data key="d11">3096315.385</data>
+</edge>
+<edge source="GRD" target="TTO">
+  <data key="d11">47076142.555</data>
+</edge>
+<edge source="GUY" target="TTO">
+  <data key="d11">414792637.84</data>
+</edge>
+<edge source="HKG" target="TLS">
+  <data key="d11">71537412.24</data>
+</edge>
+<edge source="HUN" target="RUS">
+  <data key="d11">3968391923.0</data>
+</edge>
+<edge source="IRN" target="E19">
+  <data key="d11">11008485334.7</data>
+</edge>
+<edge source="IRQ" target="HRV">
+  <data key="d11">468422842.0</data>
+</edge>
+<edge source="ISL" target="NOR">
+  <data key="d11">557684531.6</data>
+</edge>
+<edge source="JOR" target="VCT">
+  <data key="d11">89989645.66</data>
+</edge>
+<edge source="KGZ" target="RUS">
+  <data key="d11">710451435.0</data>
+</edge>
+<edge source="MEX" target="A79">
+  <data key="d11">1955646921.0</data>
+</edge>
+<edge source="MMR" target="IOT">
+  <data key="d11">969945.31</data>
+</edge>
+<edge source="NER" target="NGA">
+  <data key="d11">143518312.86</data>
+</edge>
+<edge source="NZL" target="NIU">
+  <data key="d11">2740859.636</data>
+</edge>
+<edge source="OMN" target="SOM">
+  <data key="d11">46501444.45</data>
+</edge>
+<edge source="RUS" target="TUR">
+  <data key="d11">7084198980.0</data>
+</edge>
+<edge source="RUS" target="FIN">
+  <data key="d11">6265495053.9</data>
+</edge>
+<edge source="RUS" target="SVK">
+  <data key="d11">4674206932.6</data>
+</edge>
+<edge source="RUS" target="SWE">
+  <data key="d11">4489542752.6</data>
+</edge>
+<edge source="RUS" target="CZE">
+  <data key="d11">4241559077.0</data>
+</edge>
+<edge source="RUS" target="UKR">
+  <data key="d11">4136714794.23</data>
+</edge>
+<edge source="RUS" target="TJK">
+  <data key="d11">252814501.0</data>
+</edge>
+<edge source="SWE" target="GRL">
+  <data key="d11">131150154.4</data>
+</edge>
+<edge source="SYR" target="TUR">
+  <data key="d11">113459964.0</data>
+</edge>
+<edge source="TTO" target="BES">
+  <data key="d11">353537835.0</data>
+</edge>
+<edge source="TTO" target="SXM">
+  <data key="d11">40810597.24</data>
+</edge>
+<edge source="WSM" target="TKL">
+  <data key="d11">1281873.133</data>
+</edge>
+</graph></graphml>

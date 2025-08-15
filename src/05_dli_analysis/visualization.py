@@ -46,7 +46,7 @@ def load_dli_panel_data(file_path: str = None) -> pd.DataFrame:
     
     if file_path is None:
         base_dir = Path(__file__).parent.parent.parent
-        file_path = Path(__file__).parent / "dli_panel_data_v2.csv"
+        file_path = Path(__file__).parent / "dli_panel_data.csv"
     
     logger.info(f"📂 加载双向DLI面板数据: {file_path}")
     
@@ -223,8 +223,7 @@ def create_export_target_ranking(df: pd.DataFrame = None, output_dir: str = None
     
     # 设置输出路径
     if output_dir is None:
-        base_dir = Path(__file__).parent.parent.parent
-        output_dir = base_dir / "outputs" / "figures"
+        output_dir = Path(__file__).parent / "figures"
         output_dir.mkdir(parents=True, exist_ok=True)
     
     # 筛选出口锁定数据
@@ -293,13 +292,66 @@ def create_export_target_ranking(df: pd.DataFrame = None, output_dir: str = None
                          alpha=0.6, c=recent_ranking['dli_score'], 
                          cmap='RdYlGn', edgecolors='black', linewidth=0.5)
     
-    # 标注重要国家
-    important_countries = recent_ranking.nlargest(8, 'dli_score')
-    for _, country in important_countries.iterrows():
-        ax2.annotate(country['us_partner'], 
-                    (country['market_locking_power'], country['dli_score']),
-                    xytext=(5, 5), textcoords='offset points',
-                    fontsize=9, alpha=0.8)
+    # 标注重要国家 - 包括左图中的主要国家
+    # 1. 获取左图排名前10的国家
+    top_countries_from_left = set(top_countries.head(10)['us_partner'].tolist())
+    
+    # 2. 获取右图中DLI得分或市场锁定力较高的国家
+    high_dli_countries = set(recent_ranking.nlargest(6, 'dli_score')['us_partner'].tolist())
+    high_market_countries = set(recent_ranking.nlargest(4, 'market_locking_power')['us_partner'].tolist())
+    
+    # 3. 合并需要标注的重要国家
+    countries_to_label = top_countries_from_left.union(high_dli_countries).union(high_market_countries)
+    
+    # 4. 标注这些国家，特殊处理MEX和附近国家的冲突
+    labeled_positions = {}  # 记录已标注的位置，避免重叠
+    
+    # 对所有需要标注的国家按位置排序，优先处理重要的
+    countries_with_positions = []
+    for country_code in countries_to_label:
+        country_data = recent_ranking[recent_ranking['us_partner'] == country_code]
+        if len(country_data) > 0:
+            country = country_data.iloc[0]
+            countries_with_positions.append({
+                'code': country_code,
+                'x': country['market_locking_power'],
+                'y': country['dli_score'],
+                'data': country
+            })
+    
+    # 按DLI得分排序，重要国家优先标注
+    countries_with_positions.sort(key=lambda x: x['y'], reverse=True)
+    
+    for country_info in countries_with_positions:
+        country_code = country_info['code']
+        x, y = country_info['x'], country_info['y']
+        country = country_info['data']
+        
+        # 特殊处理MEX、SLV、HND三国的标签冲突
+        if country_code == 'MEX':
+            # MEX使用向左下角的偏移
+            offset = (-20, -15)
+        elif country_code == 'SLV':
+            # SLV使用向右上角的偏移
+            offset = (20, 15)
+        elif country_code == 'HND':
+            # HND使用向右下角的偏移
+            offset = (15, -12)
+        else:
+            # 其他国家使用循环偏移
+            offsets = [(8, 8), (-8, 8), (8, -8), (-8, -8), (12, 0), (-12, 0), (0, 12), (0, -12)]
+            offset = offsets[hash(country_code) % len(offsets)]
+        
+        ax2.annotate(country_code, 
+                    (x, y),
+                    xytext=offset, textcoords='offset points',
+                    fontsize=8, alpha=0.9, fontweight='bold',
+                    bbox=dict(boxstyle="round,pad=0.2", facecolor='white', alpha=0.8, edgecolor='gray'),
+                    arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0.1', 
+                                  color='gray', alpha=0.6, lw=0.5))
+        
+        # 记录标注位置
+        labeled_positions[country_code] = (x + offset[0]/100, y + offset[1]/100)
     
     ax2.set_xlabel('Market Locking Power', fontsize=12)
     ax2.set_ylabel('DLI Score', fontsize=12)
@@ -464,7 +516,7 @@ def generate_all_visualizations(df: pd.DataFrame = None, output_dir: str = None)
         base_dir = Path(__file__).parent.parent.parent
         output_dir = base_dir / "outputs" / "figures"
     
-    output_dir = Path(__file__).parent
+    output_dir = Path(__file__).parent / "figures"
     output_dir.mkdir(parents=True, exist_ok=True)
     
     # 生成所有图表

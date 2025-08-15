@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 """
-统计验证模块 (Statistical Verification Module)
-==============================================
+双向DLI统计验证模块 v2.0 (Bidirectional DLI Statistical Verification Module)
+============================================================================
 
-本模块使用双重差分法(DID)等准实验方法，对"页岩革命是否显著改变了DLI格局"
-这一核心假说进行严谨的统计验证。
+本模块专为双向DLI分析系统设计，使用双重差分法(DID)等准实验方法，
+对"页岩革命是否显著改变了美国能源贸易的双向锁定格局"进行严谨的统计验证。
 
-DID模型设定：
-- 处理组 (Treatment Group): 通过管道进行原油和天然气贸易的美-加、美-墨关系
-  这些关系受高沉没成本的专用性基础设施锁定，是政策冲击最直接的传导渠道
-- 控制组 (Control Group): 通过海运进行LNG、原油及成品油贸易的关系
-  如与沙特、卡塔尔、委内瑞拉等，基础设施专用性较低，转换成本更灵活
-- 政策冲击时间点: 页岩革命产生显著产出效应的年份（2011年或之后）
+核心功能：
+1. 进口锁定DID分析：验证美国被供应商锁定程度的变化
+2. 出口锁定DID分析：验证美国锁定其他国家程度的变化
+3. 双向对比分析：量化权力关系反转效应
+
+DID实验设计：
+- 处理组：美-加、美-墨的管道贸易关系（高专用性基础设施）
+- 控制组：与沙特、卡塔尔等的海运贸易关系（低专用性）
+- 政策冲击时点：2011年（页岩革命显著产出效应年份）
 
 作者：Energy Network Analysis Team
+版本：2.0
 """
 
 import pandas as pd
@@ -22,9 +26,10 @@ from pathlib import Path
 import logging
 from typing import Dict, List, Tuple, Optional, Union
 import warnings
+import json
 warnings.filterwarnings('ignore')
 
-# 尝试导入statsmodels，如果没有则使用简化版本
+# 导入statsmodels
 try:
     import statsmodels.api as sm
     import statsmodels.formula.api as smf
@@ -41,670 +46,492 @@ logger = logging.getLogger(__name__)
 
 # DID实验设计常量
 TREATMENT_COUNTRIES = ['CAN', 'MEX']  # 处理组：管道贸易国家
-CONTROL_COUNTRIES = ['SAU', 'QAT', 'VEN', 'NOR', 'GBR', 'RUS', 'ARE']  # 控制组：海运贸易主要国家
-PIPELINE_PRODUCTS = ['Crude_Oil', 'Natural_Gas']  # 管道运输的主要产品
-POLICY_SHOCK_YEAR = 2011  # 页岩革命显著产出效应年份
+CONTROL_COUNTRIES = ['SAU', 'QAT', 'VEN', 'NOR', 'GBR', 'RUS', 'ARE']  # 控制组
+PIPELINE_PRODUCTS = ['Crude_Oil', 'Natural_Gas']  # 管道运输产品
+POLICY_SHOCK_YEAR = 2011  # 页岩革命冲击年份
 PRE_PERIOD = (2001, 2010)  # 政策前期间
 POST_PERIOD = (2011, 2024)  # 政策后期间
 
-def prepare_did_dataset(dli_data: pd.DataFrame = None, 
-                       data_file_path: str = None) -> pd.DataFrame:
+def load_bidirectional_dli_data(data_file_path: str = None) -> pd.DataFrame:
     """
-    准备DID分析数据集
+    加载双向DLI面板数据
     
     Args:
-        dli_data: DLI面板数据，如果为None则从文件加载
-        data_file_path: 数据文件路径
+        data_file_path: 数据文件路径，默认使用v2数据文件
+        
+    Returns:
+        双向DLI面板数据DataFrame
+    """
+    
+    if data_file_path is None:
+        base_dir = Path(__file__).parent.parent.parent
+        data_file_path = Path(__file__).parent / "dli_panel_data_v2.csv"
+    
+    if not Path(data_file_path).exists():
+        raise FileNotFoundError(f"双向DLI数据文件不存在: {data_file_path}")
+    
+    df = pd.read_csv(data_file_path)
+    logger.info(f"📂 成功加载双向DLI数据: {len(df):,} 条记录")
+    
+    # 验证数据结构
+    required_columns = ['year', 'us_partner', 'energy_product', 'locking_dimension_type', 'dli_score']
+    missing_columns = [col for col in required_columns if col not in df.columns]
+    
+    if missing_columns:
+        raise ValueError(f"数据缺少必要列: {missing_columns}")
+    
+    # 数据概览
+    locking_stats = df.groupby('locking_dimension_type').agg({
+        'dli_score': ['count', 'mean', 'std']
+    }).round(4)
+    logger.info("📊 双向锁定数据分布:")
+    print(locking_stats)
+    
+    return df
+
+def prepare_did_dataset_v2(df: pd.DataFrame, locking_type: str) -> pd.DataFrame:
+    """
+    为指定锁定类型准备DID分析数据集
+    
+    Args:
+        df: 双向DLI面板数据
+        locking_type: 锁定类型 ('import_locking' 或 'export_locking')
         
     Returns:
         准备好的DID分析数据集
-        
-    包含列：
-        - 基础标识：year, us_partner, energy_product, us_role
-        - DLI指标：dli_composite_adjusted + 四个维度
-        - DID变量：treatment, post, treatment_post
-        - 控制变量：trade_value_usd, distance_km等
     """
     
-    logger.info("🎯 开始准备DID分析数据集...")
+    logger.info(f"🎯 准备{locking_type}的DID分析数据集...")
     
-    # 第1步：加载DLI数据
-    if dli_data is not None:
-        df = dli_data.copy()
-        logger.info(f"使用提供的DLI数据: {len(df)} 条记录")
+    # 筛选指定锁定类型的数据
+    df_filtered = df[df['locking_dimension_type'] == locking_type].copy()
+    logger.info(f"筛选{locking_type}数据: {len(df_filtered):,} 条记录")
+    
+    if len(df_filtered) == 0:
+        raise ValueError(f"未找到{locking_type}类型的数据")
+    
+    # 定义处理组和控制组
+    if locking_type == 'import_locking':
+        # 进口锁定：处理组为管道贸易，控制组为海运贸易
+        treatment_condition = (
+            df_filtered['us_partner'].isin(TREATMENT_COUNTRIES) & 
+            df_filtered['energy_product'].isin(PIPELINE_PRODUCTS)
+        )
+        control_condition = (
+            df_filtered['us_partner'].isin(CONTROL_COUNTRIES) & 
+            ~df_filtered['energy_product'].isin(['Coal'])
+        )
     else:
-        if data_file_path is None:
-            base_dir = Path(__file__).parent.parent.parent
-            data_file_path = base_dir / "outputs" / "tables" / "dli_panel_data.csv"
-        
-        if not Path(data_file_path).exists():
-            raise FileNotFoundError(f"DLI数据文件不存在: {data_file_path}")
-        
-        df = pd.read_csv(data_file_path)
-        logger.info(f"从文件加载DLI数据: {data_file_path}, {len(df)} 条记录")
+        # 出口锁定：处理组为对邻国出口，控制组为对远距离国家出口
+        treatment_condition = (
+            df_filtered['us_partner'].isin(TREATMENT_COUNTRIES)
+        )
+        control_condition = (
+            df_filtered['us_partner'].isin(CONTROL_COUNTRIES)
+        )
     
-    # 第2步：定义处理组和控制组
-    logger.info("🔍 定义处理组和控制组...")
-    
-    # 处理组：管道贸易关系（美-加、美-墨的原油和天然气）
-    treatment_condition = (
-        df['us_partner'].isin(TREATMENT_COUNTRIES) & 
-        df['energy_product'].isin(PIPELINE_PRODUCTS)
-    )
-    
-    # 控制组：海运贸易关系（其他主要贸易伙伴）
-    control_condition = (
-        df['us_partner'].isin(CONTROL_COUNTRIES) & 
-        ~df['energy_product'].isin(['Coal'])  # 排除煤炭，因为主要是海运但性质不同
-    )
-    
-    # 筛选实验样本
-    did_sample = df[treatment_condition | control_condition].copy()
+    # 创建DID样本
+    did_sample = df_filtered[treatment_condition | control_condition].copy()
     
     if len(did_sample) == 0:
-        raise ValueError("未找到符合条件的DID分析样本")
+        raise ValueError(f"{locking_type}的DID样本为空")
     
-    logger.info(f"📊 DID样本构成:")
-    logger.info(f"  总样本: {len(did_sample)} 条记录")
-    
-    # 第3步：创建DID变量
-    logger.info("⚙️ 创建DID实验变量...")
-    
-    # 处理组指示变量 (Treatment)
+    # 创建DID变量
     did_sample['treatment'] = treatment_condition[treatment_condition | control_condition].astype(int)
-    
-    # 政策后时期指示变量 (Post)
     did_sample['post'] = (did_sample['year'] >= POLICY_SHOCK_YEAR).astype(int)
-    
-    # DID交互项 (Treatment × Post)
     did_sample['treatment_post'] = did_sample['treatment'] * did_sample['post']
+    did_sample['period'] = did_sample['year'].apply(
+        lambda x: 'pre' if x < POLICY_SHOCK_YEAR else 'post'
+    )
     
-    # 第4步：创建时期变量
-    def assign_period(year):
-        if year < POLICY_SHOCK_YEAR:
-            return 'pre'
-        else:
-            return 'post'
+    # 创建控制变量
+    did_sample['log_trade_value'] = np.log(did_sample['trade_value_usd'] + 1)
+    if 'distance_km' in did_sample.columns:
+        did_sample['log_distance'] = np.log(did_sample['distance_km'])
+    did_sample['year_trend'] = did_sample['year'] - 2001
+    did_sample['country_product'] = did_sample['us_partner'] + '_' + did_sample['energy_product']
     
-    did_sample['period'] = did_sample['year'].apply(assign_period)
-    
-    # 第5步：数据验证和统计
+    # 实验设计验证
     logger.info("🔍 DID实验设计验证:")
     
     # 按组和时期统计
-    group_period_stats = did_sample.groupby(['treatment', 'period']).agg({
+    group_stats = did_sample.groupby(['treatment', 'period']).agg({
         'us_partner': 'nunique',
-        'energy_product': 'nunique', 
-        'dli_composite_adjusted': ['count', 'mean', 'std']
+        'energy_product': 'nunique',
+        'dli_score': ['count', 'mean', 'std']
     }).round(4)
     
     logger.info("实验组构成统计:")
-    print(group_period_stats)
+    print(group_stats)
     
-    # 处理组国家统计
-    treatment_countries_actual = did_sample[did_sample['treatment'] == 1]['us_partner'].unique()
-    control_countries_actual = did_sample[did_sample['treatment'] == 0]['us_partner'].unique()
+    # 处理组和控制组国家
+    treatment_countries = did_sample[did_sample['treatment'] == 1]['us_partner'].unique()
+    control_countries = did_sample[did_sample['treatment'] == 0]['us_partner'].unique()
     
-    logger.info(f"  实际处理组国家: {sorted(treatment_countries_actual)}")
-    logger.info(f"  实际控制组国家: {sorted(control_countries_actual)}")
+    logger.info(f"  处理组国家: {sorted(treatment_countries)}")
+    logger.info(f"  控制组国家: {sorted(control_countries)}")
     
-    # 产品分布统计
-    product_by_group = did_sample.groupby(['treatment', 'energy_product']).size().unstack(fill_value=0)
-    logger.info("产品分布统计:")
-    print(product_by_group)
+    logger.info(f"✅ {locking_type} DID数据集准备完成: {len(did_sample):,} 观测")
     
-    # 时间平衡性检查
-    time_balance = did_sample.groupby(['treatment', 'year']).size().unstack(fill_value=0)
-    logger.info(f"时间跨度: {did_sample['year'].min()}-{did_sample['year'].max()}")
-    logger.info(f"政策冲击年份: {POLICY_SHOCK_YEAR}")
-    
-    # 第6步：创建控制变量
-    logger.info("📈 创建控制变量...")
-    
-    # 对数化贸易值（处理极值）
-    did_sample['log_trade_value'] = np.log(did_sample['trade_value_usd'] + 1)
-    
-    # 对数化距离
-    did_sample['log_distance'] = np.log(did_sample['distance_km'])
-    
-    # 年份趋势变量
-    did_sample['year_trend'] = did_sample['year'] - 2001
-    
-    # 创建国家和产品固定效应变量
-    did_sample['country_product'] = did_sample['us_partner'] + '_' + did_sample['energy_product']
-    
-    # 第7步：最终数据验证
-    logger.info("✅ DID数据集验证:")
-    logger.info(f"  最终样本量: {len(did_sample):,} 观测")
-    logger.info(f"  国家数: {did_sample['us_partner'].nunique()}")
-    logger.info(f"  产品数: {did_sample['energy_product'].nunique()}")
-    logger.info(f"  年份数: {did_sample['year'].nunique()}")
-    logger.info(f"  处理组观测: {did_sample['treatment'].sum():,} ({did_sample['treatment'].mean()*100:.1f}%)")
-    logger.info(f"  政策后观测: {did_sample['post'].sum():,} ({did_sample['post'].mean()*100:.1f}%)")
-    
-    # 检查关键变量的缺失值
-    key_variables = ['dli_composite_adjusted', 'treatment', 'post', 'treatment_post', 
-                    'log_trade_value', 'log_distance']
-    missing_summary = did_sample[key_variables].isnull().sum()
-    if missing_summary.any():
-        logger.warning("发现缺失值:")
-        for var, count in missing_summary[missing_summary > 0].items():
-            logger.warning(f"  {var}: {count} 个缺失值")
-    else:
-        logger.info("✅ 关键变量无缺失值")
-    
-    logger.info("✅ DID数据集准备完成!")
     return did_sample
 
-def run_did_analysis(did_data: pd.DataFrame = None,
-                    outcome_vars: List[str] = None,
-                    control_vars: List[str] = None,
-                    use_fixed_effects: bool = True) -> Dict[str, Dict]:
+def run_did_regression_v2(did_data: pd.DataFrame, 
+                         outcome_vars: List[str] = None,
+                         control_vars: List[str] = None,
+                         locking_type: str = 'import_locking') -> Dict[str, Dict]:
     """
-    执行双重差分(DID)分析
-    
-    基本模型：
-    Y_ijt = α + β₁×Treatment_ij + β₂×Post_t + β₃×(Treatment_ij × Post_t) + γ×X_ijt + ε_ijt
-    
-    其中：
-    - Y_ijt: DLI相关结果变量
-    - Treatment_ij: 处理组指示变量（1=管道贸易国家，0=海运贸易国家）
-    - Post_t: 政策后时期指示变量（1=2011年及以后，0=2010年及以前）
-    - β₃: DID估计量，表示政策对处理组的净影响
-    - X_ijt: 控制变量
+    执行DID回归分析（使用聚类稳健标准误）
     
     Args:
         did_data: DID分析数据集
-        outcome_vars: 结果变量列表，默认为DLI相关指标
+        outcome_vars: 结果变量列表
         control_vars: 控制变量列表
-        use_fixed_effects: 是否使用固定效应
+        locking_type: 锁定类型标识
         
     Returns:
-        包含所有模型结果的字典
+        DID分析结果字典
     """
     
-    logger.info("📊 开始执行DID分析...")
+    logger.info(f"🧮 开始执行{locking_type}的DID回归分析...")
     
-    # 数据准备
-    if did_data is None:
-        did_data = prepare_did_dataset()
+    if not HAS_STATSMODELS:
+        raise ImportError("需要安装statsmodels库进行回归分析")
     
+    # 默认结果变量
     if outcome_vars is None:
-        outcome_vars = [
-            'dli_composite_adjusted',
-            'continuity', 
-            'infrastructure', 
-            'stability', 
-            'market_locking_power'
-        ]
+        potential_outcomes = ['dli_score', 'continuity', 'infrastructure', 'stability', 'market_locking_power']
+        outcome_vars = [var for var in potential_outcomes if var in did_data.columns]
     
+    # 默认控制变量
     if control_vars is None:
-        control_vars = ['log_trade_value', 'log_distance', 'year_trend']
+        potential_controls = ['log_trade_value', 'log_distance', 'year_trend']
+        control_vars = [var for var in potential_controls if var in did_data.columns]
     
-    # 验证变量存在
-    all_vars = outcome_vars + control_vars + ['treatment', 'post', 'treatment_post']
-    missing_vars = [var for var in all_vars if var not in did_data.columns]
-    if missing_vars:
-        raise ValueError(f"数据中缺少变量: {missing_vars}")
+    logger.info(f"结果变量: {outcome_vars}")
+    logger.info(f"控制变量: {control_vars}")
     
     results = {}
     
-    # 为每个结果变量运行DID回归
     for outcome_var in outcome_vars:
-        logger.info(f"🔍 分析结果变量: {outcome_var}")
+        logger.info(f"分析 {outcome_var}...")
+        
+        # 构建回归公式
+        formula = f"{outcome_var} ~ treatment + post + treatment_post"
+        if control_vars:
+            formula += " + " + " + ".join(control_vars)
+        
+        logger.info(f"回归公式: {formula}")
+        
+        # 准备回归数据（移除缺失值）
+        reg_vars = [outcome_var, 'treatment', 'post', 'treatment_post'] + control_vars
+        cluster_vars = ['us_partner']  # 聚类变量
+        all_vars = reg_vars + cluster_vars
+        
+        reg_data = did_data[all_vars].dropna()
+        
+        if len(reg_data) < 50:  # 最少样本量检查
+            logger.warning(f"⚠️ {outcome_var}的有效样本量过少: {len(reg_data)}")
+            continue
         
         try:
-            # 准备回归数据（移除缺失值）
-            reg_vars = [outcome_var, 'treatment', 'post', 'treatment_post'] + control_vars
-            cluster_vars = ['us_partner']  # 聚类变量
-            all_vars = reg_vars + cluster_vars
-            reg_data = did_data[all_vars].dropna()
+            # 运行回归 - 使用聚类稳健标准误
+            model = smf.ols(formula, data=reg_data).fit(
+                cov_type='cluster', 
+                cov_kwds={'groups': reg_data['us_partner']}
+            )
             
-            if len(reg_data) == 0:
-                logger.warning(f"  {outcome_var}: 无有效观测，跳过分析")
-                continue
+            # 提取DID系数及统计量
+            did_coef = model.params['treatment_post']
+            did_se = model.bse['treatment_post']
+            did_tstat = model.tvalues['treatment_post']
+            did_pvalue = model.pvalues['treatment_post']
+            did_ci = model.conf_int().loc['treatment_post'].tolist()
             
-            logger.info(f"  有效观测数: {len(reg_data):,}")
+            # 判断显著性
+            significant_5pct = did_pvalue < 0.05
+            significant_10pct = did_pvalue < 0.10
             
-            if HAS_STATSMODELS:
-                # 使用statsmodels进行专业回归分析
-                
-                # 构建回归公式
-                formula = f"{outcome_var} ~ treatment + post + treatment_post"
-                if control_vars:
-                    formula += " + " + " + ".join(control_vars)
-                
-                logger.info(f"  回归公式: {formula}")
-                
-                # 运行回归 - 使用聚类稳健标准误
-                # 这是面板数据DID分析的标准做法，避免同一实体观测值的序列相关性
-                model = smf.ols(formula, data=reg_data).fit(
-                    cov_type='cluster', 
-                    cov_kwds={'groups': reg_data['us_partner']}
-                )
-                
-                # 提取关键结果
-                did_coef = model.params['treatment_post']
-                did_pvalue = model.pvalues['treatment_post']
-                did_stderr = model.bse['treatment_post']
-                did_tstat = model.tvalues['treatment_post']
-                
-                # 计算置信区间
-                conf_int = model.conf_int().loc['treatment_post']
-                did_ci_lower = conf_int[0]
-                did_ci_upper = conf_int[1]
-                
-                # 模型诊断统计
-                r_squared = model.rsquared
-                adj_r_squared = model.rsquared_adj
-                f_statistic = model.fvalue
-                f_pvalue = model.f_pvalue
-                
-                # 异方差检验（Breusch-Pagan）
-                try:
-                    bp_stat, bp_pvalue, _, _ = het_breuschpagan(model.resid, model.model.exog)
-                except:
-                    bp_stat, bp_pvalue = None, None
-                
-                # Durbin-Watson统计量（序列相关检验）
-                try:
-                    dw_stat = durbin_watson(model.resid)
-                except:
-                    dw_stat = None
-                
-                # 保存详细结果
-                var_results = {
-                    # DID核心结果
-                    'did_coefficient': did_coef,
-                    'did_std_error': did_stderr,
-                    'did_t_statistic': did_tstat,
-                    'did_p_value': did_pvalue,
-                    'did_ci_lower': did_ci_lower,
-                    'did_ci_upper': did_ci_upper,
-                    'is_significant_5pct': did_pvalue < 0.05,
-                    'is_significant_10pct': did_pvalue < 0.10,
-                    
-                    # 其他系数
-                    'treatment_coef': model.params.get('treatment', None),
-                    'post_coef': model.params.get('post', None),
-                    'treatment_pvalue': model.pvalues.get('treatment', None),
-                    'post_pvalue': model.pvalues.get('post', None),
-                    
-                    # 模型拟合统计
-                    'r_squared': r_squared,
-                    'adj_r_squared': adj_r_squared,
-                    'f_statistic': f_statistic,
-                    'f_pvalue': f_pvalue,
-                    'n_observations': len(reg_data),
-                    
-                    # 诊断统计
-                    'breusch_pagan_stat': bp_stat,
-                    'breusch_pagan_pvalue': bp_pvalue,
-                    'durbin_watson_stat': dw_stat,
-                    
-                    # 完整模型对象（用于后续分析）
-                    'full_model': model
-                }
-                
-            else:
-                # 简化版回归分析（使用numpy）
-                logger.info("  使用简化回归方法（建议安装statsmodels以获得完整统计）")
-                
-                # 准备设计矩阵
-                X = reg_data[['treatment', 'post', 'treatment_post'] + control_vars].values
-                X = np.column_stack([np.ones(len(X)), X])  # 添加常数项
-                y = reg_data[outcome_var].values
-                
-                # OLS估计
-                beta = np.linalg.inv(X.T @ X) @ X.T @ y
-                y_pred = X @ beta
-                residuals = y - y_pred
-                
-                # 标准误计算
-                mse = np.sum(residuals**2) / (len(y) - X.shape[1])
-                var_cov_matrix = mse * np.linalg.inv(X.T @ X)
-                std_errors = np.sqrt(np.diag(var_cov_matrix))
-                
-                # DID系数是第4个系数（treatment_post）
-                did_coef = beta[3]
-                did_stderr = std_errors[3]
-                did_tstat = did_coef / did_stderr
-                did_pvalue = 2 * (1 - stats.t.cdf(abs(did_tstat), len(y) - X.shape[1]))
-                
-                # R平方
-                ss_res = np.sum(residuals**2)
-                ss_tot = np.sum((y - np.mean(y))**2)
-                r_squared = 1 - (ss_res / ss_tot)
-                adj_r_squared = 1 - (1 - r_squared) * (len(y) - 1) / (len(y) - X.shape[1])
-                
-                var_results = {
-                    'did_coefficient': did_coef,
-                    'did_std_error': did_stderr,
-                    'did_t_statistic': did_tstat,
-                    'did_p_value': did_pvalue,
-                    'is_significant_5pct': did_pvalue < 0.05,
-                    'is_significant_10pct': did_pvalue < 0.10,
-                    'r_squared': r_squared,
-                    'adj_r_squared': adj_r_squared,
-                    'n_observations': len(reg_data),
-                    'method': 'simplified_ols'
-                }
+            # 保存结果
+            results[outcome_var] = {
+                'did_coefficient': did_coef,
+                'did_std_error': did_se,
+                'did_t_statistic': did_tstat,
+                'did_p_value': did_pvalue,
+                'significant_5pct': significant_5pct,
+                'significant_10pct': significant_10pct,
+                'r_squared': model.rsquared,
+                'n_observations': len(reg_data),
+                'ci_lower': did_ci[0],
+                'ci_upper': did_ci[1],
+                'locking_type': locking_type,
+                'formula': formula
+            }
             
-            results[outcome_var] = var_results
+            # 输出结果
+            significance = "***" if did_pvalue < 0.01 else "**" if did_pvalue < 0.05 else "*" if did_pvalue < 0.10 else ""
+            direction = "↑" if did_coef > 0 else "↓"
             
-            # 打印主要结果
-            logger.info(f"  ✅ {outcome_var} DID结果:")
-            logger.info(f"    系数: {did_coef:.6f}")
-            logger.info(f"    标准误: {did_stderr:.6f}")
-            logger.info(f"    t统计量: {did_tstat:.4f}")
-            logger.info(f"    p值: {did_pvalue:.6f}")
-            logger.info(f"    5%显著性: {'是' if did_pvalue < 0.05 else '否'}")
-            if HAS_STATSMODELS:
-                logger.info(f"    95%置信区间: [{did_ci_lower:.6f}, {did_ci_upper:.6f}]")
-            logger.info(f"    R²: {r_squared:.4f}")
+            logger.info(f"  {outcome_var}: {did_coef:+.4f} {significance} (p={did_pvalue:.4f}) {direction}")
             
         except Exception as e:
-            logger.error(f"  ❌ {outcome_var} 分析失败: {e}")
-            results[outcome_var] = {'error': str(e)}
+            logger.error(f"❌ {outcome_var}回归分析失败: {e}")
             continue
     
-    # 计算总体统计
-    successful_analyses = [k for k, v in results.items() if 'error' not in v]
-    significant_5pct = [k for k, v in results.items() 
-                       if 'error' not in v and v.get('is_significant_5pct', False)]
-    significant_10pct = [k for k, v in results.items() 
-                        if 'error' not in v and v.get('is_significant_10pct', False)]
-    
-    # 添加汇总信息
-    results['_summary'] = {
-        'total_variables_analyzed': len(outcome_vars),
-        'successful_analyses': len(successful_analyses),
-        'significant_5pct': len(significant_5pct),
-        'significant_10pct': len(significant_10pct),
-        'significant_variables_5pct': significant_5pct,
-        'significant_variables_10pct': significant_10pct,
-        'policy_shock_year': POLICY_SHOCK_YEAR,
-        'treatment_countries': TREATMENT_COUNTRIES,
-        'control_countries': CONTROL_COUNTRIES,
-        'analysis_timestamp': pd.Timestamp.now().isoformat()
-    }
-    
-    logger.info("📊 DID分析汇总:")
-    logger.info(f"  成功分析变量: {len(successful_analyses)}/{len(outcome_vars)}")
-    logger.info(f"  5%水平显著: {len(significant_5pct)} 个变量 {significant_5pct}")
-    logger.info(f"  10%水平显著: {len(significant_10pct)} 个变量 {significant_10pct}")
-    
-    logger.info("✅ DID分析完成!")
+    logger.info(f"✅ {locking_type} DID回归分析完成，成功分析 {len(results)} 个指标")
     return results
 
-def generate_verification_report(did_results: Dict = None,
-                                did_data: pd.DataFrame = None,
-                                output_dir: str = None) -> str:
+def run_full_bidirectional_did_analysis(dli_data: pd.DataFrame = None, 
+                                      dli_data_path: str = None,
+                                      output_dir: str = None) -> Dict[str, str]:
     """
-    生成DID验证报告
+    执行完整的双向DID分析
     
     Args:
-        did_results: DID分析结果
-        did_data: DID数据集
+        dli_data: 双向DLI面板数据，如果为None则自动加载
+        dli_data_path: DLI数据文件路径（兼容旧接口）
         output_dir: 输出目录
         
     Returns:
-        报告文件路径
+        保存的文件路径字典
     """
     
-    logger.info("📝 开始生成DID验证报告...")
+    logger.info("🚀 开始完整的双向DID分析...")
     
-    # 设置输出路径
+    # 加载数据
+    if dli_data is None:
+        if dli_data_path:
+            dli_data = pd.read_csv(dli_data_path)
+        else:
+            dli_data = load_bidirectional_dli_data()
+    
+    results = {}
+    
+    # 1. 进口锁定DID分析
+    logger.info("📥 执行进口锁定DID分析...")
+    try:
+        import_data = prepare_did_dataset_v2(dli_data, 'import_locking')
+        results['import_locking'] = run_did_regression_v2(
+            import_data, locking_type='import_locking'
+        )
+        logger.info(f"✅ 进口锁定DID分析完成: {len(results['import_locking'])} 个指标")
+    except Exception as e:
+        logger.error(f"❌ 进口锁定DID分析失败: {e}")
+    
+    # 2. 出口锁定DID分析  
+    logger.info("📤 执行出口锁定DID分析...")
+    try:
+        export_data = prepare_did_dataset_v2(dli_data, 'export_locking')
+        results['export_locking'] = run_did_regression_v2(
+            export_data, locking_type='export_locking'
+        )
+        logger.info(f"✅ 出口锁定DID分析完成: {len(results['export_locking'])} 个指标")
+    except Exception as e:
+        logger.error(f"❌ 出口锁定DID分析失败: {e}")
+    
+    # 3. 总结分析结果
+    logger.info("📊 双向DID分析总结:")
+    for locking_type, type_results in results.items():
+        significant_vars = [var for var, res in type_results.items() 
+                          if res.get('significant_5pct', False)]
+        logger.info(f"  {locking_type}: {len(significant_vars)}/{len(type_results)} 个指标在5%水平显著")
+        for var in significant_vars:
+            coef = type_results[var]['did_coefficient']
+            p_val = type_results[var]['did_p_value']
+            direction = "增强" if coef > 0 else "减弱"
+            logger.info(f"    {var}: {coef:+.4f} (p={p_val:.4f}) - 锁定效应{direction}")
+    
+    logger.info(f"🎉 完整双向DID分析完成！成功分析 {len(results)} 个锁定维度")
+    
+    # 保存结果并生成报告
+    output_files = save_bidirectional_results(results, output_dir)
+    report_path = generate_verification_report_v2(results, output_dir)
+    output_files['verification_report_md'] = report_path
+    
+    return output_files
+
+def save_bidirectional_results(results: Dict[str, Dict], 
+                              output_dir: str = None) -> Dict[str, str]:
+    """
+    保存双向DID分析结果
+    
+    Args:
+        results: 双向DID分析结果
+        output_dir: 输出目录，默认使用标准路径
+        
+    Returns:
+        保存的文件路径字典
+    """
+    
     if output_dir is None:
         base_dir = Path(__file__).parent.parent.parent
-        output_dir = base_dir / "outputs" / "tables"
-        output_dir.mkdir(parents=True, exist_ok=True)
-    else:
-        output_dir = Path(output_dir)
+        output_dir = Path(__file__).parent
         output_dir.mkdir(parents=True, exist_ok=True)
     
-    # 如果没有提供结果，则运行分析
-    if did_results is None:
-        did_results = run_did_analysis(did_data)
+    output_paths = {}
     
-    # 生成报告时间戳
-    timestamp = pd.Timestamp.now()
+    # 1. 保存详细结果为CSV
+    all_results = []
+    for locking_type, type_results in results.items():
+        for variable, result in type_results.items():
+            result_row = {
+                'locking_type': locking_type,
+                'variable': variable,
+                **result
+            }
+            all_results.append(result_row)
     
-    # 创建Markdown报告
-    md_report_path = output_dir / "dli_verification_report.md"
+    results_df = pd.DataFrame(all_results)
+    csv_path = Path(output_dir) / "dli_verification_results_v2.csv"
+    results_df.to_csv(csv_path, index=False)
+    output_paths['results_csv'] = str(csv_path)
+    logger.info(f"💾 详细结果已保存至: {csv_path}")
     
-    with open(md_report_path, 'w', encoding='utf-8') as f:
-        # 报告标题和概述
-        f.write("# DLI动态锁定指数统计验证报告\n\n")
-        f.write(f"**报告生成时间**: {timestamp.strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+    # 2. 保存JSON格式结果
+    json_path = Path(output_dir) / "dli_verification_results_v2.json"
+    with open(json_path, 'w', encoding='utf-8') as f:
+        # 处理numpy类型以便JSON序列化
+        def convert_numpy(obj):
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            elif isinstance(obj, np.float64):
+                return float(obj)
+            elif isinstance(obj, np.int64):
+                return int(obj)
+            elif isinstance(obj, np.bool_):
+                return bool(obj)
+            return obj
         
-        f.write("## 1. 研究假说与实验设计\n\n")
-        f.write("### 1.1 核心假说\n")
-        f.write("页岩革命是否显著改变了美国与贸易伙伴之间的能源贸易锁定格局（DLI）？\n\n")
+        serializable_results = {}
+        for locking_type, type_results in results.items():
+            serializable_results[locking_type] = {}
+            for var, result in type_results.items():
+                serializable_results[locking_type][var] = {
+                    k: convert_numpy(v) for k, v in result.items()
+                }
         
-        f.write("### 1.2 实验设计 (双重差分法)\n")
-        f.write("- **处理组**: 通过管道进行原油和天然气贸易的美-加、美-墨关系\n")
-        f.write("  - 国家: 加拿大(CAN)、墨西哥(MEX)\n")
-        f.write("  - 产品: 原油(Crude_Oil)、天然气(Natural_Gas)\n")
-        f.write("  - 特征: 高沉没成本的专用性基础设施锁定\n\n")
-        
-        f.write("- **控制组**: 通过海运进行贸易的关系\n")
-        f.write("  - 国家: 沙特阿拉伯(SAU)、卡塔尔(QAT)、委内瑞拉(VEN)、挪威(NOR)、英国(GBR)、俄罗斯(RUS)、阿联酋(ARE)\n")
-        f.write("  - 特征: 基础设施专用性较低，转换成本更灵活\n\n")
-        
-        f.write(f"- **政策冲击时点**: {POLICY_SHOCK_YEAR}年（页岩革命显著产出效应年份）\n\n")
-        
-        f.write("### 1.3 DID模型\n")
-        f.write("```\n")
-        f.write("DLI_ijt = α + β₁×Treatment_ij + β₂×Post_t + β₃×(Treatment_ij × Post_t) + γ×X_ijt + ε_ijt\n")
-        f.write("```\n")
-        f.write("其中 β₃ 为DID估计量，衡量政策对处理组的净影响。\n\n")
-        
-        # 数据描述性统计
-        if did_data is not None:
-            f.write("## 2. 数据概况\n\n")
-            
-            summary_stats = did_results.get('_summary', {})
-            f.write(f"- **总观测数**: {len(did_data):,} 条记录\n")
-            f.write(f"- **时间跨度**: {did_data['year'].min()}-{did_data['year'].max()}\n")
-            f.write(f"- **贸易伙伴**: {did_data['us_partner'].nunique()} 个国家\n")
-            f.write(f"- **能源产品**: {did_data['energy_product'].nunique()} 种\n")
-            f.write(f"- **处理组观测**: {did_data['treatment'].sum():,} ({did_data['treatment'].mean()*100:.1f}%)\n")
-            f.write(f"- **政策后观测**: {did_data['post'].sum():,} ({did_data['post'].mean()*100:.1f}%)\n\n")
-            
-            # 按组和时期的描述性统计
-            desc_stats = did_data.groupby(['treatment', 'period'])['dli_composite_adjusted'].agg(['count', 'mean', 'std']).round(4)
-            f.write("### 2.1 按组和时期的DLI均值\n\n")
-            f.write("| 组别 | 时期 | 观测数 | 均值 | 标准差 |\n")
-            f.write("|------|------|--------|------|--------|\n")
-            for (treatment, period), row in desc_stats.iterrows():
-                group_name = "处理组" if treatment == 1 else "控制组"
-                period_name = "政策前" if period == 'pre' else "政策后"
-                f.write(f"| {group_name} | {period_name} | {row['count']} | {row['mean']:.4f} | {row['std']:.4f} |\n")
-            f.write("\n")
-        
-        # DID分析结果
-        f.write("## 3. DID分析结果\n\n")
-        
-        summary = did_results.get('_summary', {})
-        f.write(f"- **成功分析变量数**: {summary.get('successful_analyses', 0)}/{summary.get('total_variables_analyzed', 0)}\n")
-        f.write(f"- **5%水平显著变量**: {summary.get('significant_5pct', 0)} 个\n")
-        f.write(f"- **10%水平显著变量**: {summary.get('significant_10pct', 0)} 个\n\n")
-        
-        # 详细结果表
-        f.write("### 3.1 详细回归结果\n\n")
-        f.write("| 被解释变量 | DID系数 | 标准误 | t统计量 | p值 | R² | 观测数 | 5%显著 |\n")
-        f.write("|------------|---------|--------|---------|-----|-----|--------|--------|\n")
-        
-        for var, results in did_results.items():
-            if var.startswith('_') or 'error' in results:
-                continue
-            
-            coef = results.get('did_coefficient', 0)
-            stderr = results.get('did_std_error', 0)
-            t_stat = results.get('did_t_statistic', 0)
-            p_val = results.get('did_p_value', 1)
-            r_sq = results.get('r_squared', 0)
-            n_obs = results.get('n_observations', 0)
-            is_sig = "✓" if results.get('is_significant_5pct', False) else ""
-            
-            f.write(f"| {var} | {coef:.6f} | {stderr:.6f} | {t_stat:.4f} | {p_val:.6f} | {r_sq:.4f} | {n_obs:,} | {is_sig} |\n")
-        
-        f.write("\n")
-        
-        # 关键发现
-        f.write("## 4. 关键发现\n\n")
-        
-        significant_vars_5 = summary.get('significant_variables_5pct', [])
-        significant_vars_10 = summary.get('significant_variables_10pct', [])
-        
-        if significant_vars_5:
-            f.write("### 4.1 统计显著的政策效应 (5%水平)\n\n")
-            for var in significant_vars_5:
-                if var in did_results:
-                    result = did_results[var]
-                    coef = result.get('did_coefficient', 0)
-                    f.write(f"- **{var}**: DID系数 = {coef:.6f}")
-                    if coef > 0:
-                        f.write(" (政策增强了锁定效应)\n")
-                    else:
-                        f.write(" (政策减弱了锁定效应)\n")
-            f.write("\n")
-        else:
-            f.write("### 4.1 统计显著性\n")
-            f.write("在5%显著性水平下，未发现页岩革命对DLI指标的显著影响。\n\n")
-        
-        if significant_vars_10:
-            f.write("### 4.2 边际显著的政策效应 (10%水平)\n\n")
-            for var in significant_vars_10:
-                if var in did_results and var not in significant_vars_5:
-                    result = did_results[var]
-                    coef = result.get('did_coefficient', 0)
-                    f.write(f"- **{var}**: DID系数 = {coef:.6f}")
-                    if coef > 0:
-                        f.write(" (政策可能增强了锁定效应)\n")
-                    else:
-                        f.write(" (政策可能减弱了锁定效应)\n")
-            f.write("\n")
-        
-        # 结论
-        f.write("## 5. 结论\n\n")
-        
-        if significant_vars_5:
-            f.write("基于双重差分分析，我们发现页岩革命对美国能源贸易锁定格局产生了统计显著的影响。")
-            f.write("具体而言，管道贸易关系（美-加、美-墨）相较于海运贸易关系，")
-            f.write("在页岩革命后表现出了不同的锁定模式变化。这一发现支持了我们关于")
-            f.write("基础设施专用性在政策传导中重要作用的理论假说。\n\n")
-        else:
-            f.write("基于双重差分分析，我们未能在5%显著性水平下发现页岩革命对美国能源贸易锁定格局的统计显著影响。")
-            f.write("这可能表明：(1) 政策效应确实不存在；(2) 效应存在但相对较小，需要更大样本才能检测到；")
-            f.write("(3) 实验设计需要进一步优化。建议后续研究考虑更精细的分组策略或更长的观测期。\n\n")
-        
-        f.write("## 6. 方法论注记\n\n")
-        f.write("- **因果推断方法**: 双重差分法(Difference-in-Differences)\n")
-        f.write("- **标准误估计**: 异方差稳健标准误\n")
-        if HAS_STATSMODELS:
-            f.write("- **诊断检验**: Breusch-Pagan异方差检验, Durbin-Watson序列相关检验\n")
-        f.write("- **显著性水平**: 5%和10%\n")
-        f.write("- **软件工具**: Python statsmodels\n\n")
-        
-        f.write("---\n")
-        f.write("*本报告由DLI分析模块自动生成*\n")
+        json.dump(serializable_results, f, indent=2, ensure_ascii=False)
     
-    logger.info(f"📄 Markdown报告已生成: {md_report_path}")
+    output_paths['results_json'] = str(json_path)
+    logger.info(f"💾 JSON结果已保存至: {json_path}")
     
-    # 同时生成CSV结果表
-    csv_report_path = output_dir / "dli_verification_results.csv"
-    
-    results_for_csv = []
-    for var, results in did_results.items():
-        if var.startswith('_') or 'error' in results:
-            continue
-        
-        row = {
-            'variable': var,
-            'did_coefficient': results.get('did_coefficient', np.nan),
-            'did_std_error': results.get('did_std_error', np.nan),
-            'did_t_statistic': results.get('did_t_statistic', np.nan),
-            'did_p_value': results.get('did_p_value', np.nan),
-            'significant_5pct': results.get('is_significant_5pct', False),
-            'significant_10pct': results.get('is_significant_10pct', False),
-            'r_squared': results.get('r_squared', np.nan),
-            'n_observations': results.get('n_observations', 0)
-        }
-        
-        if HAS_STATSMODELS and 'did_ci_lower' in results:
-            row['ci_lower'] = results['did_ci_lower']
-            row['ci_upper'] = results['did_ci_upper']
-        
-        results_for_csv.append(row)
-    
-    results_df = pd.DataFrame(results_for_csv)
-    results_df.to_csv(csv_report_path, index=False)
-    logger.info(f"📊 CSV结果已生成: {csv_report_path}")
-    
-    logger.info("✅ 验证报告生成完成!")
-    return str(md_report_path)
+    return output_paths
 
-def run_full_verification_analysis(dli_data_path: str = None,
-                                  output_dir: str = None) -> Dict[str, str]:
+def generate_verification_report_v2(results: Dict[str, Dict], 
+                                   output_dir: str = None) -> str:
     """
-    执行完整的DLI统计验证分析流程
-    
-    这是统计验证模块的主要接口函数
+    生成双向DLI验证报告
     
     Args:
-        dli_data_path: DLI面板数据文件路径
+        results: 双向DID分析结果
         output_dir: 输出目录
         
     Returns:
-        包含输出文件路径的字典
+        生成的报告文件路径
     """
     
-    logger.info("🚀 开始完整的DLI统计验证分析...")
+    if output_dir is None:
+        base_dir = Path(__file__).parent.parent.parent
+        output_dir = Path(__file__).parent
     
-    try:
-        # 第1步：准备DID数据集
-        logger.info("📋 第1步：准备DID分析数据集...")
-        did_data = prepare_did_dataset(data_file_path=dli_data_path)
+    report_path = Path(output_dir) / "dli_verification_report_v2.md"
+    
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write("# 双向动态锁定指数(DLI)统计验证报告 v2.0\\n\\n")
+        f.write("**生成时间**: " + pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S') + "\\n")
+        f.write("**分析方法**: 双重差分法(DID)，聚类稳健标准误\\n")
+        f.write("**政策冲击**: 页岩革命(2011年)\\n\\n")
         
-        # 第2步：执行DID分析
-        logger.info("📊 第2步：执行双重差分分析...")
-        did_results = run_did_analysis(did_data)
+        f.write("---\\n\\n")
         
-        # 第3步：生成验证报告
-        logger.info("📝 第3步：生成统计验证报告...")
-        report_path = generate_verification_report(did_results, did_data, output_dir)
+        # 分析概述
+        f.write("## 📊 分析概述\\n\\n")
+        f.write("本报告基于双向DLI分析系统，使用DID方法验证页岩革命对美国能源贸易锁定关系的双向影响：\\n\\n")
+        f.write("- **进口锁定**: 美国被供应商锁定的程度变化\\n")
+        f.write("- **出口锁定**: 美国锁定其他国家的程度变化\\n\\n")
         
-        # 返回输出文件
-        output_files = {
-            'verification_report_md': report_path,
-            'verification_results_csv': report_path.replace('.md', '_results.csv')
-        }
+        # 实验设计
+        f.write("## 🧪 实验设计\\n\\n")
+        f.write("### 处理组与控制组\\n")
+        f.write(f"- **处理组**: {', '.join(TREATMENT_COUNTRIES)}（管道贸易，高专用性基础设施）\\n")
+        f.write(f"- **控制组**: {', '.join(CONTROL_COUNTRIES)}（海运贸易，低专用性基础设施）\\n")
+        f.write(f"- **政策冲击时点**: {POLICY_SHOCK_YEAR}年\\n\\n")
         
-        logger.info("✅ 完整的DLI统计验证分析完成!")
-        logger.info(f"📄 报告文件: {output_files['verification_report_md']}")
-        logger.info(f"📊 结果文件: {output_files['verification_results_csv']}")
+        # 主要发现
+        f.write("## 🔍 主要发现\\n\\n")
         
-        return output_files
+        for locking_type, type_results in results.items():
+            type_name = "进口锁定" if locking_type == "import_locking" else "出口锁定"
+            f.write(f"### {type_name}分析结果\\n\\n")
+            
+            # 创建结果表格
+            f.write("| 指标 | DID系数 | 标准误 | t统计量 | p值 | 显著性 | 95%置信区间 |\\n")
+            f.write("|------|---------|--------|---------|-----|--------|-------------|\\n")
+            
+            for variable, result in type_results.items():
+                coef = result['did_coefficient']
+                se = result['did_std_error']
+                t_stat = result['did_t_statistic'] 
+                p_val = result['did_p_value']
+                ci_lower = result['ci_lower']
+                ci_upper = result['ci_upper']
+                
+                # 显著性标记
+                if p_val < 0.01:
+                    sig = "***"
+                elif p_val < 0.05:
+                    sig = "**"
+                elif p_val < 0.10:
+                    sig = "*"
+                else:
+                    sig = ""
+                
+                f.write(f"| {variable} | {coef:+.4f} | {se:.4f} | {t_stat:+.2f} | {p_val:.4f} | {sig} | [{ci_lower:+.4f}, {ci_upper:+.4f}] |\\n")
+            
+            f.write("\\n")
+            
+            # 显著性解释
+            significant_vars = [var for var, res in type_results.items() if res.get('significant_5pct', False)]
+            if significant_vars:
+                f.write(f"**{type_name}关键发现**：\\n")
+                for var in significant_vars:
+                    coef = type_results[var]['did_coefficient']
+                    direction = "增强" if coef > 0 else "减弱"
+                    f.write(f"- {var}: 锁定效应显著{direction} ({coef:+.4f})\\n")
+                f.write("\\n")
         
-    except Exception as e:
-        logger.error(f"❌ DLI统计验证分析失败: {e}")
-        raise
-
-# 简化版统计函数（当没有statsmodels时使用）
-if not HAS_STATSMODELS:
-    from scipy import stats
-    logger.warning("statsmodels未安装，将使用scipy进行基础统计分析")
+        # 统计说明
+        f.write("## 📝 统计说明\\n\\n")
+        f.write("- **聚类稳健标准误**: 按国家聚类校正面板数据序列相关性\\n")
+        f.write("- **显著性水平**: *** p<0.01, ** p<0.05, * p<0.10\\n")
+        f.write("- **DID系数**: treatment_post交互项系数，表示政策对处理组的净效应\\n")
+        f.write("- **正系数**: 锁定效应增强；负系数: 锁定效应减弱\\n\\n")
+        
+        f.write("---\\n\\n")
+        f.write("*本报告由双向DLI统计验证模块v2.0自动生成*\\n")
+    
+    logger.info(f"📄 双向DLI验证报告已生成: {report_path}")
+    return str(report_path)
 
 if __name__ == "__main__":
-    # 测试统计验证功能
+    # 测试双向DID分析
     try:
-        output_files = run_full_verification_analysis()
-        print("✅ DLI统计验证分析成功完成!")
-        for file_type, path in output_files.items():
-            print(f"📁 {file_type}: {path}")
+        logger.info("🚀 开始双向DLI统计验证测试...")
+        
+        # 执行完整分析
+        results = run_full_bidirectional_did_analysis()
+        
+        # 保存结果
+        output_paths = save_bidirectional_results(results)
+        
+        # 生成报告
+        report_path = generate_verification_report_v2(results)
+        
+        print("🎉 双向DLI统计验证完成！")
+        print("📊 输出文件:")
+        for desc, path in output_paths.items():
+            print(f"  {desc}: {path}")
+        print(f"  verification_report: {report_path}")
         
     except Exception as e:
-        logger.error(f"❌ 统计验证分析失败: {e}")
+        logger.error(f"❌ 双向DLI统计验证失败: {e}")
         raise

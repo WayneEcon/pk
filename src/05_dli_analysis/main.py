@@ -31,7 +31,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 # 导入各功能模块
 from data_preparation import prepare_dli_dataset, export_prepared_data
 from dli_calculator import generate_dli_panel_data
-from statistical_verification import run_full_verification_analysis
+from statistical_verification import run_full_bidirectional_did_analysis
 
 # 设置日志
 logging.basicConfig(
@@ -164,7 +164,7 @@ def run_full_dli_analysis(data_dir: str = None,
             logger.info("-" * 50)
             
             # 执行完整的DID验证分析
-            verification_files = run_full_verification_analysis(
+            verification_files = run_full_bidirectional_did_analysis(
                 dli_data_path=dli_panel_path,
                 output_dir=str(output_dir)
             )

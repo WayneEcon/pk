@@ -1,0 +1,282 @@
+{
+  "years": [
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "node_consistency": {
+    "2001": 238,
+    "2002": 238,
+    "2003": 236,
+    "2004": 238,
+    "2005": 236,
+    "2006": 238,
+    "2007": 237,
+    "2008": 239,
+    "2009": 240,
+    "2010": 240,
+    "2011": 240,
+    "2012": 243,
+    "2013": 244,
+    "2014": 241,
+    "2015": 241,
+    "2016": 240,
+    "2017": 239,
+    "2018": 240,
+    "2019": 240,
+    "2020": 240,
+    "2021": 240,
+    "2022": 241,
+    "2023": 241,
+    "2024": 241
+  },
+  "edge_attributes": {
+    "2001": "{'data_source', 'weight'}",
+    "2002": "{'data_source', 'weight'}",
+    "2003": "{'data_source', 'weight'}",
+    "2004": "{'data_source', 'weight'}",
+    "2005": "{'data_source', 'weight'}",
+    "2006": "{'data_source', 'weight'}",
+    "2007": "{'data_source', 'weight'}",
+    "2008": "{'data_source', 'weight'}",
+    "2009": "{'data_source', 'weight'}",
+    "2010": "{'data_source', 'weight'}",
+    "2011": "{'data_source', 'weight'}",
+    "2012": "{'data_source', 'weight'}",
+    "2013": "{'data_source', 'weight'}",
+    "2014": "{'data_source', 'weight'}",
+    "2015": "{'data_source', 'weight'}",
+    "2016": "{'data_source', 'weight'}",
+    "2017": "{'data_source', 'weight'}",
+    "2018": "{'data_source', 'weight'}",
+    "2019": "{'data_source', 'weight'}",
+    "2020": "{'data_source', 'weight'}",
+    "2021": "{'data_source', 'weight'}",
+    "2022": "{'data_source', 'weight'}",
+    "2023": "{'data_source', 'weight'}",
+    "2024": "{'data_source', 'weight'}"
+  },
+  "graph_attributes": {
+    "2001": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2001,
+      "description": "Global Energy Trade Network 2001",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:29.862453"
+    },
+    "2002": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2002,
+      "description": "Global Energy Trade Network 2002",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:30.334183"
+    },
+    "2003": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2003,
+      "description": "Global Energy Trade Network 2003",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:30.831498"
+    },
+    "2004": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2004,
+      "description": "Global Energy Trade Network 2004",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:31.346195"
+    },
+    "2005": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2005,
+      "description": "Global Energy Trade Network 2005",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:31.858534"
+    },
+    "2006": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2006,
+      "description": "Global Energy Trade Network 2006",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:32.408715"
+    },
+    "2007": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2007,
+      "description": "Global Energy Trade Network 2007",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:32.980659"
+    },
+    "2008": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2008,
+      "description": "Global Energy Trade Network 2008",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:33.563909"
+    },
+    "2009": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2009,
+      "description": "Global Energy Trade Network 2009",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:34.183753"
+    },
+    "2010": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2010,
+      "description": "Global Energy Trade Network 2010",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:34.781306"
+    },
+    "2011": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2011,
+      "description": "Global Energy Trade Network 2011",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:35.405308"
+    },
+    "2012": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2012,
+      "description": "Global Energy Trade Network 2012",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:36.046696"
+    },
+    "2013": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2013,
+      "description": "Global Energy Trade Network 2013",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:36.682510"
+    },
+    "2014": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2014,
+      "description": "Global Energy Trade Network 2014",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:37.319868"
+    },
+    "2015": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2015,
+      "description": "Global Energy Trade Network 2015",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:37.985104"
+    },
+    "2016": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2016,
+      "description": "Global Energy Trade Network 2016",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:38.637595"
+    },
+    "2017": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2017,
+      "description": "Global Energy Trade Network 2017",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:39.304652"
+    },
+    "2018": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2018,
+      "description": "Global Energy Trade Network 2018",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:39.988420"
+    },
+    "2019": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2019,
+      "description": "Global Energy Trade Network 2019",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:40.657840"
+    },
+    "2020": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2020,
+      "description": "Global Energy Trade Network 2020",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:41.334700"
+    },
+    "2021": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2021,
+      "description": "Global Energy Trade Network 2021",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:42.006299"
+    },
+    "2022": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2022,
+      "description": "Global Energy Trade Network 2022",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:42.698006"
+    },
+    "2023": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2023,
+      "description": "Global Energy Trade Network 2023",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:43.376869"
+    },
+    "2024": {
+      "node_default": {},
+      "edge_default": {},
+      "year": 2024,
+      "description": "Global Energy Trade Network 2024",
+      "data_consistency_strategy": "prioritize_imports",
+      "created_at": "2025-08-13T21:28:44.002707"
+    }
+  },
+  "issues": [],
+  "total_unique_nodes": 248,
+  "edge_count_range": [
+    7743,
+    11164
+  ],
+  "avg_edge_count": 9833.25,
+  "status": "consistent"
+}
