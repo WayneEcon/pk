@@ -1,0 +1,3 @@
+model,interaction_term,coefficient,p_value,significant,n_obs,r_squared,analysis_type
+dli_composite_x_betweenness_centrality,dli_composite_x_betweenness_centrality,-3.6499595501899447,0.41667431402858,False,75.0,0.05923863723281464,Local
+dli_composite_x_global_density,dli_composite_x_global_density,-4.103356928175218,0.48113799014013847,False,75.0,0.060776493925174924,Global

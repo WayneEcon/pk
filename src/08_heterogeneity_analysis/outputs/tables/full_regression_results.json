@@ -1,0 +1,42 @@
+{
+  "dli_composite_x_global_density": {
+    "model_name": "dli_composite_x_global_density",
+    "n_obs": 75.0,
+    "r_squared": 0.060776493925174924,
+    "coefficients": {
+      "const": 0.7408488264055035,
+      "dli_composite": 0.27402356716961107,
+      "global_density": 0.17680023645935386,
+      "dli_composite_x_global_density": -4.103356928175218
+    },
+    "p_values": {
+      "const": 3.9068021770057104e-05,
+      "dli_composite": 0.8805466256461969,
+      "global_density": 0.7373571881602736,
+      "dli_composite_x_global_density": 0.48113799014013847
+    },
+    "summary_stats": {
+      "significant_interactions": 1
+    }
+  },
+  "dli_composite_x_betweenness_centrality": {
+    "model_name": "dli_composite_x_betweenness_centrality",
+    "n_obs": 75.0,
+    "r_squared": 0.05923863723281464,
+    "coefficients": {
+      "const": 0.7544509463828195,
+      "dli_composite": -0.6142971027325381,
+      "betweenness_centrality": 0.4469544935381633,
+      "dli_composite_x_betweenness_centrality": -3.6499595501899447
+    },
+    "p_values": {
+      "const": 5.892132518313929e-18,
+      "dli_composite": 0.3476380054645333,
+      "betweenness_centrality": 0.3914385071235118,
+      "dli_composite_x_betweenness_centrality": 0.41667431402858
+    },
+    "summary_stats": {
+      "significant_interactions": 1
+    }
+  }
+}
