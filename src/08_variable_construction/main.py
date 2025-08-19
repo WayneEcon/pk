@@ -46,14 +46,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# 可选依赖
-try:
-    import wbdata
-    HAS_WBDATA = True
-    logger.info("✅ wbdata库可用，将使用World Bank API")
-except ImportError:
-    HAS_WBDATA = False
-    logger.warning("⚠️ wbdata库未安装，将使用模拟数据")
+# 可选依赖 - 暂时禁用wbdata以避免网络超时问题
+HAS_WBDATA = False
+logger.info("⚠️ wbdata暂时禁用，将使用缓存的宏观数据")
 
 try:
     import requests
@@ -135,6 +130,8 @@ class VariableConstructor:
             return None
         
         try:
+            # 延迟导入wbdata
+            import wbdata
             # 定义变量映射
             indicators = {
                 'NY.GDP.MKTP.CD': 'gdp_current_usd',
