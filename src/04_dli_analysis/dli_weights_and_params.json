@@ -1,0 +1,32 @@
+{
+  "version": "2.0",
+  "description": "双向DLI分析统一权重系统",
+  "unified_pca_weights": {
+    "continuity": 0.31449248416613373,
+    "infrastructure": 0.38066388257345996,
+    "stability": 0.10770051732625709,
+    "market_locking_power": 0.19714311593414932
+  },
+  "pca_explained_variance": 0.33155064366547077,
+  "generation_timestamp": "2025-08-15T02:57:58.802237",
+  "data_summary": {
+    "total_records": 41349,
+    "year_range": [
+      2001,
+      2024
+    ],
+    "num_partners": 221,
+    "num_products": 4,
+    "import_locking_records": 9266,
+    "export_locking_records": 32083
+  },
+  "methodology_notes": {
+    "pca_basis": "使用包含进口和出口的完整数据集运行PCA",
+    "weight_calculation": "第一主成分载荷的绝对值归一化",
+    "score_comparability": "所有dli_score都在统一标尺下可比",
+    "locking_types": {
+      "import_locking": "美国被供应商锁定的程度",
+      "export_locking": "美国锁定其他国家的程度（镜像计算）"
+    }
+  }
+}

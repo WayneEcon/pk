@@ -279,24 +279,24 @@ def test_multi_year_calculation_stability():
 
 ### **数据流向**
 ```
-02_net_analysis → 03_metrics → 04_policy_analysis
-              → 03_metrics → 05_dli_analysis  
-              → 03_metrics → 06_backbone_analysis
+02_net_analysis → 03_metrics → 06_policy_analysis
+              → 03_metrics → 04_dli_analysis  
+              → 03_metrics → 07_backbone_analysis
 ```
 
 ### **为下游模块提供的核心数据**
 
-#### **04_policy_analysis模块**
+#### **06_policy_analysis模块**
 - 提供美国能源地位变化的定量基础
 - 支持事前-事后对比分析的指标时间序列
 - 为政策冲击检验提供中心性排名数据
 
-#### **05_dli_analysis模块**  
+#### **04_dli_analysis模块**  
 - 提供DLI指标计算所需的基础网络特征
 - 支持动态锁定指数的多维度分析
 - 为双向锁定分析提供节点重要性参考
 
-#### **06_backbone_analysis模块**
+#### **07_backbone_analysis模块**
 - 为骨干网络提取提供原始网络的拓扑基准
 - 支持稳健性检验中的指标对比分析
 - 提供网络可视化的节点大小和着色依据

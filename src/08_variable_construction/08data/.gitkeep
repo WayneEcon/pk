@@ -1,0 +1,14 @@
+# 08data - 08模块专用数据存储目录
+# =====================================
+# 
+# 此目录存放08_variable_construction模块的所有数据文件
+# 
+# 预期文件结构:
+# 08data/
+# ├── ovi_components.csv          # OVI基础设施组件数据 (手动收集)
+# ├── macro_controls.csv          # 世界银行宏观数据 (API获取)
+# ├── us_production_data.csv      # EIA美国产量数据 (API获取)
+# ├── node_dli_us.csv            # 构建的Node-DLI_US数据
+# ├── vul_us.csv                 # 构建的Vul_US数据
+# ├── ovi.csv                    # 构建的OVI指数
+# └── us_prod_shock.csv          # 构建的美国产量冲击数据

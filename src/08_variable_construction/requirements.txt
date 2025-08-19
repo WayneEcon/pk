@@ -1,0 +1,31 @@
+# 08_variable_construction 模块依赖
+# ================================
+
+# 核心依赖 (必需)
+pandas>=1.3.0
+numpy>=1.20.0
+pathlib2>=2.3.0; python_version<"3.4"
+
+# 可选依赖 (自动降级)
+wbdata>=0.2.7                # World Bank API
+requests>=2.25.0             # EIA API
+scipy>=1.7.0                 # HP滤波和统计函数
+statsmodels>=0.12.0          # 高级时间序列滤波
+
+# 数据处理增强 (可选)
+openpyxl>=3.1.0              # Excel文件支持
+xlrd>=2.0.0                  # 旧版Excel支持
+
+# 可视化支持 (可选)
+matplotlib>=3.3.0            # 基础绘图
+seaborn>=0.11.0              # 统计绘图
+
+# 性能优化 (可选)
+numba>=0.50.0                # JIT编译加速
+joblib>=1.0.0                # 并行处理
+
+# 开发和测试 (可选)
+pytest>=6.0.0                # 单元测试
+pytest-cov>=2.10.0           # 测试覆盖率
+black>=21.0.0                # 代码格式化
+flake8>=3.8.0                # 代码检查
