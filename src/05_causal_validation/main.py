@@ -15,6 +15,7 @@
 """
 
 import pandas as pd
+import numpy as np
 import networkx as nx
 from typing import Dict, Optional, List
 import logging
@@ -40,17 +41,35 @@ class CausalValidationPipeline:
         self.output_dir.mkdir(exist_ok=True)
         logger.info("🚀 初始化因果验证分析管道（精简版）")
     
-    def load_data_from_modules(self) -> tuple[Dict[int, nx.Graph], pd.DataFrame]:
+    def _load_full_trade_data(self) -> Optional[pd.DataFrame]:
+        """从01模块加载完整的、已处理的贸易流数据"""
+        logger.info("... 正在加载完整的贸易流数据 ...")
+        processed_data_dir = project_root.parent / "data" / "processed_data"
+        trade_data_files = list(processed_data_dir.glob("cleaned_energy_trade_*.csv"))
+        
+        if not trade_data_files:
+            logger.warning(f"⚠️ 在 {processed_data_dir} 中未找到任何 'cleaned_energy_trade_*.csv' 文件。")
+            return None
+            
+        try:
+            trade_data_list = [pd.read_csv(file) for file in sorted(trade_data_files)]
+            trade_data = pd.concat(trade_data_list, ignore_index=True)
+            logger.info(f"✅ 成功加载并合并 {len(trade_data_files)} 个贸易数据文件，共 {len(trade_data)} 行。")
+            return trade_data
+        except Exception as e:
+            logger.error(f"❌ 加载完整贸易数据失败: {e}")
+            return None
+
+
+    def load_data_from_modules(self) -> tuple[Dict[int, nx.Graph], pd.DataFrame, pd.DataFrame]:
         """从前序模块加载标准化数据"""
         logger.info("📊 从前序模块加载数据...")
         
-        # 尝试从02模块加载网络数据
         networks = self._load_networks_from_02()
-        
-        # 尝试从04模块加载DLI数据  
         dli_data = self._load_dli_from_04()
+        trade_data = self._load_full_trade_data()
         
-        return networks, dli_data
+        return networks, dli_data, trade_data
     
     def _load_networks_from_02(self) -> Dict[int, nx.Graph]:
         """从02模块加载网络数据"""
@@ -156,14 +175,18 @@ class CausalValidationPipeline:
         
         return pd.DataFrame(data)
     
-    def run_analysis(self, networks: Dict[int, nx.Graph] = None, 
-                    dli_data: pd.DataFrame = None) -> Dict:
+    def run_analysis(self, networks: Dict[int, nx.Graph] = None,
+                    dli_data: pd.DataFrame = None,
+                    trade_data: pd.DataFrame = None) -> Dict:
         """运行完整的因果验证分析"""
         logger.info("🔬 开始因果验证分析...")
         
         # 1. 数据加载
-        if networks is None or dli_data is None:
-            networks, dli_data = self.load_data_from_modules()
+        if networks is None or dli_data is None or trade_data is None:
+            networks, dli_data, trade_data = self.load_data_from_modules()
+
+        # HHI_imports 构建已移至08模块处理
+        logger.info("📝 注意：HHI_imports指标构建已移至08变量构造模块")
         
         # 2. 计算韧性指标
         logger.info("📊 计算网络韧性指标...")

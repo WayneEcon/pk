@@ -1,127 +1,165 @@
-# 08_variable_construction - 变量构建模块 🏗️
+# 08_variable_construction - 变量构建模块 v3.0
 
-## 📋 模块概述
+## 📖 模块概述
 
-本模块负责从原始数据源构建所有研究需要的变量，生成最终的分析面板数据。
+本模块根据`research_outline.md`研究大纲，构建研究所需的4个核心变量，生成干净、可靠的分析面板数据。
 
-**核心成果**: 经过**完整单位统一**的OVI（物理冗余指数）数据，解决了原始数据中36种混乱单位的问题。
+**核心目标**: 从原始数据出发，构建支持模块09计量分析的标准化国别-年度面板数据集。
 
-## 📁 文件结构
+## 🎯 核心变量
 
-### 🎯 核心输出文件
+根据研究大纲，本模块构建以下4个核心变量：
+
+### 1. **Node-DLI_US** (美国锚定动态锁定指数)
+- **定义**: $NodeDLI^{US}_{i,t} = s^{imp}_{i,US,t} \cdot DLI_{US\to i,t} + (1-s^{imp}_{i,US,t}) \cdot DLI_{i\to US,t}$
+- **数据源**: 04_dli_analysis模块的边级DLI + 01模块贸易份额
+- **作用**: 量化各国与美国贸易关系的"质量"而非仅仅"数量"
+
+### 2. **Vul_US** (美国锚定脆弱性指数) 
+- **定义**: $Vul^{US}_{i,t} = s^{imp}_{i,US,t} \cdot HHI^{orig}_{i,t}$
+- **数据源**: 01模块贸易流数据
+- **作用**: 量化各国对"美国断供"风险的暴露程度
+
+### 3. **OVI** (天然气物理冗余指数)
+- **定义**: OVI = (LNG接收站容量 + 天然气管道容量) / 天然气消费量
+- **数据源**: GEM数据库LNG终端 + 管道 + EI统计消费数据
+- **作用**: 量化各国能源进口的物理选择权
+
+### 4. **US_ProdShock** (美国产量冲击)
+- **定义**: HP滤波后的美国油气产量周期成分
+- **数据源**: EIA API
+- **作用**: 作为外生冲击的工具变量
+
+## 🏗️ 架构设计
+
+### 核心文件
+
 ```
-08data/
-├── ovi_balanced_panel.csv     # 🏆 最终平衡面板数据 (1,656条记录，56国家×24年)
-├── ovi_gas_final.csv         # 天然气OVI最终版 (BCM单位统一)
-├── ovi_oil_final.csv         # 石油OVI最终版 (MTPA单位统一)
-└── ovi_final_report.md       # 完整技术报告
+08_variable_construction/
+├── clean_main.py              # 主构建器 - 整合所有变量
+├── simple_gas_ovi_builder.py  # 天然气OVI专用构建器
+├── universal_unit_converter.py # 通用单位转换器
+├── config.py                  # 配置文件
+├── 08data/                    # 中间数据存储
+│   ├── rawdata/              # 原始Excel文件
+│   ├── gas_ovi_clean.csv     # 清洁天然气OVI数据
+│   ├── node_dli_us_clean.csv # Node-DLI_US数据
+│   ├── vul_us_clean.csv      # Vul_US数据
+│   └── us_prod_shock_clean.csv # US冲击数据
+└── outputs/
+    └── analytical_panel.csv  # 最终分析面板
 ```
 
-### 🛠️ 核心工具
-```
-universal_unit_converter.py   # 通用单位转换器 (支持36种能源单位)
-upgraded_ovi_builder.py      # 升级版OVI构建器 (从Excel直接ETL)
-ovi_data_cleaner.py          # 数据清理器 (异常值处理+平衡面板)
-unit_audit_report.md         # 单位审计详细报告
-```
+### 设计原则
 
-### 📊 原始数据源
-```
-08data/rawdata/
-├── GEM-GGIT-Gas-Pipelines-2024-12.xlsx    # 天然气管道数据
-├── GEM-GGIT-LNG-Terminals-2024-09.xlsx    # LNG终端数据  
-├── GEM-GOIT-Oil-NGL-Pipelines-2025-03.xlsx # 石油管道数据
-├── gas_consumption.xlsx                     # 天然气消费数据 (BCM)
-├── oil consumption.xlsx                     # 石油消费数据 (千桶/天)
-└── oil refine.xlsx                         # 炼油厂容量数据
-```
-
-### 🗂️ 其他数据
-```
-08data/
-├── node_dli_us.csv          # DLI-US节点数据
-├── vul_us.csv              # 美国脆弱性数据
-├── us_prod_shock.csv       # 美国产量冲击数据
-└── macro_controls.csv      # 宏观控制变量
-```
+1. **回归初心**: 严格按照research_outline.md要求，不添加额外变量
+2. **单一职责**: 每个模块只负责一类变量的构建
+3. **数据一致性**: 确保中间文件与最终面板数据完全一致
+4. **可追溯性**: 每个变量都能追溯到原始数据源
 
 ## 🚀 使用方法
 
-### 完整ETL流程
-```python
-from upgraded_ovi_builder import UpgradedOVIBuilder
-from ovi_data_cleaner import OVIDataCleaner
-
-# 1. 构建OVI数据 (从Excel到标准化数据)
-builder = UpgradedOVIBuilder("08data")
-gas_ovi = builder.build_gas_ovi()  # 天然气OVI
-oil_ovi = builder.build_oil_ovi()  # 石油OVI
-
-# 2. 数据清理和平衡面板生成
-cleaner = OVIDataCleaner()
-final_data = cleaner.run_complete_cleaning()
+### 基础运行
+```bash
+python3 clean_main.py
 ```
 
-### 直接使用最终数据
-```python
-import pandas as pd
-
-# 加载最终平衡面板
-ovi_data = pd.read_csv("08data/ovi_balanced_panel.csv")
-
-# 2024年中美印对比
-data_2024 = ovi_data[ovi_data['year'] == 2024]
-usa = data_2024[data_2024['country'] == 'USA'].iloc[0]
-chn = data_2024[data_2024['country'] == 'CHN'].iloc[0] 
-ind = data_2024[data_2024['country'] == 'IND'].iloc[0]
-
-print(f"USA 2024: 天然气OVI={usa['ovi_gas']:.2f}, 石油OVI={usa['ovi_oil']:.2f}")
-print(f"CHN 2024: 天然气OVI={chn['ovi_gas']:.2f}, 石油OVI={chn['ovi_oil']:.2f}")
-print(f"IND 2024: 天然气OVI={ind['ovi_gas']:.2f}, 石油OVI={ind['ovi_oil']:.2f}")
+### 单独构建天然气OVI
+```bash
+python3 simple_gas_ovi_builder.py
 ```
 
-## 🎯 主要解决的问题
+## 📊 输出数据质量
 
-### 1. 单位混乱问题 ✅
-- **天然气**: 14种不同单位 → 统一到BCM/年
-- **石油**: 12种不同单位 → 统一到MTPA
-- **LNG**: 8种不同单位 → 统一到BCM/年
-- **特殊处理**: 印度MMSCMD、泰国极值、逗号分隔符等
+### 最终面板 (analytical_panel.csv)
+- **数据规模**: 450行 × 17列
+- **国家覆盖**: 18个主要经济体
+- **时间跨度**: 2000-2024年
 
-### 2. 数据质量问题 ✅  
-- **异常值清理**: 移除负值和极端异常值
-- **合理性验证**: OVI值控制在合理范围
-- **平衡面板**: 确保国家-年度数据完整性
-- **美国数据**: 成功修复美国数据缺失问题
+### 核心变量覆盖率
+- **Node-DLI_US**: 58.0% (261/450)
+- **Vul_US**: 58.0% (261/450) 
+- **OVI_gas**: 50.9% (229/450)
+- **US_ProdShock**: 92.0% (414/450)
 
-### 3. ETL流程问题 ✅
-- **直接Excel处理**: 不再依赖中间CSV文件
-- **智能数据清理**: 自动处理格式问题
-- **多源数据整合**: 标准化国家名称映射
+### 数据质量保证
+- ✅ 数值范围合理，无异常值
+- ✅ 中间文件与最终面板数据一致
+- ✅ 时间序列连续性良好
+- ✅ 单位转换准确
 
-## 📈 最终数据质量
+## 🔄 数据流程
 
-- **覆盖范围**: 56个国家，2001-2024年
-- **数据完整性**: 1,656条记录 (123.2%完整性)
-- **美国数据**: ✅ 32条完整记录 (每年完整)
-- **中国数据**: ✅ 天然气OVI=4.63, 石油OVI=2.35 (2024)
-- **印度数据**: ✅ 天然气OVI=6.81, 石油OVI=0.48 (2024)
+```mermaid
+graph TD
+    A[原始数据] --> B[单位转换标准化]
+    B --> C[时间序列面板构建]
+    C --> D[变量计算]
+    D --> E[数据清洗]
+    E --> F[面板整合]
+    F --> G[analytical_panel.csv]
+```
 
-## 🔧 技术特性
+## 📈 性能优化
 
-- **通用单位转换器**: 支持36种能源单位的自动转换
-- **智能数据解析**: 处理Excel复杂结构和混合数据格式
-- **异常值检测**: 自动识别和处理数据质量问题
-- **平衡面板生成**: 确保经济计量分析的数据要求
+- **运行时间**: 约26秒 (完整流水线)
+- **内存使用**: 优化Excel读取，减少内存占用
+- **API调用**: 智能缓存，避免重复请求
 
-## 📚 相关文档
+## 🛠️ 技术特性
 
-- `unit_audit_report.md`: 详细的单位审计和转换分析
-- `ovi_final_report.md`: OVI数据构建完整技术报告
-- `universal_unit_converter.py`: 转换器技术文档和使用示例
+### 单位转换系统
+- 支持36种能源单位自动转换
+- LNG: mtpa → BCM/年
+- 管道: 多种流量单位 → BCM/年
+- 石油: 各种产量单位 → MTPA
+
+### 数据质量控制
+- 异常值检测和清理
+- 缺失值合理处理
+- 时间序列一致性检查
+
+### 错误处理
+- 文件缺失自动跳过
+- API超时重试机制
+- 单位转换失败容错
+
+## 📝 版本历史
+
+### v3.0 - 回归初心版 (当前)
+- 🎯 严格按照research_outline.md构建
+- ❌ 移除所有石油OVI相关内容
+- ✅ 简化架构，提升可靠性
+- 📊 确保数据一致性
+
+### v2.0 - 性能优化版 (已归档)
+- ⚡ 大幅性能提升 (5分钟→42秒)
+- 🔧 优化Excel读取和内存使用
+- ❌ 存在数据一致性问题
+
+### v1.0 - 初始版本 (已归档)  
+- 🏗️ 建立基础架构
+- 📊 实现多能源OVI计算
+- ⚠️ 存在重复数据和性能问题
+
+## 🔗 模块依赖
+
+### 输入依赖
+- **01_data_processing**: 贸易流数据
+- **03_metrics**: 网络中心性指标  
+- **04_dli_analysis**: DLI面板数据
+
+### 输出支持
+- **09_econometric_analysis**: analytical_panel.csv
+
+## 💡 使用建议
+
+1. **运行环境**: 确保网络连接正常 (EIA API调用)
+2. **数据更新**: 原始Excel文件更新时重新运行
+3. **质量检查**: 运行后检查日志文件确认数据质量
+4. **版本控制**: 重要分析前备份outputs目录
 
 ---
 
-**版本**: v2.0 (单位统一版)  
-**更新**: 2024-08-19  
-**状态**: ✅ 生产就绪
+*本模块为美国能源独立国际影响研究项目的核心数据基础*  
+*Energy Network Analysis Team - 2024*

@@ -1,0 +1,282 @@
+2025-08-23 04:06:05,309 - __main__ - INFO - 步骤1: 开始数据加载与整合...
+2025-08-23 04:06:05,309 - data_loader - INFO - 092模块数据加载器初始化完成
+2025-08-23 04:06:05,309 - data_loader - INFO - 项目根目录: /Users/ywz/Desktop/pku/美国能源独立/project/energy_network
+2025-08-23 04:06:05,310 - data_loader - INFO - 🚀 开始加载完整的最终分析数据集...
+2025-08-23 04:06:05,310 - data_loader - INFO - 🔍 加载基础分析面板数据...
+2025-08-23 04:06:05,317 - data_loader - INFO - ✅ 基础面板加载完成: 4150 行 × 16 列
+2025-08-23 04:06:05,318 - data_loader - INFO -    核心变量齐全: country, year, ovi_gas, us_prod_shock, log_gdp, log_population
+2025-08-23 04:06:05,318 - data_loader - INFO - 📊 加载价格数量变量数据...
+2025-08-23 04:06:05,319 - data_loader - INFO - ✅ 价格数量数据加载完成: 3668 行 × 4 列
+2025-08-23 04:06:05,320 - data_loader - INFO -    时间范围: 2001-2024
+2025-08-23 04:06:05,320 - data_loader - INFO -    涵盖国家: 196 个
+2025-08-23 04:06:05,320 - data_loader - INFO -    P_it有效观测: 3668
+2025-08-23 04:06:05,320 - data_loader - INFO -    g_it有效观测: 3472
+2025-08-23 04:06:05,320 - data_loader - INFO - 🔗 合并价格数量数据...
+2025-08-23 04:06:05,323 - data_loader - INFO - ✅ 价格数量数据合并完成:
+2025-08-23 04:06:05,323 - data_loader - INFO -    • P_it覆盖: 3052/4150 条记录 (73.5%)
+2025-08-23 04:06:05,324 - data_loader - INFO -    • g_it覆盖: 2897/4150 条记录 (69.8%)
+2025-08-23 04:06:05,324 - data_loader - INFO -    • 有价格数量数据的国家: 155 个
+2025-08-23 04:06:05,324 - data_loader - INFO - 🌍 加载地理距离数据...
+2025-08-23 04:06:05,324 - data_loader - INFO - ✅ 距离数据加载完成: 224 个国家
+2025-08-23 04:06:05,324 - data_loader - INFO -    示例数据: [('ABW', 3162), ('AFG', 10848), ('AGO', 10427), ('AIA', 2717), ('ALB', 7440)]
+2025-08-23 04:06:05,324 - data_loader - INFO - 🔗 合并地理距离数据...
+2025-08-23 04:06:05,324 - data_loader - INFO - ✅ 距离数据合并完成:
+2025-08-23 04:06:05,324 - data_loader - INFO -    • 成功匹配: 4000/4150 条记录 (96.4%)
+2025-08-23 04:06:05,325 - data_loader - INFO -    • 未匹配国家: ['COD', 'MNE', 'ROU', 'SRB', 'SSD', 'TLS']...
+2025-08-23 04:06:05,325 - data_loader - INFO - 🚢 加载清理后的LNG价格数据...
+2025-08-23 04:06:05,326 - data_loader - INFO - ✅ 清理后LNG数据加载完成: 2260 行 × 5 列
+2025-08-23 04:06:05,326 - data_loader - INFO -    有效价格记录: 2260
+2025-08-23 04:06:05,326 - data_loader - INFO -    涵盖国家: 190 个
+2025-08-23 04:06:05,326 - data_loader - INFO -    时间范围: 2001-2024
+2025-08-23 04:06:05,326 - data_loader - INFO -    价格范围: $0.0483 - $520.0000 /kg
+2025-08-23 04:06:05,326 - data_loader - INFO - 🔗 合并清理后的LNG价格数据...
+2025-08-23 04:06:05,327 - data_loader - INFO - ✅ LNG价格数据合并完成:
+2025-08-23 04:06:05,327 - data_loader - INFO -    • P_lng覆盖: 1948/4150 条记录 (46.9%)
+2025-08-23 04:06:05,328 - data_loader - INFO -    • 有LNG价格数据的国家: 153 个
+2025-08-23 04:06:05,328 - data_loader - INFO - 🎉 完整数据集构建完成:
+2025-08-23 04:06:05,328 - data_loader - INFO -    • 最终形状: (4150, 19)
+2025-08-23 04:06:05,328 - data_loader - INFO -    • 核心变量完整性: {'country': {'available': True, 'coverage': '4150/4150 (100.0%)'}, 'year': {'available': True, 'coverage': '4150/4150 (100.0%)'}, 'ovi_gas': {'available': True, 'coverage': '894/4150 (21.5%)'}, 'us_prod_shock': {'available': True, 'coverage': '3818/4150 (92.0%)'}, 'distance_to_us': {'available': True, 'coverage': '4000/4150 (96.4%)'}, 'P_it': {'available': True, 'coverage': '3052/4150 (73.5%)'}, 'g_it': {'available': True, 'coverage': '2897/4150 (69.8%)'}, 'P_lng': {'available': True, 'coverage': '1948/4150 (46.9%)'}, 'log_gdp': {'available': True, 'coverage': '4068/4150 (98.0%)'}, 'log_population': {'available': True, 'coverage': '4150/4150 (100.0%)'}}
+2025-08-23 04:06:05,328 - __main__ - INFO - 步骤2: 运行最终LP-IRF分析...
+2025-08-23 04:06:05,328 - models - INFO - 🔬 092最终计量模型初始化完成
+2025-08-23 04:06:05,328 - models - INFO - 🚀 开始运行092最终计量分析...
+2025-08-23 04:06:05,328 - models - INFO - 
+==================================================
+2025-08-23 04:06:05,328 - models - INFO - 💰 运行价格通道LP-IRF模型 (Model 5A)...
+2025-08-23 04:06:05,331 - models - INFO -    数据验证通过: 829 观测值, 60 国家, 23 年份
+2025-08-23 04:06:05,331 - models - INFO -    创建前瞻价格变量...
+2025-08-23 04:06:05,331 - models - INFO -    ✓ 包含地理距离控制交互项
+2025-08-23 04:06:05,331 - models - INFO -    开始估计 5 个预测期...
+2025-08-23 04:06:05,331 - models - INFO -      预测期 h=0...
+2025-08-23 04:06:05,351 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,351 - models - INFO -      预测期 h=1...
+2025-08-23 04:06:05,360 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,361 - models - INFO -      预测期 h=2...
+2025-08-23 04:06:05,370 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,370 - models - INFO -      预测期 h=3...
+2025-08-23 04:06:05,378 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,379 - models - INFO -      预测期 h=4...
+2025-08-23 04:06:05,387 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,387 - models - INFO - 
+==================================================
+2025-08-23 04:06:05,387 - models - INFO - 📊 运行数量通道LP-IRF模型 (Model 5B)...
+2025-08-23 04:06:05,389 - models - INFO -    数据验证通过: 829 观测值, 60 国家, 23 年份
+2025-08-23 04:06:05,389 - models - INFO -    创建前瞻数量变量...
+2025-08-23 04:06:05,389 - models - INFO -    ✓ 包含地理距离控制交互项
+2025-08-23 04:06:05,389 - models - INFO -    开始估计 5 个预测期...
+2025-08-23 04:06:05,389 - models - INFO -      预测期 h=0...
+2025-08-23 04:06:05,399 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,399 - models - INFO -      预测期 h=1...
+2025-08-23 04:06:05,408 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,408 - models - INFO -      预测期 h=2...
+2025-08-23 04:06:05,417 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,417 - models - INFO -      预测期 h=3...
+2025-08-23 04:06:05,427 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,427 - models - INFO -      预测期 h=4...
+2025-08-23 04:06:05,436 - models - WARNING -        估计失败: 
+The model cannot be estimated. The included effects have fully absorbed
+one or more of the variables. This occurs when one or more of the dependent
+variable is perfectly explained using the effects included in the model.
+
+The following variables or variable combinations have been fully absorbed
+or have become perfectly collinear after effects are removed:
+
+          us_prod_shock
+
+Set drop_absorbed=True to automatically drop absorbed variables.
+
+2025-08-23 04:06:05,436 - models - INFO - 
+==================================================
+2025-08-23 04:06:05,436 - models - INFO - 📈 生成脉冲响应函数图表...
+2025-08-23 04:06:05,644 - models - INFO -    ✅ 脉冲响应图已保存: figures/final_lp_irf_results.png
+2025-08-23 04:06:06,782 - models - INFO -    📁 结果已保存: outputs/final_analysis_results.json
+2025-08-23 04:06:06,782 - models - INFO - 
+🎉 092最终计量分析完成！
+2025-08-23 04:06:06,782 - __main__ - INFO - 步骤3: 生成分析结果摘要...
+2025-08-23 04:06:06,782 - __main__ - INFO - 步骤4: 生成最终分析报告...
+2025-08-23 04:06:06,783 - __main__ - INFO - ✅ 最终分析报告已生成: outputs/final_analysis_report.md
+2025-08-23 04:06:35,987 - __main__ - INFO - 步骤1: 开始数据加载与整合...
+2025-08-23 04:06:35,988 - data_loader - INFO - 092模块数据加载器初始化完成
+2025-08-23 04:06:35,988 - data_loader - INFO - 项目根目录: /Users/ywz/Desktop/pku/美国能源独立/project/energy_network
+2025-08-23 04:06:35,988 - data_loader - INFO - 🚀 开始加载完整的最终分析数据集...
+2025-08-23 04:06:35,988 - data_loader - INFO - 🔍 加载基础分析面板数据...
+2025-08-23 04:06:35,994 - data_loader - INFO - ✅ 基础面板加载完成: 4150 行 × 16 列
+2025-08-23 04:06:35,994 - data_loader - INFO -    核心变量齐全: country, year, ovi_gas, us_prod_shock, log_gdp, log_population
+2025-08-23 04:06:35,994 - data_loader - INFO - 📊 加载价格数量变量数据...
+2025-08-23 04:06:35,996 - data_loader - INFO - ✅ 价格数量数据加载完成: 3668 行 × 4 列
+2025-08-23 04:06:35,997 - data_loader - INFO -    时间范围: 2001-2024
+2025-08-23 04:06:35,997 - data_loader - INFO -    涵盖国家: 196 个
+2025-08-23 04:06:35,997 - data_loader - INFO -    P_it有效观测: 3668
+2025-08-23 04:06:35,997 - data_loader - INFO -    g_it有效观测: 3472
+2025-08-23 04:06:35,997 - data_loader - INFO - 🔗 合并价格数量数据...
+2025-08-23 04:06:36,001 - data_loader - INFO - ✅ 价格数量数据合并完成:
+2025-08-23 04:06:36,001 - data_loader - INFO -    • P_it覆盖: 3052/4150 条记录 (73.5%)
+2025-08-23 04:06:36,001 - data_loader - INFO -    • g_it覆盖: 2897/4150 条记录 (69.8%)
+2025-08-23 04:06:36,001 - data_loader - INFO -    • 有价格数量数据的国家: 155 个
+2025-08-23 04:06:36,001 - data_loader - INFO - 🌍 加载地理距离数据...
+2025-08-23 04:06:36,002 - data_loader - INFO - ✅ 距离数据加载完成: 224 个国家
+2025-08-23 04:06:36,002 - data_loader - INFO -    示例数据: [('ABW', 3162), ('AFG', 10848), ('AGO', 10427), ('AIA', 2717), ('ALB', 7440)]
+2025-08-23 04:06:36,002 - data_loader - INFO - 🔗 合并地理距离数据...
+2025-08-23 04:06:36,003 - data_loader - INFO - ✅ 距离数据合并完成:
+2025-08-23 04:06:36,003 - data_loader - INFO -    • 成功匹配: 4000/4150 条记录 (96.4%)
+2025-08-23 04:06:36,003 - data_loader - INFO -    • 未匹配国家: ['COD', 'MNE', 'ROU', 'SRB', 'SSD', 'TLS']...
+2025-08-23 04:06:36,003 - data_loader - INFO - 🚢 加载清理后的LNG价格数据...
+2025-08-23 04:06:36,004 - data_loader - INFO - ✅ 清理后LNG数据加载完成: 2260 行 × 5 列
+2025-08-23 04:06:36,004 - data_loader - INFO -    有效价格记录: 2260
+2025-08-23 04:06:36,004 - data_loader - INFO -    涵盖国家: 190 个
+2025-08-23 04:06:36,004 - data_loader - INFO -    时间范围: 2001-2024
+2025-08-23 04:06:36,004 - data_loader - INFO -    价格范围: $0.0483 - $520.0000 /kg
+2025-08-23 04:06:36,004 - data_loader - INFO - 🔗 合并清理后的LNG价格数据...
+2025-08-23 04:06:36,006 - data_loader - INFO - ✅ LNG价格数据合并完成:
+2025-08-23 04:06:36,006 - data_loader - INFO -    • P_lng覆盖: 1948/4150 条记录 (46.9%)
+2025-08-23 04:06:36,006 - data_loader - INFO -    • 有LNG价格数据的国家: 153 个
+2025-08-23 04:06:36,007 - data_loader - INFO - 🎉 完整数据集构建完成:
+2025-08-23 04:06:36,007 - data_loader - INFO -    • 最终形状: (4150, 19)
+2025-08-23 04:06:36,007 - data_loader - INFO -    • 核心变量完整性: {'country': {'available': True, 'coverage': '4150/4150 (100.0%)'}, 'year': {'available': True, 'coverage': '4150/4150 (100.0%)'}, 'ovi_gas': {'available': True, 'coverage': '894/4150 (21.5%)'}, 'us_prod_shock': {'available': True, 'coverage': '3818/4150 (92.0%)'}, 'distance_to_us': {'available': True, 'coverage': '4000/4150 (96.4%)'}, 'P_it': {'available': True, 'coverage': '3052/4150 (73.5%)'}, 'g_it': {'available': True, 'coverage': '2897/4150 (69.8%)'}, 'P_lng': {'available': True, 'coverage': '1948/4150 (46.9%)'}, 'log_gdp': {'available': True, 'coverage': '4068/4150 (98.0%)'}, 'log_population': {'available': True, 'coverage': '4150/4150 (100.0%)'}}
+2025-08-23 04:06:36,007 - __main__ - INFO - 步骤2: 运行最终LP-IRF分析...
+2025-08-23 04:06:36,007 - models - INFO - 🔬 092最终计量模型初始化完成
+2025-08-23 04:06:36,007 - models - INFO - 🚀 开始运行092最终计量分析...
+2025-08-23 04:06:36,007 - models - INFO - 
+==================================================
+2025-08-23 04:06:36,007 - models - INFO - 💰 运行价格通道LP-IRF模型 (Model 5A)...
+2025-08-23 04:06:36,010 - models - INFO -    数据验证通过: 829 观测值, 60 国家, 23 年份
+2025-08-23 04:06:36,010 - models - INFO -    创建前瞻价格变量...
+2025-08-23 04:06:36,011 - models - INFO -    ✓ 包含地理距离控制交互项
+2025-08-23 04:06:36,011 - models - INFO -    开始估计 5 个预测期...
+2025-08-23 04:06:36,011 - models - INFO -      预测期 h=0...
+2025-08-23 04:06:36,026 - models - INFO -        θ_0 = 10.9286 (SE=10.2373, p=0.286)
+2025-08-23 04:06:36,026 - models - INFO -      预测期 h=1...
+2025-08-23 04:06:36,036 - models - INFO -        θ_1 = 35.6341 (SE=28.6656, p=0.214)
+2025-08-23 04:06:36,036 - models - INFO -      预测期 h=2...
+2025-08-23 04:06:36,047 - models - INFO -        θ_2 = -7.1612 (SE=5.1234, p=0.163)
+2025-08-23 04:06:36,047 - models - INFO -      预测期 h=3...
+2025-08-23 04:06:36,057 - models - INFO -        θ_3 = -14.5651 (SE=10.3048, p=0.158)
+2025-08-23 04:06:36,057 - models - INFO -      预测期 h=4...
+2025-08-23 04:06:36,066 - models - INFO -        θ_4 = -18.9068 (SE=15.7720, p=0.231)
+2025-08-23 04:06:36,066 - models - INFO -    ✅ 价格通道LP-IRF完成: 5 个预测期
+2025-08-23 04:06:36,066 - models - INFO - 
+==================================================
+2025-08-23 04:06:36,066 - models - INFO - 📊 运行数量通道LP-IRF模型 (Model 5B)...
+2025-08-23 04:06:36,068 - models - INFO -    数据验证通过: 829 观测值, 60 国家, 23 年份
+2025-08-23 04:06:36,068 - models - INFO -    创建前瞻数量变量...
+2025-08-23 04:06:36,069 - models - INFO -    ✓ 包含地理距离控制交互项
+2025-08-23 04:06:36,069 - models - INFO -    开始估计 5 个预测期...
+2025-08-23 04:06:36,069 - models - INFO -      预测期 h=0...
+2025-08-23 04:06:36,078 - models - INFO -        θ_0 = -1.3454 (SE=1.0641, p=0.207)
+2025-08-23 04:06:36,078 - models - INFO -      预测期 h=1...
+2025-08-23 04:06:36,087 - models - INFO -        θ_1 = -0.2290 (SE=0.6874, p=0.739)
+2025-08-23 04:06:36,087 - models - INFO -      预测期 h=2...
+2025-08-23 04:06:36,097 - models - INFO -        θ_2 = 1.0882 (SE=0.9394, p=0.247)
+2025-08-23 04:06:36,097 - models - INFO -      预测期 h=3...
+2025-08-23 04:06:36,106 - models - INFO -        θ_3 = 1.2814* (SE=0.6922, p=0.065)
+2025-08-23 04:06:36,106 - models - INFO -      预测期 h=4...
+2025-08-23 04:06:36,115 - models - INFO -        θ_4 = -1.1246 (SE=0.7749, p=0.147)
+2025-08-23 04:06:36,116 - models - INFO -    ✅ 数量通道LP-IRF完成: 5 个预测期
+2025-08-23 04:06:36,116 - models - INFO - 
+==================================================
+2025-08-23 04:06:36,116 - models - INFO - 📈 生成脉冲响应函数图表...
+2025-08-23 04:06:36,432 - models - INFO -    ✅ 脉冲响应图已保存: figures/final_lp_irf_results.png
+2025-08-23 04:06:38,308 - models - INFO -    📁 结果已保存: outputs/final_analysis_results.json
+2025-08-23 04:06:38,308 - models - INFO - 
+🎉 092最终计量分析完成！
+2025-08-23 04:06:38,308 - __main__ - INFO - 步骤3: 生成分析结果摘要...
+2025-08-23 04:06:38,308 - __main__ - INFO - 步骤4: 生成最终分析报告...
+2025-08-23 04:06:38,309 - __main__ - INFO - ✅ 最终分析报告已生成: outputs/final_analysis_report.md

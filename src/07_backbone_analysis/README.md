@@ -109,19 +109,3 @@ scipy >= 1.9
 jinja2 >= 3.0  # 用于高级报告模板
 yaml >= 6.0    # 用于配置文件支持
 ```
-
-## 🎓 学术应用
-
-该模块适用于：
-- 顶级期刊论文发表
-- 政策制定支持
-- 能源网络结构分析
-- 复杂网络方法验证
-
-## 📞 技术支持
-
-如有问题请联系：Energy Network Analysis Team
-
----
-*Version: v2.0 (Phase 2 Complete Edition)*  
-*Generated: 2025-08-15*

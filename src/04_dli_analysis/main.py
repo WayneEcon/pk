@@ -24,6 +24,8 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import warnings
 warnings.filterwarnings('ignore')
+import pandas as pd
+import numpy as np
 
 # 添加src路径以支持相对导入
 sys.path.append(str(Path(__file__).parent.parent))
@@ -55,10 +57,105 @@ def print_banner():
     """
     print(banner)
 
+def _load_full_trade_data(base_dir: Path) -> Optional[pd.DataFrame]:
+    """从01模块加载完整的、已处理的贸易流数据"""
+    logger.info("... 正在加载完整的贸易流数据 ...")
+    processed_data_dir = base_dir / "data" / "processed_data"
+    trade_data_files = list(processed_data_dir.glob("cleaned_energy_trade_*.csv"))
+    
+    if not trade_data_files:
+        logger.warning(f"⚠️ 在 {processed_data_dir} 中未找到任何 'cleaned_energy_trade_*.csv' 文件。")
+        return None
+        
+    try:
+        trade_data_list = [pd.read_csv(file) for file in sorted(trade_data_files)]
+        trade_data = pd.concat(trade_data_list, ignore_index=True)
+        logger.info(f"✅ 成功加载并合并 {len(trade_data_files)} 个贸易数据文件，共 {len(trade_data)} 行。")
+        return trade_data
+    except Exception as e:
+        logger.error(f"❌ 加载完整贸易数据失败: {e}")
+        return None
+
+def construct_node_dli_us(dli_data: pd.DataFrame, trade_data: pd.DataFrame, output_dir: Path) -> str:
+    """
+    构建 Node-DLI_US (美国锚定动态锁定指数)
+    
+    Args:
+        dli_data (pd.DataFrame): 来自本模块的边级别DLI面板数据.
+        trade_data (pd.DataFrame): 来自01模块的完整贸易流数据.
+        output_dir (Path): 输出目录.
+
+    Returns:
+        str: 生成的 node_dli_us.csv 文件路径.
+    """
+    logger.info("   构建 Node-DLI_US...")
+    
+    try:
+        # 筛选与美国相关的贸易
+        us_trade = trade_data[(trade_data['reporter'] == 'USA') | (trade_data['partner'] == 'USA')].copy()
+        if len(us_trade) == 0:
+            raise ValueError("未找到与美国相关的贸易数据")
+
+        # 计算各国总进口额
+        total_imports = trade_data[trade_data['flow'] == 'M'].groupby(['year', 'reporter']).agg(
+            total_imports=('trade_value_raw_usd', 'sum')
+        ).reset_index()
+
+        # 计算各国从美国的进口额
+        us_imports = us_trade[
+            (us_trade['partner'] == 'USA') & (us_trade['flow'] == 'M')
+        ].groupby(['year', 'reporter']).agg(
+            us_imports=('trade_value_raw_usd', 'sum')
+        ).reset_index()
+
+        # 合并计算真实进口份额
+        trade_shares = total_imports.merge(us_imports, on=['year', 'reporter'], how='left')
+        trade_shares['us_imports'] = trade_shares['us_imports'].fillna(0)
+        trade_shares['import_share_from_us'] = (trade_shares['us_imports'] / trade_shares['total_imports']).fillna(0).clip(0, 1)
+        trade_shares.rename(columns={'reporter': 'country'}, inplace=True)
+        
+        logger.info(f"   计算了 {len(trade_shares)} 个国家-年份的真实贸易份额")
+
+        # 基于真实DLI数据构建Node-DLI_US
+        node_dli_records = []
+        for _, trade_row in trade_shares.iterrows():
+            year, country, s_imp = trade_row['year'], trade_row['country'], trade_row['import_share_from_us']
+            
+            dli_us_to_i = dli_data[(dli_data['year'] == year) & (dli_data['us_partner'] == country) & (dli_data['us_role'] == 'exporter')]['dli_score_adjusted'].mean()
+            dli_i_to_us = dli_data[(dli_data['year'] == year) & (dli_data['us_partner'] == country) & (dli_data['us_role'] == 'importer')]['dli_score_adjusted'].mean()
+            
+            dli_us_to_i = dli_us_to_i if pd.notna(dli_us_to_i) else 0
+            dli_i_to_us = dli_i_to_us if pd.notna(dli_i_to_us) else 0
+            
+            node_dli_us = s_imp * dli_us_to_i + (1 - s_imp) * dli_i_to_us
+            
+            node_dli_records.append({
+                'year': year,
+                'country': country,
+                'node_dli_us': node_dli_us,
+                'import_share_from_us': s_imp
+            })
+        
+        node_dli_df = pd.DataFrame(node_dli_records)
+        
+        non_zero_dli = node_dli_df[node_dli_df['node_dli_us'] > 0]
+        logger.info(f"   有效Node-DLI记录: {len(non_zero_dli)}/{len(node_dli_df)}")
+        
+        output_path = output_dir / "node_dli_us.csv"
+        node_dli_df.to_csv(output_path, index=False)
+        
+        logger.info(f"✅ Node-DLI_US构建完成: {len(node_dli_df)} 行记录，保存至 {output_path}")
+        return str(output_path)
+        
+    except Exception as e:
+        logger.error(f"❌ Node-DLI_US构建失败: {e}", exc_info=True)
+        raise
+
 def run_full_dli_analysis(data_dir: str = None,
                           output_dir: str = None,
                           skip_data_prep: bool = False,
                           skip_dli_calculation: bool = False,
+                          skip_node_dli: bool = False,
                           skip_verification: bool = False) -> Dict[str, str]:
     """
     执行完整的DLI分析流程
@@ -157,7 +254,22 @@ def run_full_dli_analysis(data_dir: str = None,
             dli_panel_path = str(output_dir / "dli_panel_data.csv")
             if not Path(dli_panel_path).exists():
                 raise FileNotFoundError(f"跳过DLI计算但未找到已有面板数据: {dli_panel_path}")
-        
+            dli_panel = pd.read_csv(dli_panel_path)
+
+        # 第2.5步: Node-DLI_US 指标构建
+        if not skip_node_dli:
+            logger.info("\n🏗️  第2.5步: Node-DLI_US 指标构建阶段...")
+            logger.info("-" * 50)
+            
+            full_trade_data = _load_full_trade_data(base_dir)
+            if full_trade_data is not None:
+                node_dli_us_path = construct_node_dli_us(dli_panel, full_trade_data, output_dir)
+                output_files['node_dli_us'] = node_dli_us_path
+            else:
+                logger.warning("⚠️ 因无法加载完整贸易数据，跳过Node-DLI_US构建。")
+        else:
+            logger.info("\n⏭️ 跳过Node-DLI_US构建步骤")
+
         # 第3步：统计验证
         if not skip_verification:
             logger.info("\n📊 第3步：统计验证阶段...")
@@ -394,6 +506,12 @@ def main():
         action='store_true',
         help='跳过DLI计算步骤'
     )
+
+    parser.add_argument(
+        '--skip-node-dli',
+        action='store_true',
+        help='跳过Node-DLI_US构建步骤'
+    )
     
     parser.add_argument(
         '--skip-verify',
@@ -425,6 +543,7 @@ def main():
                 output_dir=args.output_dir,
                 skip_data_prep=args.skip_prep,
                 skip_dli_calculation=args.skip_dli,
+                skip_node_dli=args.skip_node_dli,
                 skip_verification=args.skip_verify
             )
             
