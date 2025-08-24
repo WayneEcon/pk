@@ -745,6 +745,13 @@ class FinalDataLoader:
         # 步骤7: 最终合并
         df_final = self.merge_clean_lng_price(df_with_distance, df_lng_price)
         
+        # 步骤8: 创建模型期望的变量名映射
+        if 'OVI_LNG_final' in df_final.columns:
+            df_final['ovi_gas'] = df_final['OVI_LNG_final']
+            logger.info("✅ 创建了ovi_gas变量映射 (基于OVI_LNG_final)")
+        else:
+            logger.warning("⚠️ 未找到OVI_LNG_final列，无法创建ovi_gas映射")
+        
         # 生成数据统计
         stats = self._generate_dataset_stats(df_final)
         
