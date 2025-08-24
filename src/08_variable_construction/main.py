@@ -128,7 +128,7 @@ class VariableConstructor:
                 logger.warning(f"⚠️ 无法加载节点指标: {str(e)}")
         
         # 加载04模块输出 - DLI数据
-        dli_panel_path = self.base_dir / "src" / "04_dli_analysis" / "dli_panel_data.csv"
+        dli_panel_path = self.base_dir / "src" / "04_dli_analysis" / "outputs" / "dli_panel_data.csv"
         if dli_panel_path.exists():
             try:
                 dli_data = pd.read_csv(dli_panel_path)

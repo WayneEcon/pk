@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "description": "美国出口锁定DLI权重系统",
+  "export_pca_weights": {
+    "continuity": 0.5752726509204124,
+    "infrastructure": 0.7046078892007718,
+    "stability": 0.18907527846950842,
+    "market_locking_power": 0.36991842161578253
+  },
+  "explained_variance_ratio": 0.3135926550162205,
+  "dimensions": [
+    "continuity",
+    "infrastructure",
+    "stability",
+    "market_locking_power"
+  ],
+  "generation_timestamp": "2025-08-24T02:52:17.311537"
+}

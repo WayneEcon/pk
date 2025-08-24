@@ -55,7 +55,7 @@
 本模块为下游分析模块提供以下核心数据产出：
 
 - **年度网络文件**:
-  - **GraphML 格式**: 位于 `data/processed_data/networks/`，用于跨平台分析和可视化。
+  - **GraphML 格式**: 位于 `outputs/networks/`，用于跨平台分析和可视化。
   - **Pickle 格式**: Python原生格式，用于高效的数据加载。
 - **基础统计报告**:
   - `outputs/network_stats/network_basic_stats.csv`: 包含所有年份网络的宏观统计指标。

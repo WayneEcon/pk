@@ -96,7 +96,7 @@ def load_network_data(config: AnalysisConfig, logger: logging.Logger) -> Dict[in
             config.data_path / "networks" / f"network_{year}.graphml",
             config.data_path / f"network_{year}.graphml", 
             config.data_path / f"{year}.graphml",
-            Path("../../data/processed_data/networks") / f"network_{year}.graphml"
+            Path("../02_net_analysis/outputs/networks") / f"network_{year}.graphml"
         ]
         
         loaded = False

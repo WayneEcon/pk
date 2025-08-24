@@ -46,7 +46,7 @@ def load_dli_panel_data(file_path: str = None) -> pd.DataFrame:
     
     if file_path is None:
         base_dir = Path(__file__).parent.parent.parent
-        file_path = Path(__file__).parent / "dli_panel_data.csv"
+        file_path = Path(__file__).parent / "outputs" / "dli_panel_data.csv"
     
     logger.info(f"📂 加载双向DLI面板数据: {file_path}")
     

@@ -367,7 +367,7 @@ def add_distance_data(trade_df: pd.DataFrame) -> pd.DataFrame:
     
     # 按距离区间统计贸易伙伴
     distance_bins = [0, 2000, 5000, 8000, 15000]
-    distance_labels = ['邻近(<2000km)', '近距离(2-5000km)', '中距离(5-8000km)', '远距离(>8000km)']
+    distance_labels = ['Near(<2000km)', 'Close(2-5000km)', 'Medium(5-8000km)', 'Far(>8000km)']
     df['distance_category'] = pd.cut(df['distance_km'], bins=distance_bins, labels=distance_labels, include_lowest=True)
     
     distance_partner_stats = df.groupby('distance_category')['us_partner'].nunique()

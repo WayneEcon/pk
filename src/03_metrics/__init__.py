@@ -304,7 +304,7 @@ def run_full_metrics_calculation() -> bool:
     try:
         # 设置路径
         base_dir = Path(__file__).parent.parent.parent
-        networks_file = base_dir / "data/processed_data/networks/annual_networks_2001_2024.pkl"
+        networks_file = base_dir / "src/02_net_analysis/outputs/networks/annual_networks_2001_2024.pkl"
         
         # 检查网络文件
         if not networks_file.exists():

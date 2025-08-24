@@ -189,7 +189,7 @@ def run_full_dli_analysis(data_dir: str = None,
         # 设置输出目录
         if output_dir is None:
             base_dir = Path(__file__).parent.parent.parent
-            output_dir = Path(__file__).parent
+            output_dir = Path(__file__).parent / "outputs"
         else:
             output_dir = Path(output_dir)
         
@@ -243,7 +243,7 @@ def run_full_dli_analysis(data_dir: str = None,
             
             # 显示DLI统计摘要
             logger.info("\n📊 DLI综合指标统计摘要:")
-            dli_stats = dli_panel['dli_composite_adjusted'].describe()
+            dli_stats = dli_panel['dli_score_adjusted'].describe()
             logger.info(f"  均值: {dli_stats['mean']:.4f}")
             logger.info(f"  标准差: {dli_stats['std']:.4f}")
             logger.info(f"  范围: [{dli_stats['min']:.4f}, {dli_stats['max']:.4f}]")
@@ -333,7 +333,7 @@ def run_dli_calculation_only(data_file: str = None,
     try:
         if output_dir is None:
             base_dir = Path(__file__).parent.parent.parent
-            output_dir = Path(__file__).parent
+            output_dir = Path(__file__).parent / "outputs"
         else:
             output_dir = Path(output_dir)
         
@@ -374,7 +374,7 @@ def run_verification_only(dli_data_file: str = None,
     try:
         if output_dir is None:
             base_dir = Path(__file__).parent.parent.parent
-            output_dir = Path(__file__).parent
+            output_dir = Path(__file__).parent / "outputs"
         else:
             output_dir = Path(output_dir)
         

@@ -53,7 +53,7 @@ class USProdShockBuilder:
         try:
             # 使用正确的本地数据文件
             current_dir = Path(__file__).parent
-            data_file = current_dir / "outputs" / "us_gas_production_correct_data.csv"
+            data_file = current_dir / "08data" / "us_gas_production_raw_eia.csv"
             
             if not data_file.exists():
                 logger.error(f"❌ 正确数据文件不存在: {data_file}")

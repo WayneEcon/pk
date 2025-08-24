@@ -12,8 +12,6 @@ DLI通过四个维度量化国家间能源贸易关系的路径依赖和转换�
 4. 市场锁定力 (Market Locking Power): 衡量市场结构导致的锁定效应
 
 最终通过主成分分析(PCA)确定权重，合成DLI总分。
-
-作者：Energy Network Analysis Team
 """
 
 import pandas as pd
@@ -493,16 +491,10 @@ def calculate_import_locking_power(df: pd.DataFrame) -> pd.DataFrame:
 
 def calculate_export_locking_power(df: pd.DataFrame, global_trade_data: Dict[int, pd.DataFrame]) -> pd.DataFrame:
     """
-    计算出口锁定力指标 (Export Locking Power) - 镜像计算逻辑
+    计算出口锁定力指标 - 调用独立的ex_dli模块
     
-    理论框架：当美国向某国出口能源时，评估该国对美国的"被锁定"程度
-    
-    计算逻辑：
-    1. 对于美国向国家X出口产品P的每一条记录
-    2. 查询全球数据，找到国家X在该年份进口产品P的所有供应商
-    3. 计算国家X在产品P上的进口集中度（供应商HHI）
-    4. 计算美国在国家X的产品P进口中的份额
-    5. 出口锁定力 = 国家X的进口HHI × 美国在X国市场的份额
+    注意：出口锁定力计算逻辑已移至ex_dli.py模块
+    这里保留接口兼容性，直接调用ExportDLICalculator
     
     Args:
         df: 包含美国贸易数据的DataFrame
@@ -512,142 +504,19 @@ def calculate_export_locking_power(df: pd.DataFrame, global_trade_data: Dict[int
         添加了market_locking_power列的DataFrame（只计算出口部分）
     """
     
-    logger.info("📤 开始计算出口锁定力指标（镜像逻辑）...")
+    logger.info("📤 调用独立的出口DLI模块计算出口锁定力...")
     
-    df_locking = df.copy()
+    # 导入出口DLI计算器
+    from ex_dli import ExportDLICalculator
     
-    # 只处理美国作为出口方的数据
-    export_data = df_locking[df_locking['us_role'] == 'exporter'].copy()
+    # 创建计算器实例
+    calculator = ExportDLICalculator()
     
-    if len(export_data) == 0:
-        logger.warning("没有找到美国出口数据，返回原数据")
-        return df_locking
+    # 调用出口锁定力计算
+    result = calculator.calculate_export_locking_power(df, global_trade_data)
     
-    if not global_trade_data:
-        logger.warning("未提供全球贸易数据，出口锁定力将设为0")
-        df_locking.loc[df_locking['us_role'] == 'exporter', 'market_locking_power'] = 0
-        return df_locking
-    
-    locking_results = []
-    
-    # 为每个美国出口记录计算对应的出口锁定力
-    for idx, row in export_data.iterrows():
-        year = row['year']
-        partner_country = row['us_partner']  # 美国的出口目标国
-        product = row['energy_product']
-        us_export_value = row['trade_value_usd']
-        
-        # 检查是否有该年份的全球数据
-        if year not in global_trade_data:
-            logger.debug(f"缺少{year}年全球数据，跳过")
-            continue
-        
-        global_year_data = global_trade_data[year]
-        
-        # 查找目标国在该年份、该产品上的所有进口记录
-        # 注意：在全球数据中，目标国作为reporter，流向为M(Import)
-        partner_imports = global_year_data[
-            (global_year_data['reporter'] == partner_country) & 
-            (global_year_data['flow'] == 'M') & 
-            (global_year_data['energy_product'] == product)
-        ].copy()
-        
-        if len(partner_imports) == 0:
-            # 目标国在该产品上没有进口记录，锁定力为0
-            locking_results.append({
-                'year': year,
-                'us_partner': partner_country,
-                'energy_product': product,
-                'us_role': 'exporter',
-                'market_locking_power': 0,
-                'target_import_hhi': 0,
-                'us_share_in_target': 0,
-                'target_total_suppliers': 0,
-                'target_total_imports': 0
-            })
-            continue
-        
-        # 计算目标国的总进口额
-        total_imports = partner_imports['trade_value_usd'].sum()
-        
-        if total_imports <= 0:
-            locking_results.append({
-                'year': year,
-                'us_partner': partner_country,
-                'energy_product': product,
-                'us_role': 'exporter',
-                'market_locking_power': 0,
-                'target_import_hhi': 0,
-                'us_share_in_target': 0,
-                'target_total_suppliers': 0,
-                'target_total_imports': 0
-            })
-            continue
-        
-        # 计算目标国各供应商的市场份额
-        supplier_shares = partner_imports.groupby('partner')['trade_value_usd'].sum() / total_imports
-        
-        # 计算目标国的进口集中度（供应商HHI）
-        import_hhi = (supplier_shares ** 2).sum()
-        
-        # 计算美国在目标国市场中的份额
-        us_share = supplier_shares.get('USA', 0)  # 如果美国不在供应商列表中，份额为0
-        
-        # 计算出口锁定力：目标国进口HHI × 美国在目标国市场的份额
-        export_locking_power = import_hhi * us_share
-        
-        locking_results.append({
-            'year': year,
-            'us_partner': partner_country,
-            'energy_product': product,
-            'us_role': 'exporter',
-            'market_locking_power': export_locking_power,
-            'target_import_hhi': import_hhi,
-            'us_share_in_target': us_share,
-            'target_total_suppliers': len(supplier_shares),
-            'target_total_imports': total_imports
-        })
-    
-    # 转换为DataFrame
-    locking_df = pd.DataFrame(locking_results)
-    
-    # 与原数据合并
-    df_with_locking = pd.merge(
-        df_locking, 
-        locking_df[['year', 'us_partner', 'energy_product', 'us_role', 'market_locking_power']], 
-        on=['year', 'us_partner', 'energy_product', 'us_role'], 
-        how='left'
-    )
-    
-    # 填充缺失值为0
-    df_with_locking['market_locking_power'] = df_with_locking['market_locking_power'].fillna(0)
-    
-    # 统计摘要
-    if len(locking_df) > 0:
-        logger.info(f"📊 出口锁定力统计:")
-        logger.info(f"  平均锁定力: {locking_df['market_locking_power'].mean():.4f}")
-        logger.info(f"  最高锁定力: {locking_df['market_locking_power'].max():.4f}")
-        logger.info(f"  非零锁定力记录: {(locking_df['market_locking_power'] > 0).sum()} 条")
-        logger.info(f"  美国在目标市场平均份额: {locking_df['us_share_in_target'].mean():.4f}")
-        logger.info(f"  目标国平均供应商数: {locking_df['target_total_suppliers'].mean():.1f}")
-        
-        # 按产品分析
-        product_stats = locking_df.groupby('energy_product').agg({
-            'market_locking_power': ['mean', 'max'],
-            'target_import_hhi': 'mean',
-            'us_share_in_target': 'mean'
-        }).round(4)
-        
-        logger.info(f"  按能源产品的出口锁定力:")
-        for product in product_stats.index:
-            stats = product_stats.loc[product]
-            logger.info(f"    {product}: 平均锁定力={stats[('market_locking_power', 'mean')]:.4f}, " +
-                       f"目标国平均HHI={stats[('target_import_hhi', 'mean')]:.4f}")
-    
-    logger.info("✅ 出口锁定力指标计算完成!")
-    return df_with_locking
-
-
+    logger.info("✅ 出口锁定力计算完成（通过ex_dli模块）!")
+    return result
 def calculate_dli_composite(df: pd.DataFrame, 
                            use_pca: bool = True, 
                            custom_weights: Dict[str, float] = None) -> pd.DataFrame:
@@ -925,7 +794,7 @@ def calculate_dli_composite_unified(df: pd.DataFrame) -> pd.DataFrame:
     return df_unified
 
 
-def generate_dli_panel_data_v2(trade_data: pd.DataFrame = None, 
+def generate_dli_panel_data(trade_data: pd.DataFrame = None, 
                               data_file_path: str = None,
                               output_path: str = None,
                               enable_global_data: bool = True) -> pd.DataFrame:
@@ -1098,7 +967,7 @@ def generate_dli_panel_data_v2(trade_data: pd.DataFrame = None,
         base_dir = Path(__file__).parent.parent.parent
         output_dir = Path(__file__).parent
         output_dir.mkdir(parents=True, exist_ok=True)
-        output_path = output_dir / "dli_panel_data_v2.csv"
+        output_path = output_dir / "dli_panel_data.csv"
     
     df_output.to_csv(output_path, index=False)
     logger.info(f"💾 双向DLI面板数据已保存至: {output_path}")
@@ -1106,7 +975,7 @@ def generate_dli_panel_data_v2(trade_data: pd.DataFrame = None,
     # 保存统一权重信息到json文件
     if hasattr(df_final, '_pca_weights'):
         import json
-        weights_path = Path(output_path).parent / "dli_weights_and_params_v2.json"
+        weights_path = Path(output_path).parent / "dli_weights_and_params.json"
         
         weights_info = {
             'version': '2.0',
@@ -1144,7 +1013,7 @@ def generate_dli_panel_data_v2(trade_data: pd.DataFrame = None,
 if __name__ == "__main__":
     # 测试双向DLI计算功能
     try:
-        dli_panel = generate_dli_panel_data_v2()
+        dli_panel = generate_dli_panel_data()
         print(f"✅ 双向DLI面板数据生成成功!")
         print(f"📊 数据维度: {dli_panel.shape}")
         print(f"🔗 DLI综合指标范围: [{dli_panel['dli_score'].min():.4f}, {dli_panel['dli_score'].max():.4f}]")

@@ -1,0 +1,110 @@
+{
+  "analysis_metadata": {
+    "calculation_method": "Enhanced_5D_PCA",
+    "dimensions_count": 5,
+    "original_dli_dimensions": [
+      "continuity",
+      "infrastructure",
+      "stability",
+      "market_locking_power"
+    ],
+    "pagerank_dimensions": [
+      "ppr_us_export_influence",
+      "ppr_influence_on_us"
+    ],
+    "analysis_timestamp": "2025-08-24T16:25:22.913550",
+    "total_records": 41349
+  },
+  "export_dli_weights": {
+    "dimensions": [
+      "continuity",
+      "infrastructure",
+      "stability",
+      "market_locking_power",
+      "pagerank_dimension"
+    ],
+    "loadings": [
+      0.3859090883982361,
+      0.6668652613613337,
+      0.13077389866332853,
+      0.1941721673702104,
+      0.5929251685738016
+    ],
+    "explained_variance_ratio": [
+      0.31675444618345705,
+      0.21894358782505902,
+      0.19205628304516476,
+      0.1691417831335412,
+      0.10310389981277786
+    ],
+    "cumulative_explained_variance": [
+      0.31675444618345705,
+      0.535698034008516,
+      0.7277543170536808,
+      0.896896100187222,
+      0.9999999999999999
+    ],
+    "first_pc_variance_explained": 0.31675444618345705,
+    "dimension_weights": {
+      "continuity": 0.3859090883982361,
+      "infrastructure": 0.6668652613613337,
+      "stability": 0.13077389866332853,
+      "market_locking_power": 0.1941721673702104,
+      "pagerank_dimension": 0.5929251685738016
+    }
+  },
+  "import_dli_weights": {
+    "dimensions": [
+      "continuity",
+      "infrastructure",
+      "stability",
+      "market_locking_power",
+      "pagerank_dimension"
+    ],
+    "loadings": [
+      0.4196614052959232,
+      0.6243505107990788,
+      0.33823432802136816,
+      0.2972938287078055,
+      0.48092064140580193
+    ],
+    "explained_variance_ratio": [
+      0.34284327283769434,
+      0.23066308153769818,
+      0.18293413064315855,
+      0.15041415116303328,
+      0.09314536381841566
+    ],
+    "cumulative_explained_variance": [
+      0.34284327283769434,
+      0.5735063543753925,
+      0.7564404850185511,
+      0.9068546361815844,
+      1.0
+    ],
+    "first_pc_variance_explained": 0.34284327283769434,
+    "dimension_weights": {
+      "continuity": 0.4196614052959232,
+      "infrastructure": 0.6243505107990788,
+      "stability": 0.33823432802136816,
+      "market_locking_power": 0.2972938287078055,
+      "pagerank_dimension": 0.48092064140580193
+    }
+  },
+  "correlation_analysis": {
+    "export_correlation_summary": {
+      "mean_correlation": 0.110510861740034,
+      "max_correlation": 0.43628114044800115,
+      "min_correlation": -0.0525216628266951,
+      "std_correlation": 0.13520598263390574,
+      "high_correlation_pairs": []
+    },
+    "import_correlation_summary": {
+      "mean_correlation": 0.16144241113385305,
+      "max_correlation": 0.42821190354535077,
+      "min_correlation": -0.06529470147183454,
+      "std_correlation": 0.13537640603834888,
+      "high_correlation_pairs": []
+    }
+  }
+}

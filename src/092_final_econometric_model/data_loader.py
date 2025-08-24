@@ -42,46 +42,232 @@ class FinalDataLoader:
         else:
             self.project_root = Path(project_root)
         
-        # 定义数据路径
-        self.analytical_panel_path = self.project_root / "src" / "08_variable_construction" / "outputs" / "analytical_panel.csv"
-        self.price_quantity_path = self.project_root / "src" / "08_variable_construction" / "outputs" / "price_quantity_variables.csv"
+        # 定义新的数据路径 - 按照最新要求更新
+        # 1. HHI数据
+        self.hhi_path = Path("/Users/ywz/Desktop/pku/美国能源独立/project/energy_network/src/08_variable_construction/outputs/hhi_imports_extracted.csv")
+        
+        # 2. 宏观控制变量
+        self.macro_controls_path = Path("/Users/ywz/Desktop/pku/美国能源独立/project/energy_network/src/08_variable_construction/outputs/macro_controls.csv")
+        
+        # 3. 核心OVI
+        self.ovi_gas_path = Path("/Users/ywz/Desktop/pku/美国能源独立/project/energy_network/src/08_variable_construction/outputs/ovi_gas.csv")
+        
+        # 4. 美国天然气产量
+        self.us_prod_shock_path = Path("/Users/ywz/Desktop/pku/美国能源独立/project/energy_network/src/08_variable_construction/outputs/us_prod_shock_ar2.csv")
+        
+        # 5. LNG价格和消费数据
+        self.price_quantity_path = Path("/Users/ywz/Desktop/pku/美国能源独立/project/energy_network/src/08_variable_construction/outputs/price_quantity_variables.csv")
+        
+        # 6. DLI数据（两个选择）
+        self.dli_pagerank_path = Path("/Users/ywz/Desktop/pku/美国能源独立/project/energy_network/src/04_dli_analysis/outputs/dli_pagerank.csv")
+        self.dli_export_path = Path("/Users/ywz/Desktop/pku/美国能源独立/project/energy_network/src/04_dli_analysis/outputs/export_dli.csv")
+        
+        # 保留原有的距离数据路径
         self.distance_data_path = Path("/Users/ywz/Desktop/pku/美国能源独立/project/energy_network/src/04_dli_analysis/complete_us_distances_cepii.json")
-        self.lng_data_path = Path("/Users/ywz/Desktop/pku/美国能源独立/project/energy_network/src/08_variable_construction/08data/rawdata/lngdata.csv")
         
         logger.info(f"092模块数据加载器初始化完成")
         logger.info(f"项目根目录: {self.project_root}")
         
-    def load_analytical_panel(self) -> pd.DataFrame:
-        """
-        加载基础分析面板数据
+    def load_hhi_data(self) -> pd.DataFrame:
+        """加载HHI进口数据"""
+        logger.info("📊 加载HHI进口数据...")
         
-        Returns:
-            基础分析面板DataFrame
-        """
-        logger.info("🔍 加载基础分析面板数据...")
-        
-        if not self.analytical_panel_path.exists():
-            logger.error(f"❌ 基础分析面板不存在: {self.analytical_panel_path}")
+        if not self.hhi_path.exists():
+            logger.warning(f"⚠️ HHI数据不存在: {self.hhi_path}")
             return pd.DataFrame()
         
         try:
-            df = pd.read_csv(self.analytical_panel_path)
-            logger.info(f"✅ 基础面板加载完成: {df.shape[0]} 行 × {df.shape[1]} 列")
+            df = pd.read_csv(self.hhi_path)
+            logger.info(f"✅ HHI数据加载完成: {df.shape[0]} 行 × {df.shape[1]} 列")
+            return df
+        except Exception as e:
+            logger.error(f"❌ 加载HHI数据失败: {str(e)}")
+            return pd.DataFrame()
+    
+    def load_macro_controls(self) -> pd.DataFrame:
+        """加载宏观控制变量数据"""
+        logger.info("🌍 加载宏观控制变量数据...")
+        
+        if not self.macro_controls_path.exists():
+            logger.warning(f"⚠️ 宏观控制变量数据不存在: {self.macro_controls_path}")
+            return pd.DataFrame()
+        
+        try:
+            df = pd.read_csv(self.macro_controls_path)
+            logger.info(f"✅ 宏观控制变量加载完成: {df.shape[0]} 行 × {df.shape[1]} 列")
+            return df
+        except Exception as e:
+            logger.error(f"❌ 加载宏观控制变量失败: {str(e)}")
+            return pd.DataFrame()
+    
+    def load_ovi_gas_data(self) -> pd.DataFrame:
+        """加载核心OVI天然气数据"""
+        logger.info("⚡ 加载核心OVI天然气数据...")
+        
+        if not self.ovi_gas_path.exists():
+            logger.error(f"❌ 核心OVI数据不存在: {self.ovi_gas_path}")
+            return pd.DataFrame()
+        
+        try:
+            df = pd.read_csv(self.ovi_gas_path)
+            logger.info(f"✅ OVI天然气数据加载完成: {df.shape[0]} 行 × {df.shape[1]} 列")
+            return df
+        except Exception as e:
+            logger.error(f"❌ 加载OVI数据失败: {str(e)}")
+            return pd.DataFrame()
+    
+    def load_us_prod_shock_data(self) -> pd.DataFrame:
+        """加载美国天然气产量冲击数据"""
+        logger.info("🇺🇸 加载美国产量冲击数据...")
+        
+        if not self.us_prod_shock_path.exists():
+            logger.error(f"❌ 美国产量冲击数据不存在: {self.us_prod_shock_path}")
+            return pd.DataFrame()
+        
+        try:
+            df = pd.read_csv(self.us_prod_shock_path)
+            logger.info(f"✅ 美国产量冲击数据加载完成: {df.shape[0]} 行 × {df.shape[1]} 列")
+            return df
+        except Exception as e:
+            logger.error(f"❌ 加载美国产量冲击数据失败: {str(e)}")
+            return pd.DataFrame()
+    
+    def load_dli_data(self, use_pagerank_version: bool = None) -> pd.DataFrame:
+        """
+        加载DLI数据，支持两个版本的选择
+        
+        Args:
+            use_pagerank_version: True使用pagerank版本，False使用export版本，None自动选择
             
-            # 检查核心变量存在性
-            required_vars = ['country', 'year', 'ovi_gas', 'us_prod_shock', 'log_gdp', 'log_population']
-            missing_vars = [var for var in required_vars if var not in df.columns]
-            
-            if missing_vars:
-                logger.warning(f"⚠️ 缺少核心变量: {missing_vars}")
-            
-            logger.info(f"   核心变量齐全: {', '.join([v for v in required_vars if v in df.columns])}")
+        Returns:
+            DLI数据DataFrame
+        """
+        logger.info("🔗 加载DLI数据...")
+        
+        # 检查两个版本的可用性
+        pagerank_available = self.dli_pagerank_path.exists()
+        export_available = self.dli_export_path.exists()
+        
+        logger.info(f"   DLI PageRank版本可用: {pagerank_available}")
+        logger.info(f"   DLI Export版本可用: {export_available}")
+        
+        # 自动选择逻辑
+        if use_pagerank_version is None:
+            if pagerank_available and export_available:
+                logger.info("   📊 两个版本都可用，优先使用PageRank增强版")
+                use_pagerank_version = True
+            elif pagerank_available:
+                use_pagerank_version = True
+            elif export_available:
+                use_pagerank_version = False
+            else:
+                logger.error("❌ 两个DLI版本都不可用")
+                return pd.DataFrame()
+        
+        # 加载选定版本
+        try:
+            if use_pagerank_version:
+                if not pagerank_available:
+                    logger.error(f"❌ PageRank版本不存在: {self.dli_pagerank_path}")
+                    return pd.DataFrame()
+                
+                df = pd.read_csv(self.dli_pagerank_path)
+                logger.info(f"✅ DLI PageRank版本加载完成: {df.shape[0]} 行 × {df.shape[1]} 列")
+                df['dli_version'] = 'pagerank_enhanced'
+                
+            else:
+                if not export_available:
+                    logger.error(f"❌ Export版本不存在: {self.dli_export_path}")
+                    return pd.DataFrame()
+                
+                df = pd.read_csv(self.dli_export_path)
+                logger.info(f"✅ DLI Export版本加载完成: {df.shape[0]} 行 × {df.shape[1]} 列")
+                df['dli_version'] = 'export_only'
             
             return df
             
         except Exception as e:
-            logger.error(f"❌ 加载基础面板失败: {str(e)}")
+            logger.error(f"❌ 加载DLI数据失败: {str(e)}")
             return pd.DataFrame()
+    
+    def _merge_base_components(self, df_ovi: pd.DataFrame, df_hhi: pd.DataFrame, 
+                              df_macro: pd.DataFrame, df_prod_shock: pd.DataFrame, 
+                              df_dli: pd.DataFrame) -> pd.DataFrame:
+        """
+        合并所有基础数据组件
+        
+        Args:
+            df_ovi: 核心OVI数据 
+            df_hhi: HHI数据
+            df_macro: 宏观控制变量
+            df_prod_shock: 美国产量冲击数据
+            df_dli: DLI数据
+            
+        Returns:
+            合并后的基础面板数据
+        """
+        logger.info("🔗 开始合并基础数据组件...")
+        
+        # 以OVI数据作为主表
+        df_merged = df_ovi.copy()
+        logger.info(f"   主表(OVI): {df_merged.shape}")
+        
+        # 合并HHI数据
+        if not df_hhi.empty:
+            merge_keys = ['country', 'year'] if 'country' in df_hhi.columns else ['year']
+            df_merged = df_merged.merge(df_hhi, on=merge_keys, how='left', suffixes=('', '_hhi'))
+            logger.info(f"   合并HHI后: {df_merged.shape}")
+        else:
+            logger.warning("   ⚠️ HHI数据为空，跳过")
+        
+        # 合并宏观控制变量
+        if not df_macro.empty:
+            merge_keys = ['country', 'year'] if 'country' in df_macro.columns else ['year']
+            df_merged = df_merged.merge(df_macro, on=merge_keys, how='left', suffixes=('', '_macro'))
+            logger.info(f"   合并宏观变量后: {df_merged.shape}")
+        else:
+            logger.warning("   ⚠️ 宏观控制变量数据为空，跳过")
+        
+        # 合并美国产量冲击数据
+        if not df_prod_shock.empty:
+            # 产量冲击数据通常只有年份维度
+            df_merged = df_merged.merge(df_prod_shock, on='year', how='left', suffixes=('', '_prod'))
+            logger.info(f"   合并产量冲击后: {df_merged.shape}")
+        else:
+            logger.warning("   ⚠️ 美国产量冲击数据为空，跳过")
+        
+        # 合并DLI数据
+        if not df_dli.empty:
+            # DLI数据可能有不同的列名结构，需要适配
+            dli_merge_keys = []
+            if 'country' in df_dli.columns and 'country' in df_merged.columns:
+                dli_merge_keys.extend(['country', 'year'])
+            elif 'us_partner' in df_dli.columns:
+                # DLI数据使用us_partner字段
+                df_dli_adapted = df_dli.rename(columns={'us_partner': 'country'})
+                dli_merge_keys = ['country', 'year']
+                df_merged = df_merged.merge(df_dli_adapted, on=dli_merge_keys, how='left', suffixes=('', '_dli'))
+            else:
+                dli_merge_keys = ['year']
+                df_merged = df_merged.merge(df_dli, on=dli_merge_keys, how='left', suffixes=('', '_dli'))
+            
+            logger.info(f"   合并DLI数据后: {df_merged.shape}")
+            logger.info(f"   使用的DLI版本: {df_dli.get('dli_version', ['未知'])[0] if 'dli_version' in df_dli.columns else '未知'}")
+        else:
+            logger.warning("   ⚠️ DLI数据为空，跳过")
+        
+        logger.info(f"✅ 基础数据组件合并完成: {df_merged.shape}")
+        
+        # 检查关键变量
+        key_vars = ['year', 'country', 'ovi_gas']
+        available_vars = [var for var in key_vars if var in df_merged.columns]
+        missing_vars = [var for var in key_vars if var not in df_merged.columns]
+        
+        logger.info(f"   可用关键变量: {available_vars}")
+        if missing_vars:
+            logger.warning(f"   ⚠️ 缺失关键变量: {missing_vars}")
+        
+        return df_merged
     
     def load_distance_data(self) -> Dict:
         """
@@ -521,10 +707,25 @@ class FinalDataLoader:
         """
         logger.info("🚀 开始加载完整的最终分析数据集...")
         
-        # 步骤1: 加载基础分析面板
-        df_panel = self.load_analytical_panel()
+        # 步骤1: 分别加载各个数据源（替代原有的analytical_panel）
+        logger.info("📊 开始分别加载各个数据源...")
+        
+        # 加载核心OVI数据作为主表
+        df_main = self.load_ovi_gas_data()
+        if df_main.empty:
+            return pd.DataFrame(), {'status': 'failed', 'message': '核心OVI数据加载失败'}
+        
+        # 加载其他数据源
+        df_hhi = self.load_hhi_data()
+        df_macro = self.load_macro_controls()
+        df_prod_shock = self.load_us_prod_shock_data()
+        df_dli = self.load_dli_data()  # 自动选择最佳版本
+        
+        # 构建基础面板数据集
+        df_panel = self._merge_base_components(df_main, df_hhi, df_macro, df_prod_shock, df_dli)
+        
         if df_panel.empty:
-            return pd.DataFrame(), {'status': 'failed', 'message': '基础面板加载失败'}
+            return pd.DataFrame(), {'status': 'failed', 'message': '基础数据合并失败'}
         
         # 步骤2: 加载价格数量数据 (P_it, g_it)
         df_pq = self.load_price_quantity_data()
