@@ -54,7 +54,11 @@ logger = logging.getLogger(__name__)
 
 class FinalEconometricModels:
     """
-    最终计量模型类 - 实现决定性的因果推断分析
+    最终计量模型类 - LNG-only严格优化版本
+    - 严格的LNG-only样本筛选
+    - log(P_lng)因变量处理
+    - ln(1+OVI)交互项优化
+    - 平衡面板构建
     """
     
     def __init__(self, output_dir: Optional[Path] = None):
@@ -72,16 +76,85 @@ class FinalEconometricModels:
         # 确保输出目录存在
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
-        # 预测期数设定 (0-4年)
-        self.horizons = list(range(5))
+        # 预测期数设定 (0-1年) - LNG-only严格优化版本
+        self.horizons = list(range(2))  # 只做h=0,1
         
-        logger.info("🔬 092最终计量模型初始化完成")
+        logger.info("🔬 093 LNG-only严格优化模型初始化完成")
         
         # 检查依赖库
         if not HAS_STATSMODELS:
             logger.warning("⚠️ statsmodels库不可用")
         if not HAS_LINEARMODELS:
             logger.warning("⚠️ linearmodels库不可用")
+    
+    def _prepare_lng_only_data(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        LNG-only严格数据处理
+        
+        1. 因变量：log(P_lng) 
+        2. 样本筛选：OVI_lag1 > 0 且 P_lng 非缺失
+        3. 交互项：us_prod_shock × ln(1+OVI_lag1)
+        4. 平衡面板：h=0和h=1都非缺失的观测
+        """
+        logger.info("🚢 开始LNG-only严格数据处理...")
+        df_work = df.copy()
+        
+        # 按国家-年份排序
+        df_work = df_work.sort_values(['country', 'year'])
+        
+        # 1. 创建滞后OVI变量
+        df_work['ovi_gas_lag1'] = df_work.groupby('country')['ovi_gas'].shift(1)
+        
+        # 2. LNG-only严格样本筛选
+        logger.info("   📋 应用LNG-only样本筛选条件...")
+        
+        # 条件1: OVI_lag1 > 0 (真有LNG冗余)
+        mask_ovi = df_work['ovi_gas_lag1'] > 0
+        
+        # 条件2: P_lng非缺失 (确实发生了LNG贸易/报价)  
+        mask_lng = df_work['P_lng'].notna()
+        
+        # 综合筛选
+        lng_only_mask = mask_ovi & mask_lng
+        df_lng_only = df_work[lng_only_mask].copy()
+        
+        logger.info(f"   ✓ LNG-only筛选完成: {len(df_lng_only):,} / {len(df_work):,} 观测值 ({len(df_lng_only)/len(df_work):.1%})")
+        
+        if len(df_lng_only) == 0:
+            logger.error("   ❌ LNG-only筛选后无有效观测值")
+            return df_lng_only
+        
+        # 3. 创建log(P_lng)因变量
+        df_lng_only['log_P_lng'] = np.log(df_lng_only['P_lng'])
+        logger.info("   ✓ 创建log(P_lng)因变量")
+        
+        # 4. 创建ln(1+OVI)交互项
+        df_lng_only['ln_1_plus_ovi_lag1'] = np.log(1 + df_lng_only['ovi_gas_lag1'])
+        df_lng_only['shock_ln_ovi_interaction'] = (
+            df_lng_only['us_prod_shock'] * df_lng_only['ln_1_plus_ovi_lag1']
+        )
+        logger.info("   ✓ 创建us_prod_shock × ln(1+OVI_lag1)交互项")
+        
+        # 5. 创建平衡面板的前瞻变量
+        logger.info("   🔄 创建h=0,1的前瞻变量...")
+        for h in [0, 1]:
+            if h == 0:
+                df_lng_only[f'log_P_lng_h{h}'] = df_lng_only['log_P_lng']
+            else:
+                df_lng_only[f'log_P_lng_h{h}'] = df_lng_only.groupby('country')['log_P_lng'].shift(-h)
+        
+        # 6. 构建平衡面板：h=0和h=1都非缺失
+        balanced_mask = (
+            df_lng_only['log_P_lng_h0'].notna() & 
+            df_lng_only['log_P_lng_h1'].notna()
+        )
+        df_balanced = df_lng_only[balanced_mask].copy()
+        
+        logger.info(f"   ✅ 平衡面板构建完成: {len(df_balanced):,} 观测值")
+        logger.info(f"      涵盖国家: {df_balanced['country'].nunique()} 个")
+        logger.info(f"      时间跨度: {df_balanced['year'].min()}-{df_balanced['year'].max()}")
+        
+        return df_balanced
             
     def _validate_data_for_lp_irf(self, df: pd.DataFrame, required_vars: List[str]) -> Tuple[bool, str, pd.DataFrame]:
         """
@@ -142,13 +215,16 @@ class FinalEconometricModels:
     
     def run_price_channel_lp_irf(self, df: pd.DataFrame) -> Dict[str, Any]:
         """
-        运行价格通道LP-IRF模型 (Model 5A)
+        运行LNG-only严格优化的价格通道LP-IRF模型
         
-        修正模型：P^lng_{i,t+h} = α_i + λ_t + θ_h·(us_prod_shock_t × ovi_gas_{i,t-1}) + 
-                                 δ_h·(us_prod_shock_t × distance_to_us_i) + Γ·Controls + η_{i,t+h}
+        LNG-only模型：log(P_lng)_{i,t+h} = α_i + λ_t + θ_h·(us_prod_shock_t × ln(1+ovi_gas_{i,t-1})) + Γ·Controls + η_{i,t+h}
         
-        核心识别：θ_h 系数的异质效应，预期为负值（OVI缓冲价格冲击）
-        注：β_h主效应被年份固定效应λ_t吸收，专注识别交互项异质效应
+        关键优化：
+        1. 因变量：log(P_lng) 而非标准化
+        2. 样本筛选：OVI_lag1 > 0 且 P_lng 非缺失
+        3. 交互项：us_prod_shock × ln(1+OVI_lag1) 
+        4. 平衡面板：h=0,1都非缺失的相同观测
+        5. 移除distance交互项避免共线性
         
         Args:
             df: 完整分析数据集
@@ -156,75 +232,62 @@ class FinalEconometricModels:
         Returns:
             模型结果字典
         """
-        model_name = 'model_5a_price_channel_lp_irf'
-        logger.info(f"💰 运行价格通道LP-IRF模型 (Model 5A)...")
+        model_name = 'lng_only_price_channel_lp_irf'
+        logger.info(f"🚢 运行LNG-only严格优化价格通道LP-IRF...")
         
-        # 验证数据
-        required_vars = ['P_lng', 'us_prod_shock', 'ovi_gas', 'distance_to_us', 'log_gdp', 'log_population']
-        is_valid, message, df_clean = self._validate_data_for_lp_irf(df, required_vars)
+        # LNG-only数据处理
+        df_lng_balanced = self._prepare_lng_only_data(df)
         
-        if not is_valid:
-            logger.warning(f"   ⚠️ {message}")
-            return self._create_empty_result(model_name, message)
+        if len(df_lng_balanced) == 0:
+            return self._create_empty_result(model_name, "LNG-only筛选后无有效观测值")
         
         if not HAS_LINEARMODELS:
             return self._create_empty_result(model_name, "缺少linearmodels库")
         
         try:
-            # 为每个预测期创建前瞻变量
-            logger.info("   创建前瞻价格变量...")
-            for h in self.horizons:
-                if h == 0:
-                    df_clean[f'P_lng_h{h}'] = df_clean['P_lng']
-                else:
-                    df_clean[f'P_lng_h{h}'] = df_clean.groupby('country')['P_lng'].shift(-h)
+            # LNG-only模型已经在prepare函数中创建了前瞻变量
+            logger.info("   ✅ 使用平衡面板的前瞻变量 log_P_lng_h0, log_P_lng_h1")
             
-            # 准备解释变量 - 修正识别策略：只关注交互项异质效应
-            # 不包含us_prod_shock主效应，因为年份固定效应会吸收共同冲击
-            base_vars = ['shock_ovi_interaction']
-            control_vars = ['log_gdp', 'log_population']
-            
-            # 添加地理控制交互项（如果可用）
-            if 'shock_distance_interaction' in df_clean.columns:
-                base_vars.append('shock_distance_interaction')
-                logger.info("   ✓ 包含地理距离控制交互项")
+            # LNG-only解释变量设定
+            base_vars = ['shock_ln_ovi_interaction']  # 核心：us_prod_shock × ln(1+OVI_lag1)
+            control_vars = ['log_gdp', 'log_population']  # 控制变量
             
             explanatory_vars = base_vars + control_vars
-            logger.info("   ✓ 修正识别策略：聚焦θ_h交互项异质效应（年份FE吸收β_h主效应）")
+            logger.info("   ✅ LNG-only识别策略：聚焦us_prod_shock × ln(1+OVI_lag1)异质效应")
             
-            # 对每个预测期运行回归
+            # 对每个预测期运行回归 (h=0,1)
             horizon_results = {}
-            logger.info(f"   开始估计 {len(self.horizons)} 个预测期...")
+            logger.info(f"   开始估计 {len(self.horizons)} 个预测期 (LNG-only平衡面板)...")
             
             for h in self.horizons:
-                logger.info(f"     预测期 h={h}...")
+                logger.info(f"     预测期 h={h} (LNG-only)...")
                 
-                # 准备该期数的数据
-                horizon_data = df_clean.dropna(subset=[f'P_lng_h{h}'] + explanatory_vars)
+                # 平衡面板数据：使用相同的观测集合
+                horizon_data = df_lng_balanced.dropna(subset=[f'log_P_lng_h{h}'] + explanatory_vars)
                 
                 if len(horizon_data) < 30:
-                    logger.warning(f"       样本不足: {len(horizon_data)} < 30")
+                    logger.warning(f"       LNG-only样本不足: {len(horizon_data)} < 30")
                     continue
                 
                 try:
                     # 设置面板索引
                     horizon_data = horizon_data.set_index(['country', 'year'])
                     
-                    # 修正：使用双向固定效应模型以正确识别异质效应
+                    # LNG-only双向固定效应模型
                     model = PanelOLS(
-                        dependent=horizon_data[f'P_lng_h{h}'],
+                        dependent=horizon_data[f'log_P_lng_h{h}'],
                         exog=horizon_data[explanatory_vars],
                         entity_effects=True,    # 国家固定效应
-                        time_effects=True,      # 年份固定效应 - 修正关键错误！
+                        time_effects=True,      # 年份固定效应
                         check_rank=False
                     )
                     
                     results = model.fit(cov_type='clustered', cluster_entity=True)
                     
-                    # 提取核心系数θ_h
-                    theta_h = results.params.get('shock_ovi_interaction', np.nan)
-                    theta_se = results.std_errors.get('shock_ovi_interaction', np.nan) 
-                    theta_pval = results.pvalues.get('shock_ovi_interaction', 1.0)
+                    # 提取核心系数θ_h (LNG-only版本使用ln交互项)
+                    theta_h = results.params.get('shock_ln_ovi_interaction', np.nan)
+                    theta_se = results.std_errors.get('shock_ln_ovi_interaction', np.nan) 
+                    theta_pval = results.pvalues.get('shock_ln_ovi_interaction', 1.0)
                     
                     # 计算置信区间
                     theta_ci_lower = theta_h - 1.96 * theta_se
@@ -269,7 +332,7 @@ class FinalEconometricModels:
                 'core_interaction': 'us_prod_shock × ovi_gas_lag1',
                 'expected_sign': 'negative (缓冲价格冲击)',
                 'data_available': True,
-                'total_sample_size': len(df_clean)
+                'total_sample_size': len(df_lng_balanced)
             }
             
             logger.info(f"   ✅ 价格通道LP-IRF完成: {len(horizon_results)} 个预测期")

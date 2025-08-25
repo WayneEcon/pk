@@ -1,0 +1,154 @@
+{
+  "analysis_type": "092_final_econometric_model_core_importers",
+  "sample_suffix": "_core_importers",
+  "sample_description": "core importers",
+  "models": {
+    "price_channel": {
+      "model_name": "lng_only_price_channel_lp_irf",
+      "model_type": "price_channel_lp_irf",
+      "status": "success",
+      "status_message": "价格通道LP-IRF估计成功，2个预测期",
+      "horizon_results": {
+        "0": {
+          "horizon": 0,
+          "theta_coefficient": -0.4581271709408983,
+          "theta_std_error": 0.40252590978292907,
+          "theta_p_value": 0.2551103263393433,
+          "theta_ci_lower": -1.247077954115439,
+          "theta_ci_upper": 0.33082361223364265,
+          "theta_significant": "False",
+          "expected_sign_correct": "True",
+          "r_squared": 0.024143194084135233,
+          "n_obs": 6179,
+          "all_coefficients": {
+            "shock_ln_ovi_interaction": -0.4581271709408983,
+            "log_gdp": 0.3191870093734841,
+            "log_population": -0.20792675986673478
+          },
+          "all_p_values": {
+            "shock_ln_ovi_interaction": 0.2551103263393433,
+            "log_gdp": 0.11158302342382753,
+            "log_population": 0.900450728181287
+          }
+        },
+        "1": {
+          "horizon": 1,
+          "theta_coefficient": -0.48008832809590957,
+          "theta_std_error": 0.4172188357985634,
+          "theta_p_value": 0.24990588787565948,
+          "theta_ci_lower": -1.2978372462610939,
+          "theta_ci_upper": 0.3376605900692747,
+          "theta_significant": "False",
+          "expected_sign_correct": "True",
+          "r_squared": 0.022098857917316694,
+          "n_obs": 6179,
+          "all_coefficients": {
+            "shock_ln_ovi_interaction": -0.48008832809590957,
+            "log_gdp": 0.3141294007815751,
+            "log_population": -0.18854860387288747
+          },
+          "all_p_values": {
+            "shock_ln_ovi_interaction": 0.24990588787565948,
+            "log_gdp": 0.1155265588326082,
+            "log_population": 0.9107346431409504
+          }
+        }
+      },
+      "horizons_estimated": [
+        0,
+        1
+      ],
+      "n_horizons": 2,
+      "dependent_variable": "P_lng (LNG价格)",
+      "core_interaction": "us_prod_shock × ovi_gas_lag1",
+      "expected_sign": "negative (缓冲价格冲击)",
+      "data_available": true,
+      "total_sample_size": 6284
+    },
+    "quantity_channel": {
+      "model_name": "model_5b_quantity_channel_lp_irf",
+      "model_type": "quantity_channel_lp_irf",
+      "status": "success",
+      "status_message": "数量通道LP-IRF估计成功，2个预测期",
+      "horizon_results": {
+        "0": {
+          "horizon": 0,
+          "theta_coefficient": -0.041442013350686625,
+          "theta_std_error": 0.2679064255684093,
+          "theta_p_value": 0.8770701531361447,
+          "theta_ci_lower": -0.5665386074647689,
+          "theta_ci_upper": 0.4836545807633956,
+          "theta_significant": "False",
+          "expected_sign_correct": "True",
+          "r_squared": 0.02549280715691693,
+          "n_obs": 9905,
+          "all_coefficients": {
+            "shock_ovi_interaction": -0.041442013350686625,
+            "shock_distance_interaction": 0.0003173325781633941,
+            "log_gdp": 0.20555442845692878,
+            "log_population": -3.042131605838306
+          },
+          "all_p_values": {
+            "shock_ovi_interaction": 0.8770701531361447,
+            "shock_distance_interaction": 0.07627996187697872,
+            "log_gdp": 0.28477289878260303,
+            "log_population": 0.09902801013945406
+          }
+        },
+        "1": {
+          "horizon": 1,
+          "theta_coefficient": -0.05378175829423014,
+          "theta_std_error": 0.2578895347843682,
+          "theta_p_value": 0.8348072104204896,
+          "theta_ci_lower": -0.5592452464715918,
+          "theta_ci_upper": 0.4516817298831315,
+          "theta_significant": "False",
+          "expected_sign_correct": "True",
+          "r_squared": 0.024979378977696642,
+          "n_obs": 9883,
+          "all_coefficients": {
+            "shock_ovi_interaction": -0.05378175829423014,
+            "shock_distance_interaction": 0.00030595722985412227,
+            "log_gdp": 0.2058553450931401,
+            "log_population": -3.0305972507895373
+          },
+          "all_p_values": {
+            "shock_ovi_interaction": 0.8348072104204896,
+            "shock_distance_interaction": 0.07031797240687276,
+            "log_gdp": 0.28904775940724714,
+            "log_population": 0.10378973238915568
+          }
+        }
+      },
+      "horizons_estimated": [
+        0,
+        1
+      ],
+      "n_horizons": 2,
+      "dependent_variable": "g_it (天然气进口量)",
+      "core_interaction": "us_prod_shock × ovi_gas_lag1",
+      "expected_sign": "negative (主动调节进口)",
+      "data_available": true,
+      "total_sample_size": 11026
+    }
+  },
+  "summary": {
+    "total_models": 2,
+    "successful_models": 2,
+    "failed_models": 0,
+    "key_findings": [
+      {
+        "channel": "price",
+        "significant_periods": 0,
+        "total_periods": 2,
+        "interpretation": "未发现显著价格缓冲效应"
+      },
+      {
+        "channel": "quantity",
+        "significant_periods": 0,
+        "total_periods": 2,
+        "interpretation": "未发现显著调节能力增强"
+      }
+    ]
+  }
+}
